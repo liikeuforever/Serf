@@ -36,7 +36,7 @@ initBitReader(BitReader* reader, uint32_t * input, size_t len)
 static inline uint64_t 
 peek(BitReader* reader, size_t len) {
         assert(len <= 32);
-        return reader->buffer >> 64 - len;
+        return reader->buffer >> (64 - len);
 }
 
 static inline void 

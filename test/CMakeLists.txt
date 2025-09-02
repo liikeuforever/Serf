@@ -17,7 +17,10 @@ add_subdirectory(baselines/sz2)
 add_subdirectory(baselines/snappy)
 add_subdirectory(baselines/zstd/build/cmake)
 add_subdirectory(baselines/sim_piece)
-add_subdirectory(baselines/sprintz)
+# Only build sprintz on x86/x64 architectures
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i386|i686")
+    add_subdirectory(baselines/sprintz)
+endif()
 add_subdirectory(baselines/alp)
 add_subdirectory(baselines/sz_adt)
 
@@ -52,6 +55,10 @@ include(GoogleTest)
 
 foreach(F ${TEST_SRC})
     get_filename_component(TEST_PROG ${F} NAME_WE)
+    # Skip sprintz test on non-x86 architectures
+    if(TEST_PROG STREQUAL "sprintz_test" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i386|i686")
+        continue()
+    endif()
     add_executable(${TEST_PROG} ${F})
     string(REPLACE "_test" "" LIB_NAME ${TEST_PROG})
     target_link_libraries(${TEST_PROG} PRIVATE ${LIB_NAME} GTest::gtest_main)
@@ -61,8 +68,14 @@ endforeach(F)
 add_executable(PerformanceProgram Perf.cc)
 add_executable(PerformanceProgram_ADT Perf_Conflict_ADT.cc)
 
-target_link_libraries(PerformanceProgram PRIVATE chimp deflate elf fpc gorilla lz77 lz4 machete sz serf
-        libzstd_shared snappy sim_piece GTest::gtest_main sprintz alp)
+# Only link sprintz on x86/x64 architectures
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i386|i686")
+    target_link_libraries(PerformanceProgram PRIVATE chimp deflate elf fpc gorilla lz77 lz4 machete sz serf
+            libzstd_shared snappy sim_piece GTest::gtest_main sprintz alp)
+else()
+    target_link_libraries(PerformanceProgram PRIVATE chimp deflate elf fpc gorilla lz77 lz4 machete sz serf
+            libzstd_shared snappy sim_piece GTest::gtest_main alp)
+endif()
 target_link_libraries(PerformanceProgram_ADT PRIVATE TSZ GTest::gtest_main)
 
 gtest_discover_tests(PerformanceProgram)

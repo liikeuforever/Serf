@@ -59,7 +59,7 @@ uint64_t zlib_compress(unsigned char* data, uint64_t dataLength, unsigned char**
 #endif
 
     uLong estCmpLen = deflateBound(&stream, dataLength);	
-	uint64_t outSize = estCmpLen;
+	uLongf outSize = (uLongf)estCmpLen;
     	
 	*compressBytes = (unsigned char*)malloc(sizeof(unsigned char)*estCmpLen);
 	int err = compress2(*compressBytes, &outSize, data, dataLength, level);
@@ -265,9 +265,9 @@ uint64_t zlib_compress5(unsigned char* data, uint64_t dataLength, unsigned char*
 
 uint64_t zlib_uncompress(unsigned char* compressBytes, uint64_t cmpSize, unsigned char** oriData, uint64_t targetOriSize)
 {
-	uint64_t outSize = targetOriSize;
+	uLongf outSize = (uLongf)targetOriSize;
 	*oriData = (unsigned char*)malloc(sizeof(unsigned char)*targetOriSize);	
-	int status = uncompress(*oriData, &outSize, compressBytes, cmpSize); 
+	int status = uncompress(*oriData, &outSize, compressBytes, (uLong)cmpSize); 
 	if(status!=Z_OK)
 	{
 		printf("Error: Zlib decompression error; status=%d\n", status);

@@ -89,7 +89,7 @@ int64_t computeRangeSize_int(void* oriData, int dataType, size_t size, int64_t* 
 	}
 	else if(dataType == SZ_INT64)
 	{
-		long* data = (int64_t *)oriData;
+		int64_t* data = (int64_t *)oriData;
 		int64_t data_;
 		min = data[0], max = min;
 		computeMinMax(data);

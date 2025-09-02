@@ -12,7 +12,9 @@
 #include <assert.h>
 #include <string.h>
 
+#ifdef USE_X86_INTRINSICS
 #include "immintrin.h"
+#endif
 
 #include "debug_utils.hpp" // TODO rm
 #include "format.h"

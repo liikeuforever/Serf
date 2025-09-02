@@ -14,7 +14,7 @@ LZ4Compressor::LZ4Compressor(int block_size) {
     written_bytes += rc;
 }
 
-LZ4Compressor::~LZ4Compressor() {
+LZ4Compressor::~LZ4Compressor() noexcept(false) {
     LZ4F_errorCode_t error_code = LZ4F_freeCompressionContext(compression_context);
     if (LZ4F_isError(error_code)) {
         throw std::runtime_error(LZ4F_getErrorName(error_code));

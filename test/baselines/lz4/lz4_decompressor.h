@@ -14,7 +14,7 @@ private:
 public:
     LZ4Decompressor();
 
-    ~LZ4Decompressor();
+    ~LZ4Decompressor() noexcept(false);
 
     std::vector<double> decompress(const Array<char> &bs);
 

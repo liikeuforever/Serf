@@ -18,11 +18,11 @@
 
 // #include "debug_utils.hpp" // TODO rm
 
-// #ifdef USE_X86_INTRINSICS
-// #include "immintrin.h"
+#ifdef USE_X86_INTRINSICS
+#include "immintrin.h"
 // #include "emmintrin.h"  // for _mm_set1_epi16
 // #include "smmintrin.h"  // for _mm_minpos_epu16
-// #endif
+#endif
 
 
 static constexpr uint64_t kHeaderMask8b = TILE_BYTE(0x07); // 3 ones

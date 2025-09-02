@@ -57,8 +57,8 @@ void exafelSZ_params_print(exafelSZ_params*pr){
   //printf("cols:%d\n",pr->cols);
   printf("\n");
   printf("CALCULATED VARIABLES\n");
-  printf("binnedRows:%ld\n",pr->binnedRows);
-  printf("binnedCols:%ld\n",pr->binnedCols);
+  printf("binnedRows:%llu\n",(unsigned long long)pr->binnedRows);
+  printf("binnedCols:%llu\n",(unsigned long long)pr->binnedCols);
   printf("peakRadius:%d\n",pr->peakRadius);
   printf("\n");
   // outs<<"Configuration (exafelSZ_params) : "<<endl;

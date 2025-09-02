@@ -11,12 +11,19 @@
 
 #include <stdint.h>
 
-#define USE_X86_INTRINSICS
-#define USE_AVX2
-
-#ifdef USE_AVX2
-    static_assert(__AVX2__, "AVX 2 is required! Try --march=native or -mavx2");
+// Check if we're on x86/x64 architecture
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
     #define USE_X86_INTRINSICS
+    #define USE_AVX2
+    
+    #ifdef USE_AVX2
+        static_assert(__AVX2__, "AVX 2 is required! Try --march=native or -mavx2");
+        #define USE_X86_INTRINSICS
+    #endif
+#else
+    // For non-x86 architectures, disable x86 intrinsics
+    #undef USE_X86_INTRINSICS
+    #undef USE_AVX2
 #endif
 
 uint16_t compress8b_naiveDelta(const uint8_t* src, uint16_t in_sz,

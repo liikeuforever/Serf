@@ -12,7 +12,9 @@
 #include <assert.h>
 #include <string.h>
 
+#ifdef USE_X86_INTRINSICS
 #include "immintrin.h"
+#endif
 
 // #include "debug_utils.hpp" // TODO rm
 #include "format.h"
@@ -82,6 +84,7 @@ uint32_t encode_delta_rowmajor(const uint_t* src, uint32_t len,
 
     // nblocks = 0;
 
+#ifdef USE_X86_INTRINSICS
     for (int32_t b = 0; b < nblocks; b++) { // for each block
         for (int32_t v = nvectors - 1; v >= 0; v--) { // for each stripe
             __m256i* prev_vals_ptr = (__m256i*)(prev_vals_ar + v * vector_sz);
@@ -101,6 +104,26 @@ uint32_t encode_delta_rowmajor(const uint_t* src, uint32_t len,
         src += block_sz_elems;
         dest += block_sz_elems;
     } // for each block
+#else
+    // Fallback implementation for non-x86 architectures
+    for (int32_t b = 0; b < nblocks; b++) { // for each block
+        for (int32_t v = nvectors - 1; v >= 0; v--) { // for each stripe
+            uint_t* prev_vals_ptr = prev_vals_ar + v * vector_sz;
+            for (uint8_t i = 0; i < block_sz; i++) {
+                const uint_t* in_ptr = src + i * ndims + v * vector_sz;
+                int_t* out_ptr = dest + i * ndims + v * vector_sz;
+                for (uint8_t j = 0; j < vector_sz && (v * vector_sz + j) < ndims; j++) {
+                    uint_t val = in_ptr[j];
+                    int_t delta = (int_t)(val - prev_vals_ptr[j]);
+                    out_ptr[j] = delta;
+                    prev_vals_ptr[j] = val;
+                }
+            }
+        } // for each vector
+        src += block_sz_elems;
+        dest += block_sz_elems;
+    } // for each block
+#endif
 
     // delta code trailing elements serially; note that if we jump straight
     // to this section, we need to not read past the beginning of the input
@@ -197,6 +220,7 @@ uint32_t decode_delta_rowmajor_large_ndims(const int_t* src, uint32_t len,
     uint32_t trailing_nelements = len % block_sz_elems;
     if (nblocks > 1 && overrun_ndims > trailing_nelements) { nblocks -= 1; }
 
+#ifdef USE_X86_INTRINSICS
     for (uint32_t b = 0; b < nblocks; b++) { // for each block
         const int_t* block_in_ptr = src + (nvectors - 1) * vector_sz;
         uint_t* block_out_ptr = dest + (nvectors - 1) * vector_sz;
@@ -222,6 +246,32 @@ uint32_t decode_delta_rowmajor_large_ndims(const int_t* src, uint32_t len,
         src += block_sz_elems;
         dest += block_sz_elems;
     } // for each block
+#else
+    // Fallback implementation for non-x86 architectures
+    for (uint32_t b = 0; b < nblocks; b++) { // for each block
+        const int_t* block_in_ptr = src + (nvectors - 1) * vector_sz;
+        uint_t* block_out_ptr = dest + (nvectors - 1) * vector_sz;
+        for (int32_t v = nvectors - 1; v >= 0; v--) { // for each stripe
+            uint_t* prev_vals_ptr = prev_vals_ar + v * vector_sz;
+            const int_t* in_ptr = block_in_ptr;
+            uint_t* out_ptr = block_out_ptr;
+            for (uint8_t i = 0; i < block_sz; i++) {
+                for (uint8_t j = 0; j < vector_sz && (v * vector_sz + j) < ndims; j++) {
+                    int_t err = in_ptr[j];
+                    uint_t val = (uint_t)(err + prev_vals_ptr[j]);
+                    out_ptr[j] = val;
+                    prev_vals_ptr[j] = val;
+                }
+                in_ptr += ndims;
+                out_ptr += ndims;
+            }
+            block_in_ptr -= vector_sz;
+            block_out_ptr -= vector_sz;
+        } // for each vector
+        src += block_sz_elems;
+        dest += block_sz_elems;
+    } // for each block
+#endif
 
     // undo delta coding for trailing elements serially
     decode_delta_serial(src, dest, orig_dest + len, ndims, nblocks == 0);

@@ -19,8 +19,10 @@
 
 #include "bitpack.h"
 
+#ifdef USE_X86_INTRINSICS
 #include "immintrin.h" // for pext, pdep
 #include "smmintrin.h"  // for _mm_minpos_epu16
+#endif
 
 #include "debug_utils.hpp" // TODO rm
 #include "macros.h"

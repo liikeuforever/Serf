@@ -7,7 +7,7 @@ LZ4Decompressor::LZ4Decompressor() {
     }
 }
 
-LZ4Decompressor::~LZ4Decompressor() {
+LZ4Decompressor::~LZ4Decompressor() noexcept(false) {
     LZ4F_errorCode_t error_code = LZ4F_freeDecompressionContext(decompression_context);
     if (LZ4F_isError(error_code)) {
         throw std::runtime_error(LZ4F_getErrorName(error_code));

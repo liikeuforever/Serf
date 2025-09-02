@@ -16,7 +16,7 @@ private:
 public:
   LZ4Compressor(int block_size);
 
-    ~LZ4Compressor();
+    ~LZ4Compressor() noexcept(false);
 
     void addValue(double v);
 

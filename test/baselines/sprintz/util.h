@@ -25,7 +25,9 @@
 #include <algorithm>  // for std::swap
 #include <string.h>
 
+#ifdef USE_X86_INTRINSICS
 #include "immintrin.h"  // TODO memrep impl without avx2
+#endif
 
 #define DIV_ROUND_UP(X, Y) ( ((X) / (Y)) + (((X) % (Y)) > 0) )
 
@@ -181,6 +183,7 @@ private:
  * @param out0 Epi16 array of values associated with the low 128b of `idxs`
  * @param out1 Epi16 array of values associated with the high 128b of `idxs`
  */
+#ifdef USE_X86_INTRINSICS
 static inline void mm256_shuffle_epi8_to_epi16(const __m256i& tbl_low,
     const __m256i& tbl_high, const __m256i& idxs, __m256i& out0, __m256i& out1)
 {
@@ -193,7 +196,9 @@ static inline void mm256_shuffle_epi8_to_epi16(const __m256i& tbl_low,
     out1 = _mm256_permute2x128_si256(
         first_third_u64s, second_fourth_u64s, 1 + (3 << 4));
 }
+#endif
 
+#ifdef USE_X86_INTRINSICS
 inline void memrep(void* dest_, const void* src_, int32_t in_nbytes,
                     int32_t ncopies)
 // inline void memrep(uint8_t* dest, const uint8_t* src, int32_t in_nbytes,
@@ -346,6 +351,20 @@ inline void memrep(void* dest_, const void* src_, int32_t in_nbytes,
 
     // printf("everything we wrote: "); dump_bytes(orig_dest, (int)(dest - orig_dest));
 }
+#else
+// Fallback implementation for non-x86 architectures
+inline void memrep(void* dest_, const void* src_, int32_t in_nbytes, int32_t ncopies)
+{
+    if (in_nbytes < 1 || ncopies < 1) { return; }
+    uint8_t* dest = (uint8_t*)dest_;
+    const uint8_t* src = (const uint8_t*)src_;
+    
+    for (int32_t i = 0; i < ncopies; i++) {
+        memcpy(dest, src, in_nbytes);
+        dest += in_nbytes;
+    }
+}
+#endif
 
 
 #endif /* util_h */
