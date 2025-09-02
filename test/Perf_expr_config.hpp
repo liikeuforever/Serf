@@ -26,7 +26,7 @@ const static std::string kDataSetList[] = {
 };
 // Overall experiment config
 const static std::string kMethodListOverall[] = {
-    "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Sprintz", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
+    "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
     "Elf", "SerfQt", "SerfXOR"
 };
 const static double kMaxDiffOverall = 1.0E-3;
@@ -41,13 +41,13 @@ const static double kMaxDiffRel[] = {
 const static int kBlockSizeRel = kBlockSizeOverall;
 // Param experiment (abs max_diff) config
 const static std::string kMethodListParamAbsMaxDiff[] = {
-    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "Sprintz"
+    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR"
 };
 const static int kBlockSizeParamAbsMaxDiff = kBlockSizeOverall;
 const static double kMaxDiffList[] = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6};
 // Param experiment (block size) config
 const static std::string kMethodListParamBlockSize[] = {
-    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "ALP", "SZ-ADT", "Sprintz"
+    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "ALP", "SZ-ADT"
 };
 const static double kAbsMaxDiffParamBlockSize = kMaxDiffOverall;
 const static int kBlockSizeList[] = {50, 100, 200, 400, 600, 800, 1000};
@@ -72,7 +72,7 @@ const static std::string kDataSetListTSBS[] = {
     "Tsbs-iot-longitude.csv"
 };
 const static std::string kMethodListTSBS[] = {
-    "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Sprintz", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
+    "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
     "Elf", "SerfQt", "SerfXOR"
 };
 const static int kBlockSizeTSBS = kBlockSizeOverall;

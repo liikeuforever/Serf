@@ -17,7 +17,10 @@ void InputBitStream::Forward(size_t len) {
   bit_in_buffer_ -= len;
   buffer_ <<= len;
   uint64_t load_more_bits = (bit_in_buffer_ < 32) * ((cursor_ < data_.length()) ? 1 : 0);
-  uint64_t next_bits = load_more_bits * data_[cursor_];
+  uint64_t next_bits = 0;
+  if (load_more_bits && cursor_ < data_.length()) {
+    next_bits = data_[cursor_];
+  }
   buffer_ |= next_bits << (32 - bit_in_buffer_);
   bit_in_buffer_ += load_more_bits * 32;
   cursor_ += load_more_bits;
@@ -48,16 +51,28 @@ void InputBitStream::SetBuffer(const Array<uint8_t> &new_buffer) {
   data_ = Array<uint32_t>(std::ceil(static_cast<double>(new_buffer.length()) / sizeof(uint32_t)));
   __builtin_memcpy(data_.begin(), new_buffer.begin(), new_buffer.length());
   for (auto &blk : data_) blk = be32toh(blk);
-  buffer_ = (static_cast<uint64_t>(data_[0])) << 32;
-  cursor_ = 1;
-  bit_in_buffer_ = 32;
+  if (data_.length() > 0) {
+    buffer_ = (static_cast<uint64_t>(data_[0])) << 32;
+    cursor_ = 1;
+    bit_in_buffer_ = 32;
+  } else {
+    buffer_ = 0;
+    cursor_ = 0;
+    bit_in_buffer_ = 0;
+  }
 }
 
 void InputBitStream::SetBuffer(const std::vector<uint8_t> &new_buffer) {
   data_ = Array<uint32_t>(std::ceil(static_cast<double>(new_buffer.size()) / sizeof(uint32_t)));
   __builtin_memcpy(data_.begin(), new_buffer.data(), new_buffer.size());
   for (auto &blk : data_) blk = be32toh(blk);
-  buffer_ = (static_cast<uint64_t>(data_[0])) << 32;
-  cursor_ = 1;
-  bit_in_buffer_ = 32;
+  if (data_.length() > 0) {
+    buffer_ = (static_cast<uint64_t>(data_[0])) << 32;
+    cursor_ = 1;
+    bit_in_buffer_ = 32;
+  } else {
+    buffer_ = 0;
+    cursor_ = 0;
+    bit_in_buffer_ = 0;
+  }
 }
