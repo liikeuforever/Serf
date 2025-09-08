@@ -1,0 +1,22 @@
+CompileFlags:
+  CompilationDatabase: .
+  Add:
+    - -I./src
+    - -std=c++17
+    - -D__MACH__
+  Remove:
+    - -W*
+
+Diagnostics:
+  ClangTidy:
+    Add: [readability-*, performance-*, modernize-*]
+    Remove: [readability-magic-numbers, readability-identifier-length]
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+
+Hover:
+  ShowAKA: true
+
