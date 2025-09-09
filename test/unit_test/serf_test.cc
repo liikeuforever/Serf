@@ -18,6 +18,8 @@
 #include "decompressor_32/serf_qt_decompressor_32.h"
 #include "compressor/serf_xor_compressor_zero_opt.h"
 #include "decompressor/serf_xor_decompressor_zero_opt.h"
+#include "compressor/serf_xor_compressor_fast_search.h"
+#include "compressor/serf_xor_compressor_combined_opt.h"
 
 TEST(Correctness, SerfXOR) {
   for (const auto &data_set : kDataSetList) {
@@ -330,4 +332,235 @@ TEST(Performance, SerfXORvsZeroOpt) {
   std::cout << std::string(84, '-') << std::endl;
   std::cout << "Note: Improvement = Original - Optimized (positive means optimization saves bits)" << std::endl;
   std::cout << "      Ratio = Optimized / Original (< 1.0 means optimization is better)" << std::endl;
+}
+
+TEST(Correctness, SerfXORFastSearch) {
+  for (const auto &data_set : kDataSetList) {
+    std::ifstream data_set_input_stream(kDataSetDirPrefix + data_set);
+    if (!data_set_input_stream.is_open()) {
+      std::cerr << "Failed to open the file [" << data_set << "]" << std::endl;
+    }
+
+    int adjust_digit = kFileNameToAdjustDigit.find(data_set)->second;
+    for (const auto &max_diff : kMaxDiffList) {
+      SerfXORCompressorFastSearch xor_compressor_fast(1000, max_diff, adjust_digit);
+      SerfXORDecompressor xor_decompressor(adjust_digit);
+
+      std::vector<double> original_data;
+      while ((original_data = ReadBlock(data_set_input_stream, kBlockSizeOverall)).size() == kBlockSizeOverall) {
+        for (const auto &datum : original_data) {
+          xor_compressor_fast.AddValue(datum);
+        }
+        xor_compressor_fast.Close();
+        Array<uint8_t> result = xor_compressor_fast.compressed_bytes_last_block();
+        std::vector<double> decompressed = xor_decompressor.Decompress(result);
+        ASSERT_EQ(original_data.size(), decompressed.size());
+        for (int i = 0; i < kBlockSizeOverall; ++i) {
+          ASSERT_NEAR(original_data[i], decompressed[i], max_diff);
+        }
+      }
+
+      ResetFileStream(data_set_input_stream);
+    }
+
+    data_set_input_stream.close();
+  }
+}
+
+TEST(Performance, SerfXORFastSearchComparison) {
+  std::cout << "\n=== Serf-XOR Fast Search vs Original Compression Comparison ===" << std::endl;
+  std::cout << std::setw(20) << "Dataset" 
+            << std::setw(12) << "MaxDiff"
+            << std::setw(15) << "Original(bits)"
+            << std::setw(15) << "FastSearch(bits)"
+            << std::setw(12) << "Difference"
+            << std::setw(10) << "Ratio" << std::endl;
+  std::cout << std::string(84, '-') << std::endl;
+
+  for (const auto &data_set : kDataSetList) {
+    std::ifstream data_set_input_stream(kDataSetDirPrefix + data_set);
+    if (!data_set_input_stream.is_open()) {
+      std::cerr << "Failed to open the file [" << data_set << "]" << std::endl;
+      continue;
+    }
+
+    int adjust_digit = kFileNameToAdjustDigit.find(data_set)->second;
+    for (const auto &max_diff : kMaxDiffList) {
+      long total_original_bits = 0;
+      long total_fast_search_bits = 0;
+      int block_count = 0;
+
+      std::vector<double> original_data;
+      while ((original_data = ReadBlock(data_set_input_stream, kBlockSizeOverall)).size() == kBlockSizeOverall) {
+        // Test original compressor
+        SerfXORCompressor xor_compressor(1000, max_diff, adjust_digit);
+        SerfXORDecompressor xor_decompressor(adjust_digit);
+        
+        for (const auto &datum : original_data) {
+          xor_compressor.AddValue(datum);
+        }
+        xor_compressor.Close();
+        Array<uint8_t> original_result = xor_compressor.compressed_bytes_last_block();
+        long original_bits = xor_compressor.compressed_size_last_block();
+        
+        // Verify original correctness
+        std::vector<double> original_decompressed = xor_decompressor.Decompress(original_result);
+        ASSERT_EQ(original_data.size(), original_decompressed.size());
+        for (int i = 0; i < kBlockSizeOverall; ++i) {
+          ASSERT_NEAR(original_data[i], original_decompressed[i], max_diff);
+        }
+
+        // Test fast search compressor
+        SerfXORCompressorFastSearch xor_compressor_fast(1000, max_diff, adjust_digit);
+        SerfXORDecompressor xor_decompressor_fast(adjust_digit);
+        
+        for (const auto &datum : original_data) {
+          xor_compressor_fast.AddValue(datum);
+        }
+        xor_compressor_fast.Close();
+        Array<uint8_t> fast_result = xor_compressor_fast.compressed_bytes_last_block();
+        long fast_bits = xor_compressor_fast.compressed_size_last_block();
+        
+        // Verify fast search correctness
+        std::vector<double> fast_decompressed = xor_decompressor_fast.Decompress(fast_result);
+        ASSERT_EQ(original_data.size(), fast_decompressed.size());
+        for (int i = 0; i < kBlockSizeOverall; ++i) {
+          ASSERT_NEAR(original_data[i], fast_decompressed[i], max_diff);
+        }
+
+        total_original_bits += original_bits;
+        total_fast_search_bits += fast_bits;
+        block_count++;
+      }
+
+      if (block_count > 0) {
+        double avg_original = (double)total_original_bits / block_count;
+        double avg_fast_search = (double)total_fast_search_bits / block_count;
+        double difference = avg_fast_search - avg_original;
+        double ratio = avg_fast_search / avg_original;
+        
+        std::cout << std::setw(20) << data_set.substr(0, 18)
+                  << std::setw(12) << max_diff
+                  << std::setw(15) << std::fixed << std::setprecision(1) << avg_original
+                  << std::setw(15) << std::fixed << std::setprecision(1) << avg_fast_search
+                  << std::setw(12) << std::fixed << std::setprecision(1) << difference
+                  << std::setw(10) << std::fixed << std::setprecision(3) << ratio
+                  << std::endl;
+      }
+
+      ResetFileStream(data_set_input_stream);
+    }
+
+    data_set_input_stream.close();
+  }
+  
+  std::cout << std::string(84, '-') << std::endl;
+  std::cout << "Note: Difference = FastSearch - Original (negative means fast search is better)" << std::endl;
+  std::cout << "      Ratio = FastSearch / Original (< 1.0 means fast search compresses better)" << std::endl;
+}
+
+TEST(Performance, SerfXORCombinedOptimizations) {
+  std::cout << "\n=== Combined Optimizations Performance Comparison ===" << std::endl;
+  std::cout << std::setw(18) << "Dataset" 
+            << std::setw(10) << "MaxDiff"
+            << std::setw(12) << "Original"
+            << std::setw(12) << "ZeroOpt"
+            << std::setw(12) << "FastSearch"
+            << std::setw(12) << "Combined"
+            << std::setw(10) << "Best" << std::endl;
+  std::cout << std::string(86, '-') << std::endl;
+
+  for (const auto &data_set : kDataSetList) {
+    std::ifstream data_set_input_stream(kDataSetDirPrefix + data_set);
+    if (!data_set_input_stream.is_open()) {
+      std::cerr << "Failed to open the file [" << data_set << "]" << std::endl;
+      continue;
+    }
+
+    int adjust_digit = kFileNameToAdjustDigit.find(data_set)->second;
+    // Test only the first max_diff for brevity
+    double max_diff = kMaxDiffList[0];
+    
+    long total_original_bits = 0;
+    long total_zero_opt_bits = 0;
+    long total_fast_search_bits = 0;
+    long total_combined_bits = 0;
+    int block_count = 0;
+
+    std::vector<double> original_data;
+    while ((original_data = ReadBlock(data_set_input_stream, kBlockSizeOverall)).size() == kBlockSizeOverall) {
+      // Test original compressor
+      SerfXORCompressor xor_compressor(1000, max_diff, adjust_digit);
+      SerfXORDecompressor xor_decompressor(adjust_digit);
+      for (const auto &datum : original_data) {
+        xor_compressor.AddValue(datum);
+      }
+      xor_compressor.Close();
+      long original_bits = xor_compressor.compressed_size_last_block();
+      
+      // Test zero optimization
+      SerfXORCompressorZeroOpt xor_compressor_zero(1000, max_diff, adjust_digit);
+      SerfXORDecompressorZeroOpt xor_decompressor_zero(adjust_digit);
+      for (const auto &datum : original_data) {
+        xor_compressor_zero.AddValue(datum);
+      }
+      xor_compressor_zero.Close();
+      long zero_opt_bits = xor_compressor_zero.compressed_size_last_block();
+      
+      // Test fast search
+      SerfXORCompressorFastSearch xor_compressor_fast(1000, max_diff, adjust_digit);
+      for (const auto &datum : original_data) {
+        xor_compressor_fast.AddValue(datum);
+      }
+      xor_compressor_fast.Close();
+      long fast_search_bits = xor_compressor_fast.compressed_size_last_block();
+      
+      // Test combined optimization
+      SerfXORCompressorCombinedOpt xor_compressor_combined(1000, max_diff, adjust_digit);
+      SerfXORDecompressorZeroOpt xor_decompressor_combined(adjust_digit);
+      for (const auto &datum : original_data) {
+        xor_compressor_combined.AddValue(datum);
+      }
+      xor_compressor_combined.Close();
+      Array<uint8_t> combined_result = xor_compressor_combined.compressed_bytes_last_block();
+      long combined_bits = xor_compressor_combined.compressed_size_last_block();
+      
+      // Verify combined optimization correctness
+      std::vector<double> combined_decompressed = xor_decompressor_combined.Decompress(combined_result);
+      ASSERT_EQ(original_data.size(), combined_decompressed.size());
+      for (int i = 0; i < kBlockSizeOverall; ++i) {
+        ASSERT_NEAR(original_data[i], combined_decompressed[i], max_diff);
+      }
+
+      total_original_bits += original_bits;
+      total_zero_opt_bits += zero_opt_bits;
+      total_fast_search_bits += fast_search_bits;
+      total_combined_bits += combined_bits;
+      block_count++;
+    }
+
+    if (block_count > 0) {
+      double avg_original = (double)total_original_bits / block_count;
+      double avg_zero_opt = (double)total_zero_opt_bits / block_count;
+      double avg_fast_search = (double)total_fast_search_bits / block_count;
+      double avg_combined = (double)total_combined_bits / block_count;
+      
+      double best = std::min({avg_original, avg_zero_opt, avg_fast_search, avg_combined});
+      
+      std::cout << std::setw(18) << data_set.substr(0, 16)
+                << std::setw(10) << max_diff
+                << std::setw(12) << std::fixed << std::setprecision(1) << avg_original
+                << std::setw(12) << std::fixed << std::setprecision(1) << avg_zero_opt
+                << std::setw(12) << std::fixed << std::setprecision(1) << avg_fast_search
+                << std::setw(12) << std::fixed << std::setprecision(1) << avg_combined
+                << std::setw(10) << std::fixed << std::setprecision(1) << best
+                << std::endl;
+    }
+
+    ResetFileStream(data_set_input_stream);
+    data_set_input_stream.close();
+  }
+  
+  std::cout << std::string(86, '-') << std::endl;
+  std::cout << "Columns: Original | ZeroOpt | FastSearch | Combined | Best" << std::endl;
 }

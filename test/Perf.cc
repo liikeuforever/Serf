@@ -5,6 +5,12 @@
 #include "Perf_file_utils.hpp"
 #include "Perf_expr_data_struct.hpp"
 
+// Include our optimized compressors
+#include "compressor/serf_xor_compressor_zero_opt.h"
+#include "decompressor/serf_xor_decompressor_zero_opt.h"
+#include "compressor/serf_xor_compressor_fast_search.h"
+#include "compressor/serf_xor_compressor_combined_opt.h"
+
 void ExportTotalExprTable(ExprTable &expr_table) {
   std::ofstream expr_table_output_stream(kExportExprTablePrefix + "total" + kExportExprTableSuffix);
   if (!expr_table_output_stream.is_open()) {
@@ -522,6 +528,123 @@ void PerfSerfXOR(std::ifstream &data_set_input_stream_ref, double max_diff, int 
 
   perf_record.set_block_count(block_count);
   table_to_insert.insert(std::make_pair(ExprConf("SerfXOR", data_set, block_size, max_diff), perf_record));
+  ResetFileStream(data_set_input_stream_ref);
+}
+
+void PerfSerfXORZeroOpt(std::ifstream &data_set_input_stream_ref, double max_diff, int block_size,
+                        const std::string &data_set, ExprTable &table_to_insert) {
+  PerfRecord perf_record;
+
+  SerfXORCompressorZeroOpt serf_xor_compressor_zero_opt(1000, max_diff, kFileNameToAdjustDigit.find(data_set)->second);
+  SerfXORDecompressorZeroOpt serf_xor_decompressor_zero_opt(kFileNameToAdjustDigit.find(data_set)->second);
+
+  int block_count = 0;
+  std::vector<double> original_data;
+
+  while ((original_data = ReadBlock(data_set_input_stream_ref, block_size)).size() == block_size) {
+    ++block_count;
+
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_xor_compressor_zero_opt.AddValue(value);
+    serf_xor_compressor_zero_opt.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+
+    perf_record.AddCompressedSize(serf_xor_compressor_zero_opt.compressed_size_last_block());
+    Array<uint8_t> compression_output = serf_xor_compressor_zero_opt.compressed_bytes_last_block();
+
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_xor_decompressor_zero_opt.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+
+    perf_record.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+
+  perf_record.set_block_count(block_count);
+  table_to_insert.insert(std::make_pair(ExprConf("SerfXOR_ZeroOpt", data_set, block_size, max_diff), perf_record));
+  ResetFileStream(data_set_input_stream_ref);
+}
+
+void PerfSerfXORFastSearch(std::ifstream &data_set_input_stream_ref, double max_diff, int block_size,
+                           const std::string &data_set, ExprTable &table_to_insert) {
+  PerfRecord perf_record;
+
+  SerfXORCompressorFastSearch serf_xor_compressor_fast_search(1000, max_diff, kFileNameToAdjustDigit.find(data_set)->second);
+  SerfXORDecompressor serf_xor_decompressor(kFileNameToAdjustDigit.find(data_set)->second);
+
+  int block_count = 0;
+  std::vector<double> original_data;
+
+  while ((original_data = ReadBlock(data_set_input_stream_ref, block_size)).size() == block_size) {
+    ++block_count;
+
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_xor_compressor_fast_search.AddValue(value);
+    serf_xor_compressor_fast_search.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+
+    perf_record.AddCompressedSize(serf_xor_compressor_fast_search.compressed_size_last_block());
+    Array<uint8_t> compression_output = serf_xor_compressor_fast_search.compressed_bytes_last_block();
+
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_xor_decompressor.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+
+    perf_record.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+
+  perf_record.set_block_count(block_count);
+  table_to_insert.insert(std::make_pair(ExprConf("SerfXOR_FastSearch", data_set, block_size, max_diff), perf_record));
+  ResetFileStream(data_set_input_stream_ref);
+}
+
+void PerfSerfXORCombinedOpt(std::ifstream &data_set_input_stream_ref, double max_diff, int block_size,
+                            const std::string &data_set, ExprTable &table_to_insert) {
+  PerfRecord perf_record;
+
+  SerfXORCompressorCombinedOpt serf_xor_compressor_combined_opt(1000, max_diff, kFileNameToAdjustDigit.find(data_set)->second);
+  SerfXORDecompressorZeroOpt serf_xor_decompressor_zero_opt(kFileNameToAdjustDigit.find(data_set)->second);
+
+  int block_count = 0;
+  std::vector<double> original_data;
+
+  while ((original_data = ReadBlock(data_set_input_stream_ref, block_size)).size() == block_size) {
+    ++block_count;
+
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_xor_compressor_combined_opt.AddValue(value);
+    serf_xor_compressor_combined_opt.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+
+    perf_record.AddCompressedSize(serf_xor_compressor_combined_opt.compressed_size_last_block());
+    Array<uint8_t> compression_output = serf_xor_compressor_combined_opt.compressed_bytes_last_block();
+
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_xor_decompressor_zero_opt.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+
+    perf_record.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+
+  perf_record.set_block_count(block_count);
+  table_to_insert.insert(std::make_pair(ExprConf("SerfXOR_CombinedOpt", data_set, block_size, max_diff), perf_record));
   ResetFileStream(data_set_input_stream_ref);
 }
 
@@ -1928,6 +2051,9 @@ TEST(Perf, Overall) {
 
     // Lossy Compression
     PerfSerfXOR(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
+    PerfSerfXORZeroOpt(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
+    PerfSerfXORFastSearch(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
+    PerfSerfXORCombinedOpt(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
     PerfSerfQt(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
     PerfMachete(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
     PerfSZ2(data_input_stream, kMaxDiffOverall, kBlockSizeOverall, data_set, expr_table_overall);
@@ -1967,6 +2093,9 @@ TEST(Perf, ParamAbsMaxDiff) {
 
     for (const auto &max_diff : kMaxDiffList) {
       PerfSerfXOR(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
+      PerfSerfXORZeroOpt(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
+      PerfSerfXORFastSearch(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
+      PerfSerfXORCombinedOpt(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
       PerfSerfQt(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
       PerfSimPiece(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
       PerfSZ2(data_input_stream, max_diff, kBlockSizeParamAbsMaxDiff, data_set, expr_table_abs_diff);
@@ -1991,6 +2120,9 @@ TEST(Perf, ParamBlockSize) {
 
     for (const auto & block_size : kBlockSizeList) {
       PerfSerfXOR(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
+      PerfSerfXORZeroOpt(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
+      PerfSerfXORFastSearch(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
+      PerfSerfXORCombinedOpt(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
       PerfSerfQt(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
       PerfSimPiece(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
       PerfSZ2(data_input_stream, kAbsMaxDiffParamBlockSize, block_size, data_set, expr_table_block_size);
@@ -2070,6 +2202,9 @@ TEST(Perf, Serf_Ablation) {
     }
 
     PerfSerfXOR(data_set_input_stream, kMaxDiffAblation, kBlockSizeAblation, data_set, expr_table_ablation);
+    PerfSerfXORZeroOpt(data_set_input_stream, kMaxDiffAblation, kBlockSizeAblation, data_set, expr_table_ablation);
+    PerfSerfXORFastSearch(data_set_input_stream, kMaxDiffAblation, kBlockSizeAblation, data_set, expr_table_ablation);
+    PerfSerfXORCombinedOpt(data_set_input_stream, kMaxDiffAblation, kBlockSizeAblation, data_set, expr_table_ablation);
     PerfSerfXOR_Without_Shifter(data_set_input_stream,
                                 kMaxDiffAblation,
                                 kBlockSizeAblation,
@@ -2162,6 +2297,9 @@ TEST(Perf, TSBS) {
 
     // Lossy Compression
     PerfSerfXOR(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
+    PerfSerfXORZeroOpt(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
+    PerfSerfXORFastSearch(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
+    PerfSerfXORCombinedOpt(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
     PerfSerfQt(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
     PerfMachete(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);
     PerfSZ2(data_input_stream, kMaxDiffTSBS, kBlockSizeTSBS, data_set, expr_table_tsbs);

@@ -1,0 +1,166 @@
+#include "serf_xor_compressor_combined_opt.h"
+#include "utils/serf_utils_64_fast_simple.h"
+#include "utils/elias_gamma_codec.h"
+#include "utils/post_office_solver.h"
+
+SerfXORCompressorCombinedOpt::SerfXORCompressorCombinedOpt(int windows_size, double max_diff, long adjust_digit) :
+    kWindowSize(windows_size), kMaxDiff(max_diff), kAdjustDigit(adjust_digit) {
+  output_buffer_ = std::make_unique<OutputBitStream>(std::floor(((windows_size + 1) * 8 + windows_size / 8 + 1) * 1.2));
+  compressed_size_this_block_ = output_buffer_->WriteInt(0, 1);
+}
+
+void SerfXORCompressorCombinedOpt::AddValue(double v) {
+  uint64_t this_val;
+  // note we cannot let > max_diff_, because kNan - v > max_diff_ is always false
+  if (SERF_LIKELY(std::abs(Double::LongBitsToDouble(stored_val_) - kAdjustDigit - v) > kMaxDiff)) {
+    // Use fast approximator search instead of exhaustive search (Optimization 2)
+    double adjust_value = v + kAdjustDigit;
+    this_val = SerfUtils64FastSimple::FindAppLongFast(adjust_value - kMaxDiff, adjust_value + kMaxDiff, v, stored_val_,
+                                                      kMaxDiff, kAdjustDigit);
+  } else {
+    // let current value be the last value, making an XORed value of 0.
+    this_val = stored_val_;
+  }
+
+  compressed_size_this_block_ += CompressValue(this_val);
+  stored_val_ = this_val;
+  ++number_of_values_this_window_;
+}
+
+long SerfXORCompressorCombinedOpt::compressed_size_last_block() const {
+  return compressed_size_last_block_;
+}
+
+Array<uint8_t> SerfXORCompressorCombinedOpt::compressed_bytes_last_block() {
+  return compressed_bytes_last_block_;
+}
+
+Array<uint8_t>& SerfXORCompressorCombinedOpt::compressed_bytes() {
+  return compressed_bytes_last_block_;
+}
+
+void SerfXORCompressorCombinedOpt::Close() {
+  // Flush any remaining zero sequence before writing the final NaN marker (Optimization 1)
+  if (in_zero_sequence_) {
+    compressed_size_this_block_ += FlushZeroSequence();
+  }
+  
+  compressed_size_this_block_ += CompressValue(Double::DoubleToLongBits(Double::kNan));
+  output_buffer_->Flush();
+  compressed_bytes_last_block_ = output_buffer_->GetBuffer(std::ceil((double) compressed_size_this_block_ / 8.0));
+  output_buffer_->Refresh();
+  compressed_size_last_block_ = compressed_size_this_block_;
+  compressed_size_this_block_ = UpdatePositionsIfNeeded();
+}
+
+int SerfXORCompressorCombinedOpt::CompressValue(uint64_t value) {
+  int this_size = 0;
+  uint64_t xor_result = stored_val_ ^ value;
+
+  if (SERF_UNLIKELY(xor_result == 0)) {
+    // Zero XOR result - start or continue zero sequence (Optimization 1)
+    if (!in_zero_sequence_) {
+      // Start new zero sequence - write '11' flag
+      this_size += output_buffer_->WriteInt(3, 2); // '11' in binary
+      in_zero_sequence_ = true;
+      zero_sequence_count_ = 1;
+    } else {
+      // Continue zero sequence
+      zero_sequence_count_++;
+    }
+  } else {
+    // Non-zero XOR result - end zero sequence if active (Optimization 1)
+    if (in_zero_sequence_) {
+      this_size += FlushZeroSequence();
+    }
+    
+    int leading_count = __builtin_clzll(xor_result);
+    int trailing_count = __builtin_ctzll(xor_result);
+    int leading_zeros = leading_round_[leading_count];
+    int trailing_zeros = trailing_round_[trailing_count];
+    ++lead_distribution_[leading_count];
+    ++trail_distribution_[trailing_count];
+
+    if (SERF_UNLIKELY(leading_zeros >= stored_leading_zeros_ && trailing_zeros >= stored_trailing_zeros_ &&
+        (leading_zeros - stored_leading_zeros_) + (trailing_zeros - stored_trailing_zeros_) <
+            1 + leading_bits_per_value_ + trailing_bits_per_value_)) {
+      // case '10' - reuse previous leading/trailing zeros (original case 1)
+      int center_bits = 64 - stored_leading_zeros_ - stored_trailing_zeros_;
+      int len = 2 + center_bits; // 2 bits for '10' + center_bits
+      if (SERF_UNLIKELY(len > 64)) {
+        output_buffer_->WriteInt(2, 2); // '10' in binary
+        output_buffer_->WriteLong(xor_result >> stored_trailing_zeros_, center_bits);
+      } else {
+        output_buffer_->WriteLong((2ULL << center_bits) | (xor_result >> stored_trailing_zeros_), len);
+      }
+      this_size += len;
+    } else {
+      stored_leading_zeros_ = leading_zeros;
+      stored_trailing_zeros_ = trailing_zeros;
+      int center_bits = 64 - stored_leading_zeros_ - stored_trailing_zeros_;
+
+      // case '00' - new leading/trailing zeros
+      int len = 2 + leading_bits_per_value_ + trailing_bits_per_value_ + center_bits;
+      if (SERF_UNLIKELY(len > 64)) {
+        output_buffer_->WriteInt((leading_representation_[stored_leading_zeros_] << trailing_bits_per_value_) |
+            trailing_representation_[stored_trailing_zeros_], 2 + leading_bits_per_value_ + trailing_bits_per_value_);
+        output_buffer_->WriteLong(xor_result >> stored_trailing_zeros_, center_bits);
+      } else {
+        output_buffer_->WriteLong(((((uint64_t) leading_representation_[stored_leading_zeros_] <<
+                                                                                               trailing_bits_per_value_)
+            | trailing_representation_[stored_trailing_zeros_]) << center_bits) | (xor_result
+            >> stored_trailing_zeros_), len);
+      }
+      this_size += len;
+    }
+  }
+  return this_size;
+}
+
+int SerfXORCompressorCombinedOpt::UpdatePositionsIfNeeded() {
+  int len;
+  if (SERF_LIKELY(number_of_values_this_window_ < kWindowSize)) {
+    // Only Check if update flag
+    compressed_size_this_window_ += compressed_size_last_block_;
+    len = output_buffer_->WriteInt(0, 1);
+  } else {
+    double compression_ratio_this_window_ = (double) compressed_size_this_window_ / (number_of_values_this_window_ * 64);
+    if (SERF_UNLIKELY(compression_ratio_last_window_ < compression_ratio_this_window_)) {
+      // update positions
+      Array<int> lead_positions = PostOfficeSolver::InitRoundAndRepresentation(lead_distribution_,
+                                                                               leading_representation_,
+                                                                               leading_round_);
+      leading_bits_per_value_ = PostOfficeSolver::kPositionLength2Bits[lead_positions.length()];
+      Array<int> trail_positions = PostOfficeSolver::InitRoundAndRepresentation(trail_distribution_,
+                                                                                trailing_representation_,
+                                                                                trailing_round_);
+      trailing_bits_per_value_ = PostOfficeSolver::kPositionLength2Bits[trail_positions.length()];
+      len = output_buffer_->WriteInt(1, 1)
+          + PostOfficeSolver::WritePositions(lead_positions, output_buffer_.get())
+          + PostOfficeSolver::WritePositions(trail_positions, output_buffer_.get());
+    } else {
+      len = output_buffer_->WriteInt(0, 1);
+    }
+    compression_ratio_last_window_ = compression_ratio_this_window_;
+    __builtin_memset(lead_distribution_.begin(), 0, 64 * sizeof(int));
+    __builtin_memset(trail_distribution_.begin(), 0, 64 * sizeof(int));
+    compressed_size_this_window_ = 0;
+    number_of_values_this_window_ = 0;
+  }
+  return len;
+}
+
+int SerfXORCompressorCombinedOpt::FlushZeroSequence() {
+  if (!in_zero_sequence_ || zero_sequence_count_ == 0) {
+    return 0;
+  }
+  
+  // Encode the count of zeros using Elias Gamma encoding (Optimization 1)
+  int encoded_bits = EliasGammaCodec::Encode(zero_sequence_count_, output_buffer_.get());
+  
+  // Reset zero sequence state
+  in_zero_sequence_ = false;
+  zero_sequence_count_ = 0;
+  
+  return encoded_bits;
+}

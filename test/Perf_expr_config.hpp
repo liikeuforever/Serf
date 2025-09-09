@@ -27,7 +27,7 @@ const static std::string kDataSetList[] = {
 // Overall experiment config
 const static std::string kMethodListOverall[] = {
     "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
-    "Elf", "SerfQt", "SerfXOR"
+    "Elf", "SerfQt", "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt"
 };
 const static double kMaxDiffOverall = 1.0E-3;
 const static int kBlockSizeOverall = 50;
@@ -41,13 +41,13 @@ const static double kMaxDiffRel[] = {
 const static int kBlockSizeRel = kBlockSizeOverall;
 // Param experiment (abs max_diff) config
 const static std::string kMethodListParamAbsMaxDiff[] = {
-    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR"
+    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt"
 };
 const static int kBlockSizeParamAbsMaxDiff = kBlockSizeOverall;
 const static double kMaxDiffList[] = {1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6};
 // Param experiment (block size) config
 const static std::string kMethodListParamBlockSize[] = {
-    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "ALP", "SZ-ADT"
+    "SZ2", "Machete", "SimPiece", "SerfQt", "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt", "ALP", "SZ-ADT"
 };
 const static double kAbsMaxDiffParamBlockSize = kMaxDiffOverall;
 const static int kBlockSizeList[] = {50, 100, 200, 400, 600, 800, 1000};
@@ -73,13 +73,13 @@ const static std::string kDataSetListTSBS[] = {
 };
 const static std::string kMethodListTSBS[] = {
     "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
-    "Elf", "SerfQt", "SerfXOR"
+    "Elf", "SerfQt", "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt"
 };
 const static int kBlockSizeTSBS = kBlockSizeOverall;
 const static double kMaxDiffTSBS = kMaxDiffOverall;
 // Ablation experiment config
 const static std::string kMethodListAblation[] = {
-    "SerfXOR", "SerfXOR_w/o_Shifter", "SerfXOR_w/o_OptAppr", "SerfXOR_w/o_FastSearch"
+    "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt", "SerfXOR_w/o_Shifter", "SerfXOR_w/o_OptAppr", "SerfXOR_w/o_FastSearch"
 };
 const static int kBlockSizeAblation = kBlockSizeOverall;
 const static double kMaxDiffAblation = kMaxDiffOverall;
