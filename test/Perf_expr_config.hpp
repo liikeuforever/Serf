@@ -29,7 +29,7 @@ const static std::string kMethodListOverall[] = {
     "LZ77", "Zstd", "Snappy", "SZ2", "Machete", "SimPiece", "Deflate", "LZ4", "FPC", "Gorilla", "Chimp128",
     "Elf", "SerfQt", "SerfXOR", "SerfXOR_ZeroOpt", "SerfXOR_FastSearch", "SerfXOR_CombinedOpt"
 };
-const static double kMaxDiffOverall = 1.0E-3;
+const static double kMaxDiffOverall = 1.0E-2;
 const static int kBlockSizeOverall = 50;
 // Rel diff experiment config
 const static std::string kMethodListRel[] = {
