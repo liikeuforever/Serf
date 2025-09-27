@@ -28,5 +28,8 @@ add_subdirectory(test)
 # Serf command line interface
 add_subdirectory(serf_cmd)
 
+# Demo programs
+add_subdirectory(demo)
+
 # Uncomment this line to use Python interface of Serf
 # add_subdirectory(pywrapper)

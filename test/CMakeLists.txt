@@ -61,7 +61,14 @@ foreach(F ${TEST_SRC})
     endif()
     add_executable(${TEST_PROG} ${F})
     string(REPLACE "_test" "" LIB_NAME ${TEST_PROG})
-    target_link_libraries(${TEST_PROG} PRIVATE ${LIB_NAME} GTest::gtest_main)
+    
+    # Special handling for GPS trajectory test - link to serf library
+    if(TEST_PROG STREQUAL "serf_qt_gps_test")
+        target_link_libraries(${TEST_PROG} PRIVATE serf GTest::gtest_main)
+    else()
+        target_link_libraries(${TEST_PROG} PRIVATE ${LIB_NAME} GTest::gtest_main)
+    endif()
+    
     gtest_discover_tests(${TEST_PROG})
 endforeach(F)
 
