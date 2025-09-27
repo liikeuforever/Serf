@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <functional>
 
 #include "Perf_baseline_inc.hpp"
 #include "Perf_expr_config.hpp"
@@ -561,6 +562,45 @@ void PerfSerfQt(std::ifstream &data_set_input_stream_ref, double max_diff, int b
 
   perf_record.set_block_count(block_count);
   table_to_insert.insert(std::make_pair(ExprConf("SerfQt", data_set, block_size, max_diff), perf_record));
+  ResetFileStream(data_set_input_stream_ref);
+}
+
+void PerfSerfQtLinear(std::ifstream &data_set_input_stream_ref, double max_diff, int block_size,
+                      const std::string &data_set, ExprTable &table_to_insert) {
+  PerfRecord perf_record;
+
+  SerfQtLinearCompressor serf_qt_linear_compressor(block_size, max_diff);
+  SerfQtLinearDecompressor serf_qt_linear_decompressor;
+
+  int block_count = 0;
+  std::vector<double> original_data;
+
+  while ((original_data = ReadBlock(data_set_input_stream_ref, block_size)).size() == block_size) {
+    ++block_count;
+
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_qt_linear_compressor.AddValue(value);
+    serf_qt_linear_compressor.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+
+    perf_record.AddCompressedSize(serf_qt_linear_compressor.get_compressed_size_in_bits());
+    Array<uint8_t> compression_output = serf_qt_linear_compressor.compressed_bytes();
+
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_qt_linear_decompressor.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+
+    perf_record.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+
+  perf_record.set_block_count(block_count);
+  table_to_insert.insert(std::make_pair(ExprConf("SerfQtLinear", data_set, block_size, max_diff), perf_record));
   ResetFileStream(data_set_input_stream_ref);
 }
 
@@ -2188,4 +2228,513 @@ TEST(Perf, TSBS) {
   GenTSBSTableCR(expr_table_tsbs);
   GenTSBSTableCT(expr_table_tsbs);
   GenTSBSTableDT(expr_table_tsbs);
+}
+
+std::vector<double> ReadLongitudeOnly(std::ifstream &file_input_stream_ref, int block_size) {
+  std::vector<double> ret;
+  ret.reserve(block_size);
+  int entry_count = 0;
+  std::string line;
+  
+  while (std::getline(file_input_stream_ref, line) && entry_count < block_size) {
+    size_t comma_pos = line.find(',');
+    if (comma_pos != std::string::npos) {
+      try {
+        double longitude = std::stod(line.substr(0, comma_pos));
+        ret.emplace_back(longitude);
+        ++entry_count;
+      } catch (...) {
+        // Skip invalid lines
+      }
+    }
+  }
+  return ret;
+}
+
+std::vector<double> ReadLatitudeOnly(std::ifstream &file_input_stream_ref, int block_size) {
+  std::vector<double> ret;
+  ret.reserve(block_size);
+  int entry_count = 0;
+  std::string line;
+  
+  while (std::getline(file_input_stream_ref, line) && entry_count < block_size) {
+    size_t comma_pos = line.find(',');
+    if (comma_pos != std::string::npos) {
+      try {
+        double latitude = std::stod(line.substr(comma_pos + 1));
+        ret.emplace_back(latitude);
+        ++entry_count;
+      } catch (...) {
+        // Skip invalid lines
+      }
+    }
+  }
+  return ret;
+}
+
+void TestDataType(const std::string& dataset_name, const std::string& file_path, 
+                  std::function<std::vector<double>(std::ifstream&, int)> read_func,
+                  const std::string& data_type, ExprTable& expr_table_comparison,
+                  int max_blocks = 100, double max_diff = 1.0E-3) {
+  const int test_block_size = 100;
+  
+  // Test original Serf-QT
+  std::ifstream data_input_stream1(file_path);
+  if (!data_input_stream1.is_open()) {
+    std::cerr << "Failed to open " << file_path << std::endl;
+    return;
+  }
+  
+  PerfRecord perf_record_qt;
+  int block_count = 0;
+  std::vector<double> original_data;
+  
+  while ((original_data = read_func(data_input_stream1, test_block_size)).size() == test_block_size && block_count < max_blocks) {
+    ++block_count;
+    
+    SerfQtCompressor serf_qt_compressor(test_block_size, max_diff);
+    SerfQtDecompressor serf_qt_decompressor;
+    
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_qt_compressor.AddValue(value);
+    serf_qt_compressor.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+    
+    perf_record_qt.AddCompressedSize(serf_qt_compressor.get_compressed_size_in_bits());
+    Array<uint8_t> compression_output = serf_qt_compressor.compressed_bytes();
+    
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_qt_decompressor.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+    
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+    
+    perf_record_qt.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record_qt.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+  
+  perf_record_qt.set_block_count(block_count);
+  std::string qt_name = dataset_name + "_" + data_type;
+  expr_table_comparison.insert(std::make_pair(ExprConf("SerfQt", qt_name, test_block_size, max_diff), perf_record_qt));
+  data_input_stream1.close();
+  
+  // Test linear prediction Serf-QT
+  std::ifstream data_input_stream2(file_path);
+  PerfRecord perf_record_linear;
+  block_count = 0;
+  
+  while ((original_data = read_func(data_input_stream2, test_block_size)).size() == test_block_size && block_count < max_blocks) {
+    ++block_count;
+    
+    SerfQtLinearCompressor serf_qt_linear_compressor(test_block_size, max_diff);
+    SerfQtLinearDecompressor serf_qt_linear_decompressor;
+    
+    auto compression_start_time = std::chrono::steady_clock::now();
+    for (const auto &value : original_data) serf_qt_linear_compressor.AddValue(value);
+    serf_qt_linear_compressor.Close();
+    auto compression_end_time = std::chrono::steady_clock::now();
+    
+    perf_record_linear.AddCompressedSize(serf_qt_linear_compressor.get_compressed_size_in_bits());
+    Array<uint8_t> compression_output = serf_qt_linear_compressor.compressed_bytes();
+    
+    auto decompression_start_time = std::chrono::steady_clock::now();
+    std::vector<double> decompressed_data = serf_qt_linear_decompressor.Decompress(compression_output);
+    auto decompression_end_time = std::chrono::steady_clock::now();
+    
+    auto compression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        compression_end_time - compression_start_time);
+    auto decompression_time_in_a_block = std::chrono::duration_cast<std::chrono::microseconds>(
+        decompression_end_time - decompression_start_time);
+    
+    perf_record_linear.IncreaseCompressionTime(compression_time_in_a_block);
+    perf_record_linear.IncreaseDecompressionTime(decompression_time_in_a_block);
+  }
+  
+  perf_record_linear.set_block_count(block_count);
+  std::string linear_name = dataset_name + "_" + data_type;
+  expr_table_comparison.insert(std::make_pair(ExprConf("SerfQtLinear", linear_name, test_block_size, max_diff), perf_record_linear));
+  data_input_stream2.close();
+}
+
+TEST(Perf, SerfQtLinearComparison) {
+  ExprTable expr_table_comparison;
+  
+  // Test datasets
+  const std::string test_datasets[] = {
+    "T-drive_longitude_latitude.csv",
+    "Geolife_100k_longitude_latitude.csv"
+  };
+  
+  for (const auto &data_set : test_datasets) {
+    std::string file_path = "../test/data_set/" + data_set;
+    std::string dataset_name = data_set.substr(0, data_set.find("_longitude_latitude.csv"));
+    
+    // Test longitude data only
+    TestDataType(dataset_name, file_path, ReadLongitudeOnly, "longitude", expr_table_comparison);
+    
+    // Test latitude data only  
+    TestDataType(dataset_name, file_path, ReadLatitudeOnly, "latitude", expr_table_comparison);
+  }
+
+  // Export comparison results
+  std::ofstream comparison_output("../test/serf_qt_linear_comparison_table.csv");
+  if (!comparison_output.is_open()) {
+    std::cerr << "Failed to export comparison data." << std::endl;
+    return;
+  }
+
+  // Write header
+  comparison_output << "Method,DataSet,BlockSize,MaxDiff,CompressionRatio,CompressionTime(AvgPerBlock),DecompressionTime(AvgPerBlock)" << std::endl;
+  
+  // Write records
+  for (const auto &conf_record : expr_table_comparison) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    comparison_output << conf.method() << "," << conf.data_set() << "," << conf.block_size() << ","
+                     << conf.max_diff() << "," << record.CalCompressionRatio(conf) << ","
+                     << record.AvgCompressionTimePerBlock() << ","
+                     << record.AvgDecompressionTimePerBlock() << std::endl;
+  }
+
+  comparison_output.flush();
+  comparison_output.close();
+  
+  std::cout << "Serf-QT Linear Prediction comparison test completed!" << std::endl;
+  std::cout << "Results saved to: ../test/serf_qt_linear_comparison_table.csv" << std::endl;
+}
+
+TEST(Perf, GeolifeDetailedComparison) {
+  ExprTable expr_table_geolife;
+  
+  const std::string geolife_dataset = "Geolife_100k_longitude_latitude.csv";
+  const std::string file_path = "../test/data_set/" + geolife_dataset;
+  
+  const int test_block_size = 100;  // 100 data points per block
+  const double test_max_diff = 1.0E-3;
+  const int max_blocks = 1000;  // Use 1000 blocks = 100,000 data points
+  
+  std::cout << "=== Geolife Detailed Performance Comparison ===" << std::endl;
+  std::cout << "Dataset: " << geolife_dataset << std::endl;
+  std::cout << "Block size: " << test_block_size << std::endl;
+  std::cout << "Max blocks: " << max_blocks << " (Total: " << (max_blocks * test_block_size) << " data points)" << std::endl;
+  std::cout << "Max diff: " << test_max_diff << std::endl << std::endl;
+  
+  // Test longitude data
+  std::cout << "Testing Longitude Data..." << std::endl;
+  TestDataType("Geolife_100k", file_path, ReadLongitudeOnly, "longitude", expr_table_geolife, max_blocks);
+  
+  // Test latitude data  
+  std::cout << "Testing Latitude Data..." << std::endl;
+  TestDataType("Geolife_100k", file_path, ReadLatitudeOnly, "latitude", expr_table_geolife, max_blocks);
+  
+  // Export detailed results
+  std::ofstream geolife_output("../test/geolife_detailed_comparison.csv");
+  if (!geolife_output.is_open()) {
+    std::cerr << "Failed to export Geolife comparison data." << std::endl;
+    return;
+  }
+  
+  geolife_output << "Method,DataType,BlockSize,MaxDiff,BlockCount,TotalDataPoints,CompressionRatio,CompressionTime(AvgPerBlock),DecompressionTime(AvgPerBlock),TotalCompressedBits" << std::endl;
+  
+  for (const auto &conf_record : expr_table_geolife) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    geolife_output << conf.method() << "," 
+                   << conf.data_set() << "," 
+                   << conf.block_size() << ","
+                   << conf.max_diff() << "," 
+                   << record.block_count() << ","
+                   << (record.block_count() * std::stoi(conf.block_size())) << ","
+                   << record.CalCompressionRatio(conf) << ","
+                   << record.AvgCompressionTimePerBlock() << ","
+                   << record.AvgDecompressionTimePerBlock() << ","
+                   << record.compressed_size_in_bits() << std::endl;
+  }
+  
+  geolife_output.flush();
+  geolife_output.close();
+  
+  // Print summary to console
+  std::cout << "\n=== Results Summary ===" << std::endl;
+  for (const auto &conf_record : expr_table_geolife) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    std::cout << conf.method() << " (" << conf.data_set() << "):" << std::endl;
+    std::cout << "  Compression Ratio: " << std::fixed << std::setprecision(6) << record.CalCompressionRatio(conf) << std::endl;
+    std::cout << "  Blocks Processed: " << record.block_count() << std::endl;
+    std::cout << "  Total Data Points: " << (record.block_count() * std::stoi(conf.block_size())) << std::endl;
+    std::cout << "  Avg Compression Time: " << std::fixed << std::setprecision(2) << record.AvgCompressionTimePerBlock() << " μs/block" << std::endl;
+    std::cout << "  Avg Decompression Time: " << std::fixed << std::setprecision(2) << record.AvgDecompressionTimePerBlock() << " μs/block" << std::endl;
+    std::cout << "  Total Compressed Size: " << record.compressed_size_in_bits() << " bits" << std::endl;
+    std::cout << std::endl;
+  }
+  
+  std::cout << "Geolife detailed comparison completed!" << std::endl;
+  std::cout << "Results saved to: ../test/geolife_detailed_comparison.csv" << std::endl;
+}
+
+TEST(Perf, GeolifeMultiPrecisionComparison) {
+  ExprTable expr_table_precision;
+  
+  const std::string geolife_dataset = "Geolife_100k_longitude_latitude.csv";
+  const std::string file_path = "../test/data_set/" + geolife_dataset;
+  
+  const int test_block_size = 100;
+  const int max_blocks = 500;  // Use 500 blocks = 50,000 data points for faster testing
+  
+  // Test different max_diff values
+  const double max_diff_values[] = {1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 1.0E-7};
+  const int num_precisions = sizeof(max_diff_values) / sizeof(max_diff_values[0]);
+  
+  std::cout << "=== Geolife Multi-Precision Comparison ===" << std::endl;
+  std::cout << "Dataset: " << geolife_dataset << std::endl;
+  std::cout << "Block size: " << test_block_size << std::endl;
+  std::cout << "Max blocks: " << max_blocks << " (Total: " << (max_blocks * test_block_size) << " data points)" << std::endl;
+  std::cout << "Testing " << num_precisions << " different max_diff values..." << std::endl << std::endl;
+  
+  for (int i = 0; i < num_precisions; i++) {
+    double current_max_diff = max_diff_values[i];
+    std::cout << "Testing max_diff = " << std::scientific << current_max_diff << std::endl;
+    
+    // Test longitude data with current max_diff
+    std::cout << "  - Longitude data..." << std::endl;
+    TestDataType("Geolife_precision", file_path, ReadLongitudeOnly, 
+                 "longitude_" + std::to_string(i), expr_table_precision, max_blocks, current_max_diff);
+    
+    // Test latitude data with current max_diff
+    std::cout << "  - Latitude data..." << std::endl;
+    TestDataType("Geolife_precision", file_path, ReadLatitudeOnly, 
+                 "latitude_" + std::to_string(i), expr_table_precision, max_blocks, current_max_diff);
+  }
+  
+  // Export detailed results
+  std::ofstream precision_output("../test/geolife_precision_comparison.csv");
+  if (!precision_output.is_open()) {
+    std::cerr << "Failed to export precision comparison data." << std::endl;
+    return;
+  }
+  
+  precision_output << "Method,DataType,MaxDiff,BlockSize,BlockCount,TotalDataPoints,CompressionRatio,CompressionTime(AvgPerBlock),DecompressionTime(AvgPerBlock),TotalCompressedBits" << std::endl;
+  
+  for (const auto &conf_record : expr_table_precision) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    precision_output << conf.method() << "," 
+                     << conf.data_set() << "," 
+                     << std::scientific << std::stod(conf.max_diff()) << ","
+                     << conf.block_size() << ","
+                     << record.block_count() << ","
+                     << (record.block_count() * std::stoi(conf.block_size())) << ","
+                     << std::fixed << std::setprecision(6) << record.CalCompressionRatio(conf) << ","
+                     << std::fixed << std::setprecision(2) << record.AvgCompressionTimePerBlock() << ","
+                     << std::fixed << std::setprecision(2) << record.AvgDecompressionTimePerBlock() << ","
+                     << record.compressed_size_in_bits() << std::endl;
+  }
+  
+  precision_output.flush();
+  precision_output.close();
+  
+  // Print summary analysis
+  std::cout << "\n=== Precision Analysis Summary ===" << std::endl;
+  
+  // Group results by max_diff for comparison
+  std::map<double, std::pair<double, double>> precision_comparison; // max_diff -> (qt_ratio, linear_ratio)
+  
+  for (const auto &conf_record : expr_table_precision) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    double max_diff_val = std::stod(conf.max_diff());
+    double compression_ratio = record.CalCompressionRatio(conf);
+    
+    if (conf.method() == "SerfQt") {
+      precision_comparison[max_diff_val].first = compression_ratio;
+    } else if (conf.method() == "SerfQtLinear") {
+      precision_comparison[max_diff_val].second = compression_ratio;
+    }
+  }
+  
+  std::cout << std::left << std::setw(12) << "MaxDiff" 
+            << std::setw(15) << "SerfQt Ratio" 
+            << std::setw(18) << "SerfLinear Ratio" 
+            << std::setw(15) << "Improvement" 
+            << "Winner" << std::endl;
+  std::cout << std::string(70, '-') << std::endl;
+  
+  for (const auto &entry : precision_comparison) {
+    double max_diff_val = entry.first;
+    double qt_ratio = entry.second.first;
+    double linear_ratio = entry.second.second;
+    
+    if (qt_ratio > 0 && linear_ratio > 0) {
+      double improvement = ((qt_ratio - linear_ratio) / qt_ratio) * 100.0;
+      std::string winner = (linear_ratio < qt_ratio) ? "Linear" : "Original";
+      
+      std::cout << std::left << std::setw(12) << std::scientific << max_diff_val
+                << std::setw(15) << std::fixed << std::setprecision(6) << qt_ratio
+                << std::setw(18) << std::fixed << std::setprecision(6) << linear_ratio
+                << std::setw(15) << std::fixed << std::setprecision(2) << improvement << "%"
+                << winner << std::endl;
+    }
+  }
+  
+  std::cout << "\nGeolife multi-precision comparison completed!" << std::endl;
+  std::cout << "Results saved to: ../test/geolife_precision_comparison.csv" << std::endl;
+}
+
+TEST(Perf, GeolifeOptimalPrecisionTest) {
+  ExprTable expr_table_optimal;
+  
+  const std::string geolife_dataset = "Geolife_100k_longitude_latitude.csv";
+  const std::string file_path = "../test/data_set/" + geolife_dataset;
+  
+  const int test_block_size = 100;
+  const int max_blocks = 1000;  // Use 1000 blocks = 100,000 data points
+  const double optimal_max_diff = 1.0E-5;  // Optimal precision found in previous test
+  
+  std::cout << "=== Geolife Optimal Precision Performance Test ===" << std::endl;
+  std::cout << "Dataset: " << geolife_dataset << std::endl;
+  std::cout << "Block size: " << test_block_size << std::endl;
+  std::cout << "Max blocks: " << max_blocks << " (Total: " << (max_blocks * test_block_size) << " data points)" << std::endl;
+  std::cout << "Optimal max_diff: " << std::scientific << optimal_max_diff << std::endl << std::endl;
+  
+  // Test longitude data with optimal precision
+  std::cout << "Testing Longitude Data with Optimal Precision..." << std::endl;
+  TestDataType("Geolife_optimal", file_path, ReadLongitudeOnly, "longitude", expr_table_optimal, max_blocks, optimal_max_diff);
+  
+  // Test latitude data with optimal precision
+  std::cout << "Testing Latitude Data with Optimal Precision..." << std::endl;
+  TestDataType("Geolife_optimal", file_path, ReadLatitudeOnly, "latitude", expr_table_optimal, max_blocks, optimal_max_diff);
+  
+  // Export detailed results
+  std::ofstream optimal_output("../test/geolife_optimal_precision_100k.csv");
+  if (!optimal_output.is_open()) {
+    std::cerr << "Failed to export optimal precision data." << std::endl;
+    return;
+  }
+  
+  optimal_output << "Method,DataType,MaxDiff,BlockSize,BlockCount,TotalDataPoints,CompressionRatio,CompressionTime(AvgPerBlock),DecompressionTime(AvgPerBlock),TotalCompressedBits,CompressionRateBitsPerValue" << std::endl;
+  
+  for (const auto &conf_record : expr_table_optimal) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    int total_data_points = record.block_count() * std::stoi(conf.block_size());
+    double bits_per_value = (double)record.compressed_size_in_bits() / total_data_points;
+    
+    optimal_output << conf.method() << "," 
+                   << conf.data_set() << "," 
+                   << std::scientific << std::stod(conf.max_diff()) << ","
+                   << conf.block_size() << ","
+                   << record.block_count() << ","
+                   << total_data_points << ","
+                   << std::fixed << std::setprecision(6) << record.CalCompressionRatio(conf) << ","
+                   << std::fixed << std::setprecision(2) << record.AvgCompressionTimePerBlock() << ","
+                   << std::fixed << std::setprecision(2) << record.AvgDecompressionTimePerBlock() << ","
+                   << record.compressed_size_in_bits() << ","
+                   << std::fixed << std::setprecision(2) << bits_per_value << std::endl;
+  }
+  
+  optimal_output.flush();
+  optimal_output.close();
+  
+  // Calculate and display comprehensive comparison
+  std::cout << "\n=== Comprehensive Performance Analysis ===" << std::endl;
+  
+  // Organize results by data type for comparison
+  struct MethodResults {
+    double compression_ratio = 0;
+    double compression_time = 0;
+    double decompression_time = 0;
+    long total_bits = 0;
+    int total_points = 0;
+    double bits_per_value = 0;
+  };
+  
+  std::map<std::string, MethodResults> longitude_results;
+  std::map<std::string, MethodResults> latitude_results;
+  
+  for (const auto &conf_record : expr_table_optimal) {
+    auto conf = conf_record.first;
+    auto record = conf_record.second;
+    
+    MethodResults result;
+    result.compression_ratio = record.CalCompressionRatio(conf);
+    result.compression_time = record.AvgCompressionTimePerBlock();
+    result.decompression_time = record.AvgDecompressionTimePerBlock();
+    result.total_bits = record.compressed_size_in_bits();
+    result.total_points = record.block_count() * std::stoi(conf.block_size());
+    result.bits_per_value = (double)result.total_bits / result.total_points;
+    
+    if (conf.data_set().find("longitude") != std::string::npos) {
+      longitude_results[conf.method()] = result;
+    } else if (conf.data_set().find("latitude") != std::string::npos) {
+      latitude_results[conf.method()] = result;
+    }
+  }
+  
+  // Display longitude comparison
+  std::cout << "📍 LONGITUDE DATA COMPARISON:" << std::endl;
+  if (longitude_results.count("SerfQt") && longitude_results.count("SerfQtLinear")) {
+    auto qt = longitude_results["SerfQt"];
+    auto linear = longitude_results["SerfQtLinear"];
+    
+    double ratio_improvement = ((qt.compression_ratio - linear.compression_ratio) / qt.compression_ratio) * 100.0;
+    double time_overhead = ((linear.compression_time - qt.compression_time) / qt.compression_time) * 100.0;
+    double decomp_overhead = ((linear.decompression_time - qt.decompression_time) / qt.decompression_time) * 100.0;
+    
+    std::cout << "  Original Serf-QT:" << std::endl;
+    std::cout << "    Compression Ratio: " << std::fixed << std::setprecision(6) << qt.compression_ratio << std::endl;
+    std::cout << "    Bits per Value: " << std::fixed << std::setprecision(2) << qt.bits_per_value << std::endl;
+    std::cout << "    Compression Time: " << std::fixed << std::setprecision(2) << qt.compression_time << " μs/block" << std::endl;
+    std::cout << "    Decompression Time: " << std::fixed << std::setprecision(2) << qt.decompression_time << " μs/block" << std::endl;
+    
+    std::cout << "  Linear Serf-QT:" << std::endl;
+    std::cout << "    Compression Ratio: " << std::fixed << std::setprecision(6) << linear.compression_ratio << std::endl;
+    std::cout << "    Bits per Value: " << std::fixed << std::setprecision(2) << linear.bits_per_value << std::endl;
+    std::cout << "    Compression Time: " << std::fixed << std::setprecision(2) << linear.compression_time << " μs/block" << std::endl;
+    std::cout << "    Decompression Time: " << std::fixed << std::setprecision(2) << linear.decompression_time << " μs/block" << std::endl;
+    
+    std::cout << "  🎯 IMPROVEMENT ANALYSIS:" << std::endl;
+    std::cout << "    Compression Ratio: " << (ratio_improvement > 0 ? "+" : "") << std::fixed << std::setprecision(2) << ratio_improvement << "% " << (ratio_improvement > 0 ? "BETTER" : "WORSE") << std::endl;
+    std::cout << "    Compression Time: " << (time_overhead > 0 ? "+" : "") << std::fixed << std::setprecision(2) << time_overhead << "% overhead" << std::endl;
+    std::cout << "    Decompression Time: " << (decomp_overhead > 0 ? "+" : "") << std::fixed << std::setprecision(2) << decomp_overhead << "% overhead" << std::endl;
+  }
+  
+  // Display latitude comparison
+  std::cout << "\n📍 LATITUDE DATA COMPARISON:" << std::endl;
+  if (latitude_results.count("SerfQt") && latitude_results.count("SerfQtLinear")) {
+    auto qt = latitude_results["SerfQt"];
+    auto linear = latitude_results["SerfQtLinear"];
+    
+    double ratio_improvement = ((qt.compression_ratio - linear.compression_ratio) / qt.compression_ratio) * 100.0;
+    double time_overhead = ((linear.compression_time - qt.compression_time) / qt.compression_time) * 100.0;
+    double decomp_overhead = ((linear.decompression_time - qt.decompression_time) / qt.decompression_time) * 100.0;
+    
+    std::cout << "  Original Serf-QT:" << std::endl;
+    std::cout << "    Compression Ratio: " << std::fixed << std::setprecision(6) << qt.compression_ratio << std::endl;
+    std::cout << "    Bits per Value: " << std::fixed << std::setprecision(2) << qt.bits_per_value << std::endl;
+    std::cout << "    Compression Time: " << std::fixed << std::setprecision(2) << qt.compression_time << " μs/block" << std::endl;
+    std::cout << "    Decompression Time: " << std::fixed << std::setprecision(2) << qt.decompression_time << " μs/block" << std::endl;
+    
+    std::cout << "  Linear Serf-QT:" << std::endl;
+    std::cout << "    Compression Ratio: " << std::fixed << std::setprecision(6) << linear.compression_ratio << std::endl;
+    std::cout << "    Bits per Value: " << std::fixed << std::setprecision(2) << linear.bits_per_value << std::endl;
+    std::cout << "    Compression Time: " << std::fixed << std::setprecision(2) << linear.compression_time << " μs/block" << std::endl;
+    std::cout << "    Decompression Time: " << std::fixed << std::setprecision(2) << linear.decompression_time << " μs/block" << std::endl;
+    
+    std::cout << "  🎯 IMPROVEMENT ANALYSIS:" << std::endl;
+    std::cout << "    Compression Ratio: " << (ratio_improvement > 0 ? "+" : "") << std::fixed << std::setprecision(2) << ratio_improvement << "% " << (ratio_improvement > 0 ? "BETTER" : "WORSE") << std::endl;
+    std::cout << "    Compression Time: " << (time_overhead > 0 ? "+" : "") << std::fixed << std::setprecision(2) << time_overhead << "% overhead" << std::endl;
+    std::cout << "    Decompression Time: " << (decomp_overhead > 0 ? "+" : "") << std::fixed << std::setprecision(2) << decomp_overhead << "% overhead" << std::endl;
+  }
+  
+  std::cout << "\n🏆 Geolife optimal precision test (100k data points) completed!" << std::endl;
+  std::cout << "Results saved to: ../test/geolife_optimal_precision_100k.csv" << std::endl;
 }
