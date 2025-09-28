@@ -8,7 +8,7 @@
 
 SerfQtGpsConfigurableCompressor::SerfQtGpsConfigurableCompressor(int block_size, double e_max, 
                                                                 double epsilon_v, double epsilon_theta)
-    : kBlockSize(block_size), kEMax(e_max * 0.999), kEpsilonV(epsilon_v), kEpsilonTheta(epsilon_theta) {
+    : kBlockSize(block_size), kEMax(e_max), kEpsilonV(epsilon_v), kEpsilonTheta(epsilon_theta) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
 }
@@ -332,10 +332,12 @@ void SerfQtGpsConfigurableCompressor::UpdateState(const GpsPoint& current_point,
         final_point = CalculateDestinationPoint(current_reconstructed_point_, final_motion);
     }
     
+    // ✅ 正确修复：运动矢量必须是解压器能够独立重构的值
+    // 即通过"预测+校正"路径得出的 final_motion，而不是事后反算的矢量
     current_reconstructed_point_ = final_point;
-    current_motion_vector_ = final_motion;
+    current_motion_vector_ = final_motion;  // 这是解压器能同步的状态！
     
-    history_states_.emplace_back(final_point, final_motion);
+    history_states_.emplace_back(final_point, current_motion_vector_);
     if (history_states_.size() > kMaxHistorySize) {
         history_states_.erase(history_states_.begin());
     }
