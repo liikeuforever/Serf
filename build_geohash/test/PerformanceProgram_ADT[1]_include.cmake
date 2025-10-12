@@ -1,0 +1,5 @@
+if(EXISTS "/Users/xuzihang/GitProject/GG/Serf/build_geohash/test/PerformanceProgram_ADT[1]_tests.cmake")
+  include("/Users/xuzihang/GitProject/GG/Serf/build_geohash/test/PerformanceProgram_ADT[1]_tests.cmake")
+else()
+  add_test(PerformanceProgram_ADT_NOT_BUILT PerformanceProgram_ADT_NOT_BUILT)
+endif()

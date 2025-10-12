@@ -1,0 +1,2378 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The system is: Darwin - 24.5.0 - arm64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+      Compiler: /Library/Developer/CommandLineTools/usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      1
+      ld: library 'System' not found
+      cc: error: linker command failed with exit code 1 (use -v to see invocation)
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /Library/Developer/CommandLineTools/usr/bin/cc 
+      Build flags: 
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is AppleClang, found in:
+        /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+      Compiler: /Library/Developer/CommandLineTools/usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      1
+      ld: library 'c++' not found
+      c++: error: linker command failed with exit code 1 (use -v to see invocation)
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /Library/Developer/CommandLineTools/usr/bin/c++ 
+      Build flags: 
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+      
+      The CXX compiler identification is AppleClang, found in:
+        /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/3.31.6/CompilerIdCXX/CMakeCXXCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bb42e/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_bb42e.dir/build.make CMakeFiles/cmTC_bb42e.dir/build
+        Building C object CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Apple clang version 16.0.0 (clang-1600.0.26.6)
+        Target: arm64-apple-darwin24.5.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        cc: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx15.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=15.2 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +lse -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sha2 -target-feature +sha3 -target-feature +neon -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1115.7.3 -v -fcoverage-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/16 -dependency-file CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/16/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdebug-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -fcommon -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -x c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 16.0.0 (clang-1600.0.26.6) default target arm64-apple-darwin24.5.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Library/Developer/CommandLineTools/usr/lib/clang/16/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        Linking C executable cmTC_bb42e
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb42e.dir/link.txt --verbose=1
+        Apple clang version 16.0.0 (clang-1600.0.26.6)
+        Target: arm64-apple-darwin24.5.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 15.0.0 15.2 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_bb42e -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld PROJECT:ld-1115.7.3
+        BUILD 23:52:02 Dec  5 2024
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+        LTO support using: LLVM version 16.0.0 (static support for 29, runtime is 29)
+        TAPI support using: Apple TAPI version 16.0.0 (tapi-1600.0.11.9)
+        Library search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift
+        Framework search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -o cmTC_bb42e
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:113 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Effective list of requested architectures (possibly empty)  : ""
+      Effective list of architectures found in the ABI info binary: "arm64"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+          add: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+          add: [/Library/Developer/CommandLineTools/usr/include]
+        end of search list found
+        collapse include dir [/Library/Developer/CommandLineTools/usr/lib/clang/16/include] ==> [/Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+        collapse include dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+        collapse include dir [/Library/Developer/CommandLineTools/usr/include] ==> [/Library/Developer/CommandLineTools/usr/include]
+        implicit include dirs: [/Library/Developer/CommandLineTools/usr/lib/clang/16/include;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include;/Library/Developer/CommandLineTools/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN']
+        ignore line: []
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bb42e/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_bb42e.dir/build.make CMakeFiles/cmTC_bb42e.dir/build]
+        ignore line: [Building C object CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Apple clang version 16.0.0 (clang-1600.0.26.6)]
+        ignore line: [Target: arm64-apple-darwin24.5.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
+        ignore line: [cc: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx15.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=15.2 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +lse -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sha2 -target-feature +sha3 -target-feature +neon -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1115.7.3 -v -fcoverage-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/16 -dependency-file CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/16/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdebug-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-rC5VqN -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -fcommon -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -x c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 16.0.0 (clang-1600.0.26.6) default target arm64-apple-darwin24.5.0]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [Linking C executable cmTC_bb42e]
+        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb42e.dir/link.txt --verbose=1]
+        ignore line: [Apple clang version 16.0.0 (clang-1600.0.26.6)]
+        ignore line: [Target: arm64-apple-darwin24.5.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
+        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 15.0.0 15.2 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_bb42e -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+          arg [/Library/Developer/CommandLineTools/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/Library/Developer/CommandLineTools/usr/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [arm64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [15.0.0] ==> ignore
+          arg [15.2] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk] ==> ignore
+          arg [-mllvm] ==> ignore
+          arg [-enable-linkonceodr-outlining] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_bb42e] ==> ignore
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_bb42e.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lSystem] ==> lib [System]
+          arg [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a] ==> lib [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+        linker tool for 'C': /Library/Developer/CommandLineTools/usr/bin/ld
+        Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+        remove lib [System]
+        remove lib [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        collapse framework dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        implicit fwks: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the C compiler's linker: "/Library/Developer/CommandLineTools/usr/bin/ld" "-v"
+      @(#)PROGRAM:ld PROJECT:ld-1115.7.3
+      BUILD 23:52:02 Dec  5 2024
+      configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+      will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+      LTO support using: LLVM version 16.0.0 (static support for 29, runtime is 29)
+      TAPI support using: Apple TAPI version 16.0.0 (tapi-1600.0.11.9)
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0af88/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_0af88.dir/build.make CMakeFiles/cmTC_0af88.dir/build
+        Building CXX object CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Apple clang version 16.0.0 (clang-1600.0.26.6)
+        Target: arm64-apple-darwin24.5.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        c++: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx15.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=15.2 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +lse -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sha2 -target-feature +sha3 -target-feature +neon -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1115.7.3 -v -fcoverage-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/16 -dependency-file CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/16/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdeprecated-macro -fdebug-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -x c++ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 16.0.0 (clang-1600.0.26.6) default target arm64-apple-darwin24.5.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/16/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        Linking CXX executable cmTC_0af88
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0af88.dir/link.txt --verbose=1
+        Apple clang version 16.0.0 (clang-1600.0.26.6)
+        Target: arm64-apple-darwin24.5.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 15.0.0 15.2 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_0af88 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld PROJECT:ld-1115.7.3
+        BUILD 23:52:02 Dec  5 2024
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+        LTO support using: LLVM version 16.0.0 (static support for 29, runtime is 29)
+        TAPI support using: Apple TAPI version 16.0.0 (tapi-1600.0.11.9)
+        Library search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift
+        Framework search paths:
+        	/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks
+        /Library/Developer/CommandLineTools/usr/bin/c++  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_0af88
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:113 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Effective list of requested architectures (possibly empty)  : ""
+      Effective list of architectures found in the ABI info binary: "arm64"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1]
+          add: [/Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+          add: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+          add: [/Library/Developer/CommandLineTools/usr/include]
+        end of search list found
+        collapse include dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1]
+        collapse include dir [/Library/Developer/CommandLineTools/usr/lib/clang/16/include] ==> [/Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+        collapse include dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+        collapse include dir [/Library/Developer/CommandLineTools/usr/include] ==> [/Library/Developer/CommandLineTools/usr/include]
+        implicit include dirs: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1;/Library/Developer/CommandLineTools/usr/lib/clang/16/include;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include;/Library/Developer/CommandLineTools/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p']
+        ignore line: []
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0af88/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_0af88.dir/build.make CMakeFiles/cmTC_0af88.dir/build]
+        ignore line: [Building CXX object CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/c++   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Apple clang version 16.0.0 (clang-1600.0.26.6)]
+        ignore line: [Target: arm64-apple-darwin24.5.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
+        ignore line: [c++: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"]
+        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx15.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=15.2 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +lse -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sha2 -target-feature +sha3 -target-feature +neon -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1115.7.3 -v -fcoverage-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/16 -dependency-file CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/16/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdeprecated-macro -fdebug-compilation-dir=/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tPNV6p -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -x c++ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 16.0.0 (clang-1600.0.26.6) default target arm64-apple-darwin24.5.0]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include/c++/v1]
+        ignore line: [ /Library/Developer/CommandLineTools/usr/lib/clang/16/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/usr/include]
+        ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [Linking CXX executable cmTC_0af88]
+        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0af88.dir/link.txt --verbose=1]
+        ignore line: [Apple clang version 16.0.0 (clang-1600.0.26.6)]
+        ignore line: [Target: arm64-apple-darwin24.5.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
+        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 15.0.0 15.2 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_0af88 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+          arg [/Library/Developer/CommandLineTools/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/Library/Developer/CommandLineTools/usr/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [arm64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [15.0.0] ==> ignore
+          arg [15.2] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk] ==> ignore
+          arg [-mllvm] ==> ignore
+          arg [-enable-linkonceodr-outlining] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_0af88] ==> ignore
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_0af88.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lc++] ==> lib [c++]
+          arg [-lSystem] ==> lib [System]
+          arg [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a] ==> lib [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+        linker tool for 'CXX': /Library/Developer/CommandLineTools/usr/bin/ld
+        Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+        remove lib [System]
+        remove lib [/Library/Developer/CommandLineTools/usr/lib/clang/16/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib]
+        collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        collapse framework dir [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+        implicit libs: [c++]
+        implicit objs: []
+        implicit dirs: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/swift]
+        implicit fwks: [/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      Running the CXX compiler's linker: "/Library/Developer/CommandLineTools/usr/bin/ld" "-v"
+      @(#)PROGRAM:ld PROJECT:ld-1115.7.3
+      BUILD 23:52:02 Dec  5 2024
+      configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+      will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+      LTO support using: LLVM version 16.0.0 (static support for 29, runtime is 29)
+      TAPI support using: Apple TAPI version 16.0.0 (tapi-1600.0.11.9)
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFiles.cmake:141 (try_compile)"
+      - "test/baselines/sz2/CMakeLists.txt:42 (CHECK_INCLUDE_FILES)"
+    checks:
+      - "Looking for include file unistd.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C2G5Cc"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C2G5Cc"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C2G5Cc'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_74345/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_74345.dir/build.make CMakeFiles/cmTC_74345.dir/build
+        Building C object CMakeFiles/cmTC_74345.dir/HAVE_UNISTD_H.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_74345.dir/HAVE_UNISTD_H.c.o -MF CMakeFiles/cmTC_74345.dir/HAVE_UNISTD_H.c.o.d -o CMakeFiles/cmTC_74345.dir/HAVE_UNISTD_H.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C2G5Cc/HAVE_UNISTD_H.c
+        Linking C executable cmTC_74345
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74345.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_74345.dir/HAVE_UNISTD_H.c.o -o cmTC_74345
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFiles.cmake:141 (try_compile)"
+      - "test/baselines/sz2/CMakeLists.txt:43 (CHECK_INCLUDE_FILES)"
+    checks:
+      - "Looking for include file sys/time.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-u2uQV1"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-u2uQV1"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_SYS_TIME_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-u2uQV1'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_12de3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_12de3.dir/build.make CMakeFiles/cmTC_12de3.dir/build
+        Building C object CMakeFiles/cmTC_12de3.dir/HAVE_SYS_TIME_H.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_12de3.dir/HAVE_SYS_TIME_H.c.o -MF CMakeFiles/cmTC_12de3.dir/HAVE_SYS_TIME_H.c.o.d -o CMakeFiles/cmTC_12de3.dir/HAVE_SYS_TIME_H.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-u2uQV1/HAVE_SYS_TIME_H.c
+        Linking C executable cmTC_12de3
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12de3.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_12de3.dir/HAVE_SYS_TIME_H.c.o -o cmTC_12de3
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "test/baselines/sz2/CMakeLists.txt:50 (CHECK_FUNCTION_EXISTS)"
+    checks:
+      - "Looking for gettimeofday"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-REF2IT"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-REF2IT"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_GETTIMEOFDAY"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-REF2IT'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_72124/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_72124.dir/build.make CMakeFiles/cmTC_72124.dir/build
+        Building C object CMakeFiles/cmTC_72124.dir/CheckFunctionExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gettimeofday -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_72124.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_72124.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_72124.dir/CheckFunctionExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-REF2IT/CheckFunctionExists.c
+        Linking C executable cmTC_72124
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_72124.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=gettimeofday -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_72124.dir/CheckFunctionExists.c.o -o cmTC_72124
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "test/baselines/sz2/CMakeLists.txt:51 (CHECK_FUNCTION_EXISTS)"
+    checks:
+      - "Looking for clock_gettime"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-aJhTdr"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-aJhTdr"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_CLOCK_GETTIME"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-aJhTdr'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9e01e/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_9e01e.dir/build.make CMakeFiles/cmTC_9e01e.dir/build
+        Building C object CMakeFiles/cmTC_9e01e.dir/CheckFunctionExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=clock_gettime -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_9e01e.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_9e01e.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_9e01e.dir/CheckFunctionExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-aJhTdr/CheckFunctionExists.c
+        Linking C executable cmTC_9e01e
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e01e.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=clock_gettime -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_9e01e.dir/CheckFunctionExists.c.o -o cmTC_9e01e
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a92c6p"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a92c6p"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a92c6p'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_46eb1/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_46eb1.dir/build.make CMakeFiles/cmTC_46eb1.dir/build
+        Building C object CMakeFiles/cmTC_46eb1.dir/OpenMPTryFlag.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -Xclang -fopenmp -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_46eb1.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_46eb1.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_46eb1.dir/OpenMPTryFlag.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a92c6p/OpenMPTryFlag.c
+        /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a92c6p/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_46eb1.dir/OpenMPTryFlag.c.o] Error 1
+        make: *** [cmTC_46eb1/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9fHcrH"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9fHcrH"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9fHcrH'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f05b1/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_f05b1.dir/build.make CMakeFiles/cmTC_f05b1.dir/build
+        Building CXX object CMakeFiles/cmTC_f05b1.dir/OpenMPTryFlag.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -Xclang -fopenmp -std=c++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_f05b1.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_f05b1.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_f05b1.dir/OpenMPTryFlag.cpp.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9fHcrH/OpenMPTryFlag.cpp
+        /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9fHcrH/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_f05b1.dir/OpenMPTryFlag.cpp.o] Error 1
+        make: *** [cmTC_f05b1/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:110 (check_include_file)"
+    checks:
+      - "Looking for sys/mman.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dcr4rj"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dcr4rj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_SYS_MMAN_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dcr4rj'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_17fd5/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_17fd5.dir/build.make CMakeFiles/cmTC_17fd5.dir/build
+        Building C object CMakeFiles/cmTC_17fd5.dir/CheckIncludeFile.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_17fd5.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_17fd5.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_17fd5.dir/CheckIncludeFile.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dcr4rj/CheckIncludeFile.c
+        Linking C executable cmTC_17fd5
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_17fd5.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_17fd5.dir/CheckIncludeFile.c.o -o cmTC_17fd5
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:111 (check_include_file)"
+    checks:
+      - "Looking for sys/resource.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-e4MJPm"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-e4MJPm"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_SYS_RESOURCE_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-e4MJPm'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3ff69/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_3ff69.dir/build.make CMakeFiles/cmTC_3ff69.dir/build
+        Building C object CMakeFiles/cmTC_3ff69.dir/CheckIncludeFile.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_3ff69.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_3ff69.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_3ff69.dir/CheckIncludeFile.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-e4MJPm/CheckIncludeFile.c
+        Linking C executable cmTC_3ff69
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3ff69.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_3ff69.dir/CheckIncludeFile.c.o -o cmTC_3ff69
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:113 (check_include_file)"
+    checks:
+      - "Looking for sys/uio.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-bFGDn2"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-bFGDn2"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_SYS_UIO_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-bFGDn2'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_88beb/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_88beb.dir/build.make CMakeFiles/cmTC_88beb.dir/build
+        Building C object CMakeFiles/cmTC_88beb.dir/CheckIncludeFile.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_88beb.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_88beb.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_88beb.dir/CheckIncludeFile.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-bFGDn2/CheckIncludeFile.c
+        Linking C executable cmTC_88beb
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_88beb.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_88beb.dir/CheckIncludeFile.c.o -o cmTC_88beb
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:115 (check_include_file)"
+    checks:
+      - "Looking for windows.h"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9XOW1n"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9XOW1n"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_WINDOWS_H"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9XOW1n'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_38594/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_38594.dir/build.make CMakeFiles/cmTC_38594.dir/build
+        Building C object CMakeFiles/cmTC_38594.dir/CheckIncludeFile.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_38594.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_38594.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_38594.dir/CheckIncludeFile.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9XOW1n/CheckIncludeFile.c
+        /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-9XOW1n/CheckIncludeFile.c:1:10: fatal error: 'windows.h' file not found
+            1 | #include <windows.h>
+              |          ^~~~~~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_38594.dir/CheckIncludeFile.c.o] Error 1
+        make: *** [cmTC_38594/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:118 (check_library_exists)"
+    checks:
+      - "Looking for zlibVersion in z"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-L81jGH"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-L81jGH"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_LIBZ"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-L81jGH'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9e940/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_9e940.dir/build.make CMakeFiles/cmTC_9e940.dir/build
+        Building C object CMakeFiles/cmTC_9e940.dir/CheckFunctionExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=zlibVersion -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_9e940.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_9e940.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_9e940.dir/CheckFunctionExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-L81jGH/CheckFunctionExists.c
+        Linking C executable cmTC_9e940
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e940.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=zlibVersion -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_9e940.dir/CheckFunctionExists.c.o -o cmTC_9e940  -lz
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:119 (check_library_exists)"
+    checks:
+      - "Looking for lzo1x_1_15_compress in lzo2"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-GZ5Gzu"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-GZ5Gzu"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_LIBLZO2"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-GZ5Gzu'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5121c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_5121c.dir/build.make CMakeFiles/cmTC_5121c.dir/build
+        Building C object CMakeFiles/cmTC_5121c.dir/CheckFunctionExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=lzo1x_1_15_compress -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_5121c.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_5121c.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_5121c.dir/CheckFunctionExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-GZ5Gzu/CheckFunctionExists.c
+        Linking C executable cmTC_5121c
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5121c.dir/link.txt --verbose=1
+        ld: library 'lzo2' not found
+        cc: error: linker command failed with exit code 1 (use -v to see invocation)
+        /Library/Developer/CommandLineTools/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=lzo1x_1_15_compress -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_5121c.dir/CheckFunctionExists.c.o -o cmTC_5121c  -llzo2
+        make[1]: *** [cmTC_5121c] Error 1
+        make: *** [cmTC_5121c/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "test/baselines/snappy/CMakeLists.txt:120 (check_library_exists)"
+    checks:
+      - "Looking for LZ4_compress_default in lz4"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-nl9spg"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-nl9spg"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_LIBLZ4"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-nl9spg'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_096d8/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_096d8.dir/build.make CMakeFiles/cmTC_096d8.dir/build
+        Building C object CMakeFiles/cmTC_096d8.dir/CheckFunctionExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=LZ4_compress_default -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_096d8.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_096d8.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_096d8.dir/CheckFunctionExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-nl9spg/CheckFunctionExists.c
+        Linking C executable cmTC_096d8
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_096d8.dir/link.txt --verbose=1
+        ld: library 'lz4' not found
+        cc: error: linker command failed with exit code 1 (use -v to see invocation)
+        /Library/Developer/CommandLineTools/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=LZ4_compress_default -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_096d8.dir/CheckFunctionExists.c.o -o cmTC_096d8  -llz4
+        make[1]: *** [cmTC_096d8] Error 1
+        make: *** [cmTC_096d8/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:123 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test HAVE_VISUAL_STUDIO_ARCH_AVX"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-iZqxLE"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-iZqxLE"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_VISUAL_STUDIO_ARCH_AVX"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-iZqxLE'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_38481/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_38481.dir/build.make CMakeFiles/cmTC_38481.dir/build
+        Building CXX object CMakeFiles/cmTC_38481.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_VISUAL_STUDIO_ARCH_AVX  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   /arch:AVX -MD -MT CMakeFiles/cmTC_38481.dir/src.cxx.o -MF CMakeFiles/cmTC_38481.dir/src.cxx.o.d -o CMakeFiles/cmTC_38481.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-iZqxLE/src.cxx
+        c++: error: no such file or directory: '/arch:AVX'
+        make[1]: *** [CMakeFiles/cmTC_38481.dir/src.cxx.o] Error 1
+        make: *** [cmTC_38481/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:124 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test HAVE_VISUAL_STUDIO_ARCH_AVX2"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wBhs3w"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wBhs3w"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_VISUAL_STUDIO_ARCH_AVX2"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wBhs3w'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_2923c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_2923c.dir/build.make CMakeFiles/cmTC_2923c.dir/build
+        Building CXX object CMakeFiles/cmTC_2923c.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_VISUAL_STUDIO_ARCH_AVX2  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   /arch:AVX2 -MD -MT CMakeFiles/cmTC_2923c.dir/src.cxx.o -MF CMakeFiles/cmTC_2923c.dir/src.cxx.o.d -o CMakeFiles/cmTC_2923c.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wBhs3w/src.cxx
+        c++: error: no such file or directory: '/arch:AVX2'
+        make[1]: *** [CMakeFiles/cmTC_2923c.dir/src.cxx.o] Error 1
+        make: *** [cmTC_2923c/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:125 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test HAVE_CLANG_MAVX"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-kVKFjL"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-kVKFjL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_CLANG_MAVX"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-kVKFjL'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_69c2e/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_69c2e.dir/build.make CMakeFiles/cmTC_69c2e.dir/build
+        Building CXX object CMakeFiles/cmTC_69c2e.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_CLANG_MAVX  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -mavx -MD -MT CMakeFiles/cmTC_69c2e.dir/src.cxx.o -MF CMakeFiles/cmTC_69c2e.dir/src.cxx.o.d -o CMakeFiles/cmTC_69c2e.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-kVKFjL/src.cxx
+        c++: error: argument unused during compilation: '-mavx' [-Werror,-Wunused-command-line-argument]
+        make[1]: *** [CMakeFiles/cmTC_69c2e.dir/src.cxx.o] Error 1
+        make: *** [cmTC_69c2e/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:126 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test HAVE_CLANG_MBMI2"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tBeoRr"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tBeoRr"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_CLANG_MBMI2"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tBeoRr'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_7eb1f/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_7eb1f.dir/build.make CMakeFiles/cmTC_7eb1f.dir/build
+        Building CXX object CMakeFiles/cmTC_7eb1f.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_CLANG_MBMI2  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -mbmi2 -MD -MT CMakeFiles/cmTC_7eb1f.dir/src.cxx.o -MF CMakeFiles/cmTC_7eb1f.dir/src.cxx.o.d -o CMakeFiles/cmTC_7eb1f.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-tBeoRr/src.cxx
+        c++: error: argument unused during compilation: '-mbmi2' [-Werror,-Wunused-command-line-argument]
+        make[1]: *** [CMakeFiles/cmTC_7eb1f.dir/src.cxx.o] Error 1
+        make: *** [cmTC_7eb1f/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:147 (check_cxx_compiler_flag)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_NO_MISSING_FIELD_INITIALIZERS"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-XP1zwq"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-XP1zwq"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_NO_MISSING_FIELD_INITIALIZERS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-XP1zwq'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0fb71/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_0fb71.dir/build.make CMakeFiles/cmTC_0fb71.dir/build
+        Building CXX object CMakeFiles/cmTC_0fb71.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_NO_MISSING_FIELD_INITIALIZERS  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wno-missing-field-initializers -MD -MT CMakeFiles/cmTC_0fb71.dir/src.cxx.o -MF CMakeFiles/cmTC_0fb71.dir/src.cxx.o.d -o CMakeFiles/cmTC_0fb71.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-XP1zwq/src.cxx
+        Linking CXX executable cmTC_0fb71
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0fb71.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_0fb71.dir/src.cxx.o -o cmTC_0fb71
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/snappy/CMakeLists.txt:149 (check_cxx_compiler_flag)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_NO_IMPLICIT_INT_FLOAT_CONVERSION"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-yGXvio"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-yGXvio"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_NO_IMPLICIT_INT_FLOAT_CONVERSION"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-yGXvio'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3e200/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_3e200.dir/build.make CMakeFiles/cmTC_3e200.dir/build
+        Building CXX object CMakeFiles/cmTC_3e200.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_NO_IMPLICIT_INT_FLOAT_CONVERSION  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wno-implicit-int-float-conversion -MD -MT CMakeFiles/cmTC_3e200.dir/src.cxx.o -MF CMakeFiles/cmTC_3e200.dir/src.cxx.o.d -o CMakeFiles/cmTC_3e200.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-yGXvio/src.cxx
+        Linking CXX executable cmTC_3e200
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3e200.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_3e200.dir/src.cxx.o -o cmTC_3e200
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:153 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_EXPECT"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ViYnCL"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ViYnCL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_BUILTIN_EXPECT"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ViYnCL'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_6af0f/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_6af0f.dir/build.make CMakeFiles/cmTC_6af0f.dir/build
+        Building CXX object CMakeFiles/cmTC_6af0f.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_BUILTIN_EXPECT  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_6af0f.dir/src.cxx.o -MF CMakeFiles/cmTC_6af0f.dir/src.cxx.o.d -o CMakeFiles/cmTC_6af0f.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ViYnCL/src.cxx
+        Linking CXX executable cmTC_6af0f
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6af0f.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_6af0f.dir/src.cxx.o -o cmTC_6af0f
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:158 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_CTZ"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BnR4Ph"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BnR4Ph"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_BUILTIN_CTZ"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BnR4Ph'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3eb4f/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_3eb4f.dir/build.make CMakeFiles/cmTC_3eb4f.dir/build
+        Building CXX object CMakeFiles/cmTC_3eb4f.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_BUILTIN_CTZ  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_3eb4f.dir/src.cxx.o -MF CMakeFiles/cmTC_3eb4f.dir/src.cxx.o.d -o CMakeFiles/cmTC_3eb4f.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BnR4Ph/src.cxx
+        Linking CXX executable cmTC_3eb4f
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3eb4f.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_3eb4f.dir/src.cxx.o -o cmTC_3eb4f
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:163 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_PREFETCH"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-11u0Zy"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-11u0Zy"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_BUILTIN_PREFETCH"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-11u0Zy'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_4cb26/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_4cb26.dir/build.make CMakeFiles/cmTC_4cb26.dir/build
+        Building CXX object CMakeFiles/cmTC_4cb26.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_BUILTIN_PREFETCH  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_4cb26.dir/src.cxx.o -MF CMakeFiles/cmTC_4cb26.dir/src.cxx.o.d -o CMakeFiles/cmTC_4cb26.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-11u0Zy/src.cxx
+        Linking CXX executable cmTC_4cb26
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4cb26.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_4cb26.dir/src.cxx.o -o cmTC_4cb26
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:169 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test HAVE_ATTRIBUTE_ALWAYS_INLINE"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-253xFY"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-253xFY"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_ATTRIBUTE_ALWAYS_INLINE"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-253xFY'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_134c7/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_134c7.dir/build.make CMakeFiles/cmTC_134c7.dir/build
+        Building CXX object CMakeFiles/cmTC_134c7.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DHAVE_ATTRIBUTE_ALWAYS_INLINE  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_134c7.dir/src.cxx.o -MF CMakeFiles/cmTC_134c7.dir/src.cxx.o.d -o CMakeFiles/cmTC_134c7.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-253xFY/src.cxx
+        Linking CXX executable cmTC_134c7
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_134c7.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_134c7.dir/src.cxx.o -o cmTC_134c7
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:176 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_SSSE3"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_SSSE3"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bbd66/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_bbd66.dir/build.make CMakeFiles/cmTC_bbd66.dir/build
+        Building CXX object CMakeFiles/cmTC_bbd66.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_SSSE3  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_bbd66.dir/src.cxx.o -MF CMakeFiles/cmTC_bbd66.dir/src.cxx.o.d -o CMakeFiles/cmTC_bbd66.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx:2:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/tmmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/tmmintrin.h:17:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/pmmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/tmmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/pmmintrin.h:17:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/emmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/tmmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/pmmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/emmintrin.h:17:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/xmmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vNaqxB/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/tmmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/pmmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/emmintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/xmmintrin.h:17:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: error: use of undeclared identifier '__builtin_ia32_emms'; did you mean '__builtin_isless'?
+           37 |     __builtin_ia32_emms();
+              |     ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: note: '__builtin_isless' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:25: error: too few arguments to function call, expected 2, have 0
+           37 |     __builtin_ia32_emms();
+              |     ~~~~~~~~~~~~~~~~~~~~^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:54:19: error: use of undeclared identifier '__builtin_ia32_vec_init_v2si'
+           54 |     return (__m64)__builtin_ia32_vec_init_v2si(__i, 0);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:71:12: error: use of undeclared identifier '__builtin_ia32_vec_ext_v2si'
+           71 |     return __builtin_ia32_vec_ext_v2si((__v2si)__m, 0);
+              |            ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:133:19: error: use of undeclared identifier '__builtin_ia32_packsswb'
+          133 |     return (__m64)__builtin_ia32_packsswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:163:19: error: use of undeclared identifier '__builtin_ia32_packssdw'
+          163 |     return (__m64)__builtin_ia32_packssdw((__v2si)__m1, (__v2si)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:193:19: error: use of undeclared identifier '__builtin_ia32_packuswb'
+          193 |     return (__m64)__builtin_ia32_packuswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:220:19: error: use of undeclared identifier '__builtin_ia32_punpckhbw'
+          220 |     return (__m64)__builtin_ia32_punpckhbw((__v8qi)__m1, (__v8qi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:243:19: error: use of undeclared identifier '__builtin_ia32_punpckhwd'
+          243 |     return (__m64)__builtin_ia32_punpckhwd((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:264:19: error: use of undeclared identifier '__builtin_ia32_punpckhdq'
+          264 |     return (__m64)__builtin_ia32_punpckhdq((__v2si)__m1, (__v2si)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:291:19: error: use of undeclared identifier '__builtin_ia32_punpcklbw'
+          291 |     return (__m64)__builtin_ia32_punpcklbw((__v8qi)__m1, (__v8qi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:314:19: error: use of undeclared identifier '__builtin_ia32_punpcklwd'
+          314 |     return (__m64)__builtin_ia32_punpcklwd((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:335:19: error: use of undeclared identifier '__builtin_ia32_punpckldq'
+          335 |     return (__m64)__builtin_ia32_punpckldq((__v2si)__m1, (__v2si)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:356:19: error: use of undeclared identifier '__builtin_ia32_paddb'; did you mean '__builtin_arm_addg'?
+          356 |     return (__m64)__builtin_ia32_paddb((__v8qi)__m1, (__v8qi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:356:19: note: '__builtin_arm_addg' declared here
+        fatal error: too many errors emitted, stopping now [-ferror-limit=]
+        20 errors generated.
+        make[1]: *** [CMakeFiles/cmTC_bbd66.dir/src.cxx.o] Error 1
+        make: *** [cmTC_bbd66/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:188 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_X86_CRC32"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_X86_CRC32"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c7771/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_c7771.dir/build.make CMakeFiles/cmTC_c7771.dir/build
+        Building CXX object CMakeFiles/cmTC_c7771.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_X86_CRC32  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_c7771.dir/src.cxx.o -MF CMakeFiles/cmTC_c7771.dir/src.cxx.o.d -o CMakeFiles/cmTC_c7771.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx:2:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:15:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/hresetintrin.h:42:27: error: invalid input constraint 'a' in asm
+           42 |   __asm__ ("hreset $0" :: "a"(__eax));
+              |                           ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:25:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:33:10: error: use of undeclared identifier '__builtin_ia32_crc32qi'
+           33 |   return __builtin_ia32_crc32qi(__C, __D);
+              |          ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:53:10: error: use of undeclared identifier '__builtin_ia32_crc32hi'; did you mean '__builtin_arm_crc32h'?
+           53 |   return __builtin_ia32_crc32hi(__C, __D);
+              |          ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:53:10: note: '__builtin_arm_crc32h' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:73:10: error: use of undeclared identifier '__builtin_ia32_crc32si'
+           73 |   return __builtin_ia32_crc32si(__C, __D);
+              |          ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:35:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: error: use of undeclared identifier '__builtin_ia32_aadd32'; did you mean '__builtin_arm_addg'?
+           39 |   __builtin_ia32_aadd32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: note: '__builtin_arm_addg' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: error: argument to '__builtin_arm_addg' must be a constant integer
+           39 |   __builtin_ia32_aadd32((int *)__A, __B);
+              |   ^                                 ~~~
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:61:3: error: use of undeclared identifier '__builtin_ia32_aand32'
+           61 |   __builtin_ia32_aand32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:83:3: error: use of undeclared identifier '__builtin_ia32_aor32'
+           83 |   __builtin_ia32_aor32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:105:3: error: use of undeclared identifier '__builtin_ia32_axor32'
+          105 |   __builtin_ia32_axor32((int *)__A, __B);
+              |   ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-dthcbA/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:21:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: error: use of undeclared identifier '__builtin_ia32_emms'; did you mean '__builtin_isless'?
+           37 |     __builtin_ia32_emms();
+              |     ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: note: '__builtin_isless' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:25: error: too few arguments to function call, expected 2, have 0
+           37 |     __builtin_ia32_emms();
+              |     ~~~~~~~~~~~~~~~~~~~~^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:54:19: error: use of undeclared identifier '__builtin_ia32_vec_init_v2si'
+           54 |     return (__m64)__builtin_ia32_vec_init_v2si(__i, 0);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:71:12: error: use of undeclared identifier '__builtin_ia32_vec_ext_v2si'
+           71 |     return __builtin_ia32_vec_ext_v2si((__v2si)__m, 0);
+              |            ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:133:19: error: use of undeclared identifier '__builtin_ia32_packsswb'
+          133 |     return (__m64)__builtin_ia32_packsswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:163:19: error: use of undeclared identifier '__builtin_ia32_packssdw'
+          163 |     return (__m64)__builtin_ia32_packssdw((__v2si)__m1, (__v2si)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:193:19: error: use of undeclared identifier '__builtin_ia32_packuswb'
+          193 |     return (__m64)__builtin_ia32_packuswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:220:19: error: use of undeclared identifier '__builtin_ia32_punpckhbw'
+          220 |     return (__m64)__builtin_ia32_punpckhbw((__v8qi)__m1, (__v8qi)__m2);
+              |                   ^
+        fatal error: too many errors emitted, stopping now [-ferror-limit=]
+        20 errors generated.
+        make[1]: *** [CMakeFiles/cmTC_c7771.dir/src.cxx.o] Error 1
+        make: *** [cmTC_c7771/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:194 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_NEON_CRC32"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eP6zjT"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eP6zjT"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_NEON_CRC32"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eP6zjT'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_6d742/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_6d742.dir/build.make CMakeFiles/cmTC_6d742.dir/build
+        Building CXX object CMakeFiles/cmTC_6d742.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_NEON_CRC32  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_6d742.dir/src.cxx.o -MF CMakeFiles/cmTC_6d742.dir/src.cxx.o.d -o CMakeFiles/cmTC_6d742.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eP6zjT/src.cxx
+        Linking CXX executable cmTC_6d742
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6d742.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_6d742.dir/src.cxx.o -o cmTC_6d742
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:201 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_BMI2"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_BMI2"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_a8ec3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_a8ec3.dir/build.make CMakeFiles/cmTC_a8ec3.dir/build
+        Building CXX object CMakeFiles/cmTC_a8ec3.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_BMI2  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_a8ec3.dir/src.cxx.o -MF CMakeFiles/cmTC_a8ec3.dir/src.cxx.o.d -o CMakeFiles/cmTC_a8ec3.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx:2:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:15:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/hresetintrin.h:42:27: error: invalid input constraint 'a' in asm
+           42 |   __asm__ ("hreset $0" :: "a"(__eax));
+              |                           ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:25:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:33:10: error: use of undeclared identifier '__builtin_ia32_crc32qi'
+           33 |   return __builtin_ia32_crc32qi(__C, __D);
+              |          ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:53:10: error: use of undeclared identifier '__builtin_ia32_crc32hi'; did you mean '__builtin_arm_crc32h'?
+           53 |   return __builtin_ia32_crc32hi(__C, __D);
+              |          ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:53:10: note: '__builtin_arm_crc32h' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/crc32intrin.h:73:10: error: use of undeclared identifier '__builtin_ia32_crc32si'
+           73 |   return __builtin_ia32_crc32si(__C, __D);
+              |          ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:17:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/x86gprintrin.h:35:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: error: use of undeclared identifier '__builtin_ia32_aadd32'; did you mean '__builtin_arm_addg'?
+           39 |   __builtin_ia32_aadd32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: note: '__builtin_arm_addg' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:39:3: error: argument to '__builtin_arm_addg' must be a constant integer
+           39 |   __builtin_ia32_aadd32((int *)__A, __B);
+              |   ^                                 ~~~
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:61:3: error: use of undeclared identifier '__builtin_ia32_aand32'
+           61 |   __builtin_ia32_aand32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:83:3: error: use of undeclared identifier '__builtin_ia32_aor32'
+           83 |   __builtin_ia32_aor32((int *)__A, __B);
+              |   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/raointintrin.h:105:3: error: use of undeclared identifier '__builtin_ia32_axor32'
+          105 |   __builtin_ia32_axor32((int *)__A, __B);
+              |   ^
+        In file included from /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vPpEcK/src.cxx:2:
+        In file included from /Library/Developer/CommandLineTools/usr/lib/clang/16/include/immintrin.h:21:
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:14:2: error: "This header is only meant to be used on x86 and x64 architecture"
+           14 | #error "This header is only meant to be used on x86 and x64 architecture"
+              |  ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: error: use of undeclared identifier '__builtin_ia32_emms'; did you mean '__builtin_isless'?
+           37 |     __builtin_ia32_emms();
+              |     ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:5: note: '__builtin_isless' declared here
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:37:25: error: too few arguments to function call, expected 2, have 0
+           37 |     __builtin_ia32_emms();
+              |     ~~~~~~~~~~~~~~~~~~~~^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:54:19: error: use of undeclared identifier '__builtin_ia32_vec_init_v2si'
+           54 |     return (__m64)__builtin_ia32_vec_init_v2si(__i, 0);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:71:12: error: use of undeclared identifier '__builtin_ia32_vec_ext_v2si'
+           71 |     return __builtin_ia32_vec_ext_v2si((__v2si)__m, 0);
+              |            ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:133:19: error: use of undeclared identifier '__builtin_ia32_packsswb'
+          133 |     return (__m64)__builtin_ia32_packsswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:163:19: error: use of undeclared identifier '__builtin_ia32_packssdw'
+          163 |     return (__m64)__builtin_ia32_packssdw((__v2si)__m1, (__v2si)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:193:19: error: use of undeclared identifier '__builtin_ia32_packuswb'
+          193 |     return (__m64)__builtin_ia32_packuswb((__v4hi)__m1, (__v4hi)__m2);
+              |                   ^
+        /Library/Developer/CommandLineTools/usr/lib/clang/16/include/mmintrin.h:220:19: error: use of undeclared identifier '__builtin_ia32_punpckhbw'
+          220 |     return (__m64)__builtin_ia32_punpckhbw((__v8qi)__m1, (__v8qi)__m2);
+              |                   ^
+        fatal error: too many errors emitted, stopping now [-ferror-limit=]
+        20 errors generated.
+        make[1]: *** [CMakeFiles/cmTC_a8ec3.dir/src.cxx.o] Error 1
+        make: *** [cmTC_a8ec3/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "test/baselines/snappy/CMakeLists.txt:207 (check_cxx_source_compiles)"
+    checks:
+      - "Performing Test SNAPPY_HAVE_NEON"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-qrCAzG"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-qrCAzG"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "SNAPPY_HAVE_NEON"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-qrCAzG'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_71285/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_71285.dir/build.make CMakeFiles/cmTC_71285.dir/build
+        Building CXX object CMakeFiles/cmTC_71285.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DSNAPPY_HAVE_NEON  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_71285.dir/src.cxx.o -MF CMakeFiles/cmTC_71285.dir/src.cxx.o.d -o CMakeFiles/cmTC_71285.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-qrCAzG/src.cxx
+        Linking CXX executable cmTC_71285
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_71285.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Werror -Wno-sign-compare -fno-exceptions -fno-rtti  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_71285.dir/src.cxx.o -o cmTC_71285
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckSymbolExists.cmake:163 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckSymbolExists.cmake:68 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "test/baselines/snappy/CMakeLists.txt:217 (check_symbol_exists)"
+    checks:
+      - "Looking for mmap"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-4fH4sj"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-4fH4sj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_FUNC_MMAP"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-4fH4sj'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9989e/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_9989e.dir/build.make CMakeFiles/cmTC_9989e.dir/build
+        Building C object CMakeFiles/cmTC_9989e.dir/CheckSymbolExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_9989e.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_9989e.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_9989e.dir/CheckSymbolExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-4fH4sj/CheckSymbolExists.c
+        Linking C executable cmTC_9989e
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9989e.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_9989e.dir/CheckSymbolExists.c.o -o cmTC_9989e
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CheckSymbolExists.cmake:163 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckSymbolExists.cmake:68 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "test/baselines/snappy/CMakeLists.txt:218 (check_symbol_exists)"
+    checks:
+      - "Looking for sysconf"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-CLTPhb"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-CLTPhb"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "HAVE_FUNC_SYSCONF"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-CLTPhb'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_da2e9/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_da2e9.dir/build.make CMakeFiles/cmTC_da2e9.dir/build
+        Building C object CMakeFiles/cmTC_da2e9.dir/CheckSymbolExists.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_da2e9.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_da2e9.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_da2e9.dir/CheckSymbolExists.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-CLTPhb/CheckSymbolExists.c
+        Linking C executable cmTC_da2e9
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_da2e9.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_da2e9.dir/CheckSymbolExists.c.o -o cmTC_da2e9
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1250 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:46 (project)"
+    message: |
+      Checking whether the ASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
+      Apple clang version 16.0.0 (clang-1600.0.26.6)
+      Target: arm64-apple-darwin24.5.0
+      Thread model: posix
+      InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1237 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:46 (project)"
+    message: |
+      Checking whether the ASM compiler is AppleClang using "--version" matched "(Apple (clang|LLVM) version)":
+      Apple clang version 16.0.0 (clang-1600.0.26.6)
+      Target: arm64-apple-darwin24.5.0
+      Thread model: posix
+      InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:65 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WALL"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eMVSYn"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eMVSYn"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WALL"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eMVSYn'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_681eb/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_681eb.dir/build.make CMakeFiles/cmTC_681eb.dir/build
+        Building C object CMakeFiles/cmTC_681eb.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WALL  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wall -MD -MT CMakeFiles/cmTC_681eb.dir/src.c.o -MF CMakeFiles/cmTC_681eb.dir/src.c.o.d -o CMakeFiles/cmTC_681eb.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-eMVSYn/src.c
+        Linking C executable cmTC_681eb
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_681eb.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_681eb.dir/src.c.o -o cmTC_681eb
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:65 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WALL"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a0d7DK"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a0d7DK"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WALL"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a0d7DK'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_dbbaa/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_dbbaa.dir/build.make CMakeFiles/cmTC_dbbaa.dir/build
+        Building CXX object CMakeFiles/cmTC_dbbaa.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WALL  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wall -MD -MT CMakeFiles/cmTC_dbbaa.dir/src.cxx.o -MF CMakeFiles/cmTC_dbbaa.dir/src.cxx.o.d -o CMakeFiles/cmTC_dbbaa.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-a0d7DK/src.cxx
+        Linking CXX executable cmTC_dbbaa
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dbbaa.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_dbbaa.dir/src.cxx.o -o cmTC_dbbaa
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:67 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WEXTRA"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-OItfLH"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-OItfLH"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WEXTRA"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-OItfLH'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_2eda5/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_2eda5.dir/build.make CMakeFiles/cmTC_2eda5.dir/build
+        Building C object CMakeFiles/cmTC_2eda5.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WEXTRA  -Wall  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wextra -MD -MT CMakeFiles/cmTC_2eda5.dir/src.c.o -MF CMakeFiles/cmTC_2eda5.dir/src.c.o.d -o CMakeFiles/cmTC_2eda5.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-OItfLH/src.c
+        Linking C executable cmTC_2eda5
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2eda5.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_2eda5.dir/src.c.o -o cmTC_2eda5
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:67 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WEXTRA"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-sTUfHd"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-sTUfHd"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WEXTRA"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-sTUfHd'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_47c08/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_47c08.dir/build.make CMakeFiles/cmTC_47c08.dir/build
+        Building CXX object CMakeFiles/cmTC_47c08.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WEXTRA  -Wall  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wextra -MD -MT CMakeFiles/cmTC_47c08.dir/src.cxx.o -MF CMakeFiles/cmTC_47c08.dir/src.cxx.o.d -o CMakeFiles/cmTC_47c08.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-sTUfHd/src.cxx
+        Linking CXX executable cmTC_47c08
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_47c08.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_47c08.dir/src.cxx.o -o cmTC_47c08
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:68 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WUNDEF"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vzapaR"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vzapaR"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WUNDEF"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vzapaR'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_4e0bc/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_4e0bc.dir/build.make CMakeFiles/cmTC_4e0bc.dir/build
+        Building C object CMakeFiles/cmTC_4e0bc.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WUNDEF  -Wall -Wextra  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wundef -MD -MT CMakeFiles/cmTC_4e0bc.dir/src.c.o -MF CMakeFiles/cmTC_4e0bc.dir/src.c.o.d -o CMakeFiles/cmTC_4e0bc.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-vzapaR/src.c
+        Linking C executable cmTC_4e0bc
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4e0bc.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_4e0bc.dir/src.c.o -o cmTC_4e0bc
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:68 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WUNDEF"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-SoHmHn"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-SoHmHn"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WUNDEF"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-SoHmHn'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f1f7c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_f1f7c.dir/build.make CMakeFiles/cmTC_f1f7c.dir/build
+        Building CXX object CMakeFiles/cmTC_f1f7c.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WUNDEF  -Wall -Wextra  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wundef -MD -MT CMakeFiles/cmTC_f1f7c.dir/src.cxx.o -MF CMakeFiles/cmTC_f1f7c.dir/src.cxx.o.d -o CMakeFiles/cmTC_f1f7c.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-SoHmHn/src.cxx
+        Linking CXX executable cmTC_f1f7c
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f1f7c.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_f1f7c.dir/src.cxx.o -o cmTC_f1f7c
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:69 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WSHADOW"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wyB2oK"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wyB2oK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WSHADOW"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wyB2oK'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_46d66/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_46d66.dir/build.make CMakeFiles/cmTC_46d66.dir/build
+        Building C object CMakeFiles/cmTC_46d66.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WSHADOW  -Wall -Wextra -Wundef  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wshadow -MD -MT CMakeFiles/cmTC_46d66.dir/src.c.o -MF CMakeFiles/cmTC_46d66.dir/src.c.o.d -o CMakeFiles/cmTC_46d66.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-wyB2oK/src.c
+        Linking C executable cmTC_46d66
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_46d66.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_46d66.dir/src.c.o -o cmTC_46d66
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:69 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WSHADOW"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-hsMHik"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-hsMHik"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Wundef"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WSHADOW"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-hsMHik'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f6dc3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_f6dc3.dir/build.make CMakeFiles/cmTC_f6dc3.dir/build
+        Building CXX object CMakeFiles/cmTC_f6dc3.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WSHADOW  -Wall -Wextra -Wundef  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wshadow -MD -MT CMakeFiles/cmTC_f6dc3.dir/src.cxx.o -MF CMakeFiles/cmTC_f6dc3.dir/src.cxx.o.d -o CMakeFiles/cmTC_f6dc3.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-hsMHik/src.cxx
+        Linking CXX executable cmTC_f6dc3
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f6dc3.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wundef  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_f6dc3.dir/src.cxx.o -o cmTC_f6dc3
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:70 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WCAST_ALIGN"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-cv0koM"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-cv0koM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WCAST_ALIGN"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-cv0koM'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_6ad2c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_6ad2c.dir/build.make CMakeFiles/cmTC_6ad2c.dir/build
+        Building C object CMakeFiles/cmTC_6ad2c.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WCAST_ALIGN  -Wall -Wextra -Wundef -Wshadow  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wcast-align -MD -MT CMakeFiles/cmTC_6ad2c.dir/src.c.o -MF CMakeFiles/cmTC_6ad2c.dir/src.c.o.d -o CMakeFiles/cmTC_6ad2c.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-cv0koM/src.c
+        Linking C executable cmTC_6ad2c
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6ad2c.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_6ad2c.dir/src.c.o -o cmTC_6ad2c
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:70 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WCAST_ALIGN"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-h80lVq"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-h80lVq"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Wundef -Wshadow"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WCAST_ALIGN"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-h80lVq'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_db50a/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_db50a.dir/build.make CMakeFiles/cmTC_db50a.dir/build
+        Building CXX object CMakeFiles/cmTC_db50a.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WCAST_ALIGN  -Wall -Wextra -Wundef -Wshadow  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wcast-align -MD -MT CMakeFiles/cmTC_db50a.dir/src.cxx.o -MF CMakeFiles/cmTC_db50a.dir/src.cxx.o.d -o CMakeFiles/cmTC_db50a.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-h80lVq/src.cxx
+        Linking CXX executable cmTC_db50a
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_db50a.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wundef -Wshadow  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_db50a.dir/src.cxx.o -o cmTC_db50a
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:71 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WCAST_QUAL"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BHXkWy"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BHXkWy"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WCAST_QUAL"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BHXkWy'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_cc4db/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_cc4db.dir/build.make CMakeFiles/cmTC_cc4db.dir/build
+        Building C object CMakeFiles/cmTC_cc4db.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WCAST_QUAL  -Wall -Wextra -Wundef -Wshadow -Wcast-align  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wcast-qual -MD -MT CMakeFiles/cmTC_cc4db.dir/src.c.o -MF CMakeFiles/cmTC_cc4db.dir/src.c.o.d -o CMakeFiles/cmTC_cc4db.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-BHXkWy/src.c
+        Linking C executable cmTC_cc4db
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc4db.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_cc4db.dir/src.c.o -o cmTC_cc4db
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:71 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WCAST_QUAL"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-fFbDbi"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-fFbDbi"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WCAST_QUAL"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-fFbDbi'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ff08e/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_ff08e.dir/build.make CMakeFiles/cmTC_ff08e.dir/build
+        Building CXX object CMakeFiles/cmTC_ff08e.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WCAST_QUAL  -Wall -Wextra -Wundef -Wshadow -Wcast-align  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wcast-qual -MD -MT CMakeFiles/cmTC_ff08e.dir/src.cxx.o -MF CMakeFiles/cmTC_ff08e.dir/src.cxx.o.d -o CMakeFiles/cmTC_ff08e.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-fFbDbi/src.cxx
+        Linking CXX executable cmTC_ff08e
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff08e.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wundef -Wshadow -Wcast-align  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_ff08e.dir/src.cxx.o -o cmTC_ff08e
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:72 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WSTRICT_PROTOTYPES"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dmiz93"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dmiz93"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WSTRICT_PROTOTYPES"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dmiz93'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_984da/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_984da.dir/build.make CMakeFiles/cmTC_984da.dir/build
+        Building C object CMakeFiles/cmTC_984da.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WSTRICT_PROTOTYPES  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wstrict-prototypes -MD -MT CMakeFiles/cmTC_984da.dir/src.c.o -MF CMakeFiles/cmTC_984da.dir/src.c.o.d -o CMakeFiles/cmTC_984da.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-Dmiz93/src.c
+        Linking C executable cmTC_984da
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_984da.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_984da.dir/src.c.o -o cmTC_984da
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckLinkerFlag.cmake:37 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckLinkerFlag.cmake:44 (cmake_check_linker_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:42 (CHECK_LINKER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:79 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test LD_FLAG_Z_NOEXECSTACK"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C96SA7"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C96SA7"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "LD_FLAG_Z_NOEXECSTACK"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C96SA7'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ed01a/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_ed01a.dir/build.make CMakeFiles/cmTC_ed01a.dir/build
+        Building C object CMakeFiles/cmTC_ed01a.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DLD_FLAG_Z_NOEXECSTACK  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_ed01a.dir/src.c.o -MF CMakeFiles/cmTC_ed01a.dir/src.c.o.d -o CMakeFiles/cmTC_ed01a.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-C96SA7/src.c
+        Linking C executable cmTC_ed01a
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed01a.dir/link.txt --verbose=1
+        cc: error: unknown argument: '-z noexecstack'
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names "-z noexecstack" CMakeFiles/cmTC_ed01a.dir/src.c.o -o cmTC_ed01a
+        make[1]: *** [cmTC_ed01a] Error 1
+        make: *** [cmTC_ed01a/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:81 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_QUNUSED_ARGUMENTS"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-htGaXm"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-htGaXm"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_QUNUSED_ARGUMENTS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-htGaXm'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_df36b/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_df36b.dir/build.make CMakeFiles/cmTC_df36b.dir/build
+        Building C object CMakeFiles/cmTC_df36b.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_QUNUSED_ARGUMENTS  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Qunused-arguments -MD -MT CMakeFiles/cmTC_df36b.dir/src.c.o -MF CMakeFiles/cmTC_df36b.dir/src.c.o.d -o CMakeFiles/cmTC_df36b.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-htGaXm/src.c
+        Linking C executable cmTC_df36b
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df36b.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_df36b.dir/src.c.o -o cmTC_df36b
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:81 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_QUNUSED_ARGUMENTS"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-UdbubL"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-UdbubL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_QUNUSED_ARGUMENTS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-UdbubL'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_86de0/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_86de0.dir/build.make CMakeFiles/cmTC_86de0.dir/build
+        Building CXX object CMakeFiles/cmTC_86de0.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_QUNUSED_ARGUMENTS  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Qunused-arguments -MD -MT CMakeFiles/cmTC_86de0.dir/src.cxx.o -MF CMakeFiles/cmTC_86de0.dir/src.cxx.o.d -o CMakeFiles/cmTC_86de0.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-UdbubL/src.cxx
+        Linking CXX executable cmTC_86de0
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_86de0.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_86de0.dir/src.cxx.o -o cmTC_86de0
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:20 (CHECK_C_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:82 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test C_FLAG_WA_NOEXECSTACK"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ESgfpH"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ESgfpH"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "C_FLAG_WA_NOEXECSTACK"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ESgfpH'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_d0a3a/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_d0a3a.dir/build.make CMakeFiles/cmTC_d0a3a.dir/build
+        Building C object CMakeFiles/cmTC_d0a3a.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DC_FLAG_WA_NOEXECSTACK  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wa,--noexecstack -MD -MT CMakeFiles/cmTC_d0a3a.dir/src.c.o -MF CMakeFiles/cmTC_d0a3a.dir/src.c.o.d -o CMakeFiles/cmTC_d0a3a.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-ESgfpH/src.c
+        Linking C executable cmTC_d0a3a
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d0a3a.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_d0a3a.dir/src.c.o -o cmTC_d0a3a
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake:55 (cmake_check_compiler_flag)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:26 (CHECK_CXX_COMPILER_FLAG)"
+      - "test/baselines/zstd/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake:82 (EnableCompilerFlag)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:71 (ADD_ZSTD_COMPILATION_FLAGS)"
+    checks:
+      - "Performing Test CXX_FLAG_WA_NOEXECSTACK"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-HBG9y7"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-HBG9y7"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Qunused-arguments"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CXX_FLAG_WA_NOEXECSTACK"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-HBG9y7'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9889a/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_9889a.dir/build.make CMakeFiles/cmTC_9889a.dir/build
+        Building CXX object CMakeFiles/cmTC_9889a.dir/src.cxx.o
+        /Library/Developer/CommandLineTools/usr/bin/c++ -DCXX_FLAG_WA_NOEXECSTACK  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Qunused-arguments  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk   -Wa,--noexecstack -MD -MT CMakeFiles/cmTC_9889a.dir/src.cxx.o -MF CMakeFiles/cmTC_9889a.dir/src.cxx.o.d -o CMakeFiles/cmTC_9889a.dir/src.cxx.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-HBG9y7/src.cxx
+        Linking CXX executable cmTC_9889a
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9889a.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/c++  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Qunused-arguments  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_9889a.dir/src.cxx.o -o cmTC_9889a
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "/opt/homebrew/share/cmake/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/opt/homebrew/share/cmake/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "test/baselines/zstd/build/cmake/CMakeLists.txt:132 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-31anVu"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-31anVu"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments -Wa,--noexecstack"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/Users/xuzihang/GitProject/GG/Serf/test/baselines/zstd/build/cmake/CMakeModules"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-31anVu'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_91069/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_91069.dir/build.make CMakeFiles/cmTC_91069.dir/build
+        Building C object CMakeFiles/cmTC_91069.dir/src.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments -Wa,--noexecstack  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_91069.dir/src.c.o -MF CMakeFiles/cmTC_91069.dir/src.c.o.d -o CMakeFiles/cmTC_91069.dir/src.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_geohash/CMakeFiles/CMakeScratch/TryCompile-31anVu/src.c
+        Linking C executable cmTC_91069
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91069.dir/link.txt --verbose=1
+        /Library/Developer/CommandLineTools/usr/bin/cc  -Wall -Wextra -Wundef -Wshadow -Wcast-align -Wcast-qual -Wstrict-prototypes -Qunused-arguments -Wa,--noexecstack  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_91069.dir/src.c.o -o cmTC_91069
+        
+      exitCode: 0
+...

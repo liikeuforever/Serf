@@ -8,13 +8,16 @@ int EliasGammaCodec::Encode(int64_t number, OutputBitStream *output_bit_stream_p
   } else {
     n = std::floor(std::log2(number));
   }
+  // 写入n个0比特
   compressed_size_in_bits += output_bit_stream_ptr->WriteInt(0, n);
-  compressed_size_in_bits += output_bit_stream_ptr->WriteInt(number, n + 1);
+  // 写入number的二进制表示（n+1位）- 使用WriteLong以支持大于32位的数
+  compressed_size_in_bits += output_bit_stream_ptr->WriteLong(number, n + 1);
   return compressed_size_in_bits;
 }
 
 int64_t EliasGammaCodec::Decode(InputBitStream *input_bit_stream_ptr) {
   int n = 0;
   while (!input_bit_stream_ptr->ReadBit()) n++;
-  return n == 0 ? 1 :  (1 << n) | input_bit_stream_ptr->ReadInt(n);
+  // 使用ReadLong以支持大于32位的数
+  return n == 0 ? 1 :  (1LL << n) | input_bit_stream_ptr->ReadLong(n);
 }

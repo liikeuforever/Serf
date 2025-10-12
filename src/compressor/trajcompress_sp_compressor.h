@@ -1,0 +1,221 @@
+#pragma once
+
+#include "utils/output_bit_stream.h"
+#include "utils/array.h"
+#include "utils/double.h"
+#include <vector>
+#include <memory>
+#include <cmath>
+#include <string>
+
+/**
+ * TrajCompress-SP: Trajectory Compression with Switched Predictors
+ * 基于Serf-QT优化的GPS轨迹有损压缩算法
+ * 
+ * 核心创新：
+ * 1. 多预测器系统（LDR线性预测、CP曲线预测、ZP零预测）
+ * 2. 状态感知（静止/运动状态检测）
+ * 3. 动态预测器切换
+ * 4. 静止状态RLE编码优化
+ */
+class TrajCompressSPCompressor {
+public:
+    // GPS点结构
+    struct GpsPoint {
+        double longitude;
+        double latitude;
+        
+        GpsPoint() : longitude(0), latitude(0) {}
+        GpsPoint(double lon, double lat) : longitude(lon), latitude(lat) {}
+        
+        GpsPoint operator+(const GpsPoint& other) const {
+            return GpsPoint(longitude + other.longitude, latitude + other.latitude);
+        }
+        
+        GpsPoint operator-(const GpsPoint& other) const {
+            return GpsPoint(longitude - other.longitude, latitude - other.latitude);
+        }
+        
+        GpsPoint operator*(double scale) const {
+            return GpsPoint(longitude * scale, latitude * scale);
+        }
+    };
+    
+    // 预测器类型枚举
+    enum PredictorType {
+        PREDICTOR_LDR = 0,    // Linear Dead Reckoning - 线性航位推算
+        PREDICTOR_CP = 1,     // Curve Predictor - 曲线预测（二阶）
+        PREDICTOR_ZP = 2      // Zero Predictor - 零预测（Serf-QT风格）
+    };
+    
+    // 历史状态结构
+    struct HistoryState {
+        GpsPoint reconstructed_point;
+        GpsPoint velocity;  // 速度向量（经纬度差）
+        
+        HistoryState() {}
+        HistoryState(const GpsPoint& point, const GpsPoint& vel)
+            : reconstructed_point(point), velocity(vel) {}
+    };
+    
+    // 统计信息结构
+    struct CompressionStats {
+        int total_points = 0;
+        
+        // 预测器使用统计
+        int ldr_count = 0;
+        int cp_count = 0;
+        int zp_count = 0;
+        
+        // 编码成本统计
+        int total_bits = 0;
+        int predictor_flag_bits = 0;
+        int quantization_bits = 0;
+        
+        // 预测误差统计
+        double total_prediction_error = 0;
+        double max_prediction_error = 0;
+        std::vector<double> prediction_errors;
+        
+        void PrintStats() const;
+        void PrintDetailedStats() const;
+    };
+
+    /**
+     * 构造函数
+     * @param block_size 块大小（用于预分配缓冲区）
+     * @param epsilon 最大允许误差（度）
+     */
+    TrajCompressSPCompressor(int block_size, double epsilon);
+    
+    /**
+     * 添加GPS点进行压缩
+     * @param point GPS点
+     */
+    void AddGpsPoint(const GpsPoint& point);
+    
+    /**
+     * 结束压缩，刷新缓冲区
+     */
+    void Close();
+    
+    /**
+     * 获取压缩后的数据
+     */
+    Array<uint8_t> GetCompressedData();
+    
+    /**
+     * 获取压缩大小（比特）
+     */
+    int GetCompressedSizeInBits() const { return compressed_size_in_bits_; }
+    
+    /**
+     * 获取统计信息
+     */
+    const CompressionStats& GetStats() const { return stats_; }
+
+private:
+    // 参数
+    const int kBlockSize;
+    const double kEpsilon;          // 误差阈值
+    const double kQuantStep;        // 量化步长 = 2 * epsilon
+    
+    // 状态
+    std::unique_ptr<OutputBitStream> output_bit_stream_;
+    int compressed_size_in_bits_ = 0;
+    bool first_point_ = true;
+    
+    // 重构状态（与解压器保持同步）
+    GpsPoint current_reconstructed_point_;
+    std::vector<HistoryState> history_states_;
+    static constexpr int kMaxHistorySize = 3;  // 只需要保留3个历史状态
+    
+    // 统计信息
+    CompressionStats stats_;
+    
+    // 核心算法函数
+    
+    /**
+     * 处理第一个点（写入原始坐标）
+     */
+    void ProcessFirstPoint(const GpsPoint& point);
+    
+    /**
+     * 并行预测：计算所有预测器的预测结果
+     */
+    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp);
+    
+    /**
+     * 选择最优预测器
+     */
+    PredictorType SelectBestPredictor(const GpsPoint& current_point,
+                                     const GpsPoint& pred_ldr,
+                                     const GpsPoint& pred_cp,
+                                     const GpsPoint& pred_zp,
+                                     GpsPoint& best_prediction);
+    
+    /**
+     * 编码预测器标志和量化误差
+     */
+    void EncodePrediction(PredictorType predictor,
+                         const GpsPoint& current_point,
+                         const GpsPoint& predicted_point);
+    
+    /**
+     * 更新历史状态
+     */
+    void UpdateHistory(const GpsPoint& reconstructed_point);
+    
+    /**
+     * 辅助函数：计算两点间欧氏距离
+     */
+    double CalculateDistance(const GpsPoint& p1, const GpsPoint& p2) const;
+};
+
+/**
+ * TrajCompress-SP 解压缩器
+ */
+class TrajCompressSPDecompressor {
+public:
+    using GpsPoint = TrajCompressSPCompressor::GpsPoint;
+    using PredictorType = TrajCompressSPCompressor::PredictorType;
+    using HistoryState = TrajCompressSPCompressor::HistoryState;
+    
+    /**
+     * 构造函数
+     * @param compressed_data 压缩数据
+     * @param data_size 数据大小（字节）
+     */
+    TrajCompressSPDecompressor(uint8_t* compressed_data, int data_size);
+    
+    /**
+     * 读取下一个GPS点
+     * @return 是否成功读取
+     */
+    bool ReadNextPoint(GpsPoint& point);
+    
+    /**
+     * 获取所有解压后的点
+     */
+    std::vector<GpsPoint> ReadAllPoints();
+
+private:
+    std::unique_ptr<class InputBitStream> input_bit_stream_;
+    
+    // 参数（从压缩数据头读取）
+    int block_size_;
+    double epsilon_;
+    double quant_step_;
+    
+    // 重构状态
+    bool first_point_ = true;
+    GpsPoint current_reconstructed_point_;
+    std::vector<HistoryState> history_states_;
+    static constexpr int kMaxHistorySize = 3;
+    
+    // 辅助函数
+    void ReadHeader();
+    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp);
+    void UpdateHistory(const GpsPoint& reconstructed_point);
+};
+

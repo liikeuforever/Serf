@@ -1,0 +1,5 @@
+if(EXISTS "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/test/deflate_test[1]_tests.cmake")
+  include("/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/test/deflate_test[1]_tests.cmake")
+else()
+  add_test(deflate_test_NOT_BUILT deflate_test_NOT_BUILT)
+endif()

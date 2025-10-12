@@ -1,0 +1,5 @@
+if(EXISTS "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/test/chimp_test[1]_tests.cmake")
+  include("/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/test/chimp_test[1]_tests.cmake")
+else()
+  add_test(chimp_test_NOT_BUILT chimp_test_NOT_BUILT)
+endif()

@@ -1,0 +1,5 @@
+if(EXISTS "/Users/xuzihang/GitProject/GG/Serf/build_geohash/test/serf_test[1]_tests.cmake")
+  include("/Users/xuzihang/GitProject/GG/Serf/build_geohash/test/serf_test[1]_tests.cmake")
+else()
+  add_test(serf_test_NOT_BUILT serf_test_NOT_BUILT)
+endif()

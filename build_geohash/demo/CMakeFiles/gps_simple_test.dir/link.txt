@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/gps_simple_test.dir/gps_simple_test.cc.o -o gps_simple_test  -Wl,-rpath,/Users/xuzihang/GitProject/GG/Serf/build_geohash/src ../src/libserf.dylib
