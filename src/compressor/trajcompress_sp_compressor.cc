@@ -31,8 +31,8 @@ void TrajCompressSPCompressor::AddGpsPoint(const GpsPoint& point) {
     GpsPoint best_prediction;
     PredictorType best_predictor = SelectBestPredictor(point, pred_ldr, pred_cp, pred_zp, best_prediction);
     
-    // 编码预测器标志和量化误差
-    EncodePrediction(best_predictor, point, best_prediction);
+    // 编码预测器标志和量化误差（使用优化编码）
+    EncodePredictionOptimized(best_predictor, point, best_prediction);
     
     // 更新统计
     switch (best_predictor) {
@@ -360,20 +360,29 @@ bool TrajCompressSPDecompressor::ReadNextPoint(GpsPoint& point) {
         return true;
     }
     
-    // 尝试读取预测器标志（2 bits）
+    // 尝试读取预测器标志（基于频率的最优编码）
     // 如果读取失败，说明已经到达数据流末尾
     try {
         bool bit1 = input_bit_stream_->ReadBit();
-        bool bit2 = input_bit_stream_->ReadBit();
         
         PredictorType predictor;
-        if (!bit1 && !bit2) {
+        if (!bit1) {
+            // 0: LDR (最高频率，1 bit)
             predictor = TrajCompressSPCompressor::PREDICTOR_LDR;
-        } else if (!bit1 && bit2) {
-            predictor = TrajCompressSPCompressor::PREDICTOR_CP;
-        } else {  // bit1 && !bit2
-            predictor = TrajCompressSPCompressor::PREDICTOR_ZP;
+        } else {
+            // 需要读取第二位
+            bool bit2 = input_bit_stream_->ReadBit();
+            if (!bit2) {
+                // 10: ZP (中等频率，2 bits)
+                predictor = TrajCompressSPCompressor::PREDICTOR_ZP;
+            } else {
+                // 11: CP (最低频率，2 bits)
+                predictor = TrajCompressSPCompressor::PREDICTOR_CP;
+            }
         }
+        
+        // 更新最后使用的预测器
+        last_used_predictor_ = predictor;
         
         // 并行预测
         GpsPoint pred_ldr, pred_cp, pred_zp;
@@ -454,6 +463,82 @@ void TrajCompressSPDecompressor::UpdateHistory(const GpsPoint& reconstructed_poi
     
     // 更新当前重构点
     current_reconstructed_point_ = reconstructed_point;
+    
+    // 添加到历史状态
+    history_states_.emplace_back(reconstructed_point, velocity);
+    
+    // 保持历史状态大小不超过限制
+    if (history_states_.size() > kMaxHistorySize) {
+        history_states_.erase(history_states_.begin());
+    }
+}
+void TrajCompressSPCompressor::EncodePredictionOptimized(PredictorType predictor,
+                                                        const GpsPoint& current_point,
+                                                        const GpsPoint& predicted_point) {
+    // 基于频率的最优编码：LDR=0, ZP=10, CP=11
+    // 根据预测器使用频率设计的最优编码方案
+    int bits_written = 0;
+    
+    switch (predictor) {
+        case PREDICTOR_LDR:
+            // LDR: 0 (1 bit) - 最高频率
+            compressed_size_in_bits_ += output_bit_stream_->WriteBit(false);
+            bits_written = 1;
+            break;
+        case PREDICTOR_ZP:
+            // ZP: 10 (2 bits) - 中等频率
+            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
+            compressed_size_in_bits_ += output_bit_stream_->WriteBit(false);
+            bits_written = 2;
+            break;
+        case PREDICTOR_CP:
+            // CP: 11 (2 bits) - 最低频率
+            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
+            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
+            bits_written = 2;
+            break;
+    }
+    
+    stats_.predictor_flag_bits += bits_written;
+    
+    // 2. 计算预测误差（二维向量）
+    GpsPoint delta = current_point - predicted_point;
+    
+    // 3. 量化误差（使用epsilon作为量化步长，确保重构误差≤epsilon）
+    int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kEpsilon));
+    int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kEpsilon));
+    
+    // 4. ZigZag编码（将有符号整数转换为非负整数）
+    uint64_t zigzag_lon = ZigZagCodec::Encode(quantized_delta_lon);
+    uint64_t zigzag_lat = ZigZagCodec::Encode(quantized_delta_lat);
+    
+    // 5. Elias Gamma编码（+1避免零值）
+    int bits_lon = EliasGammaCodec::Encode(zigzag_lon + 1, output_bit_stream_.get());
+    int bits_lat = EliasGammaCodec::Encode(zigzag_lat + 1, output_bit_stream_.get());
+    
+    compressed_size_in_bits_ += bits_lon + bits_lat;
+    stats_.quantization_bits += bits_lon + bits_lat;
+    
+    // 6. 重构当前点（用于下一个点的预测）
+    GpsPoint reconstructed_point = predicted_point + GpsPoint(
+        quantized_delta_lon * kEpsilon,
+        quantized_delta_lat * kEpsilon
+    );
+    
+    // 更新重构状态
+    UpdateReconstructedState(reconstructed_point);
+}
+
+
+void TrajCompressSPCompressor::UpdateReconstructedState(const GpsPoint& reconstructed_point) {
+    // 更新当前重构点
+    current_reconstructed_point_ = reconstructed_point;
+    
+    // 计算速度向量（用于下一个点的预测）
+    GpsPoint velocity(0, 0);
+    if (history_states_.size() >= 1) {
+        velocity = reconstructed_point - history_states_.back().reconstructed_point;
+    }
     
     // 添加到历史状态
     history_states_.emplace_back(reconstructed_point, velocity);

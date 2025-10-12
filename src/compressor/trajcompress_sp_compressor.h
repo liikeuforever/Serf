@@ -48,6 +48,14 @@ public:
         PREDICTOR_ZP = 2      // Zero Predictor - 零预测（Serf-QT风格）
     };
     
+    // 预测器标志编码优化
+    enum PredictorFlag {
+        FLAG_REUSE = 0,       // 重用上一个预测器
+        FLAG_SWITCH_LDR = 1,   // 切换到LDR预测器
+        FLAG_SWITCH_CP = 2,    // 切换到CP预测器
+        FLAG_SWITCH_ZP = 3     // 切换到ZP预测器
+    };
+    
     // 历史状态结构
     struct HistoryState {
         GpsPoint reconstructed_point;
@@ -71,6 +79,7 @@ public:
         int total_bits = 0;
         int predictor_flag_bits = 0;
         int quantization_bits = 0;
+        int quantized_data_bits = 0;
         
         // 预测误差统计
         double total_prediction_error = 0;
@@ -125,6 +134,9 @@ private:
     int compressed_size_in_bits_ = 0;
     bool first_point_ = true;
     
+    // 预测器重用优化
+    PredictorType last_used_predictor_ = PREDICTOR_ZP;  // 初始化为ZP
+    
     // 重构状态（与解压器保持同步）
     GpsPoint current_reconstructed_point_;
     std::vector<HistoryState> history_states_;
@@ -162,9 +174,22 @@ private:
                          const GpsPoint& predicted_point);
     
     /**
+     * 优化编码预测器标志和量化误差（支持预测器重用）
+     */
+    void EncodePredictionOptimized(PredictorType predictor,
+                                 const GpsPoint& current_point,
+                                 const GpsPoint& predicted_point);
+    
+    /**
      * 更新历史状态
      */
     void UpdateHistory(const GpsPoint& reconstructed_point);
+    
+    /**
+     * 更新重构状态（用于优化编码）
+     */
+    void UpdateReconstructedState(const GpsPoint& reconstructed_point);
+    
     
     /**
      * 辅助函数：计算两点间欧氏距离
@@ -212,6 +237,9 @@ private:
     GpsPoint current_reconstructed_point_;
     std::vector<HistoryState> history_states_;
     static constexpr int kMaxHistorySize = 3;
+    
+    // 预测器重用状态
+    PredictorType last_used_predictor_ = TrajCompressSPCompressor::PREDICTOR_ZP;  // 初始化为ZP
     
     // 辅助函数
     void ReadHeader();
