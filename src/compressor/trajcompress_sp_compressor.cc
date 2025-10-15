@@ -13,6 +13,14 @@ TrajCompressSPCompressor::TrajCompressSPCompressor(int block_size, double epsilo
     : kBlockSize(block_size), kEpsilon(epsilon), kQuantStep(epsilon) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
+    predictor_window_.reserve(kSlidingWindowSize);
+    
+    // 初始化 Huffman 编码表（初始使用固定编码）
+    // 假设初始频率分布：LDR 最高，CP 较低，ZP 中等
+    predictor_frequency_[PREDICTOR_LDR] = 60;  // 假设 LDR 60%
+    predictor_frequency_[PREDICTOR_CP] = 10;   // 假设 CP 10%
+    predictor_frequency_[PREDICTOR_ZP] = 30;   // 假设 ZP 30%
+    UpdateHuffmanCodes();
 }
 
 void TrajCompressSPCompressor::AddGpsPoint(const GpsPoint& point) {
@@ -31,8 +39,18 @@ void TrajCompressSPCompressor::AddGpsPoint(const GpsPoint& point) {
     GpsPoint best_prediction;
     PredictorType best_predictor = SelectBestPredictor(point, pred_ldr, pred_cp, pred_zp, best_prediction);
     
+    // 统计预测器重用情况
+    if (best_predictor == last_used_predictor_) {
+        stats_.predictor_reuse_count++;  // 连续使用同一预测器
+    } else {
+        stats_.predictor_switch_count++;  // 切换到不同预测器
+    }
+    
     // 编码预测器标志和量化误差（使用优化编码）
     EncodePredictionOptimized(best_predictor, point, best_prediction);
+    
+    // 更新最后使用的预测器
+    last_used_predictor_ = best_predictor;
     
     // 更新统计
     switch (best_predictor) {
@@ -235,6 +253,20 @@ void TrajCompressSPCompressor::CompressionStats::PrintStats() const {
                   << (100.0 * zp_count / moving_points) << "%)" << std::endl;
     }
     
+    std::cout << "\n=== 预测器重用统计 ===" << std::endl;
+    if (moving_points > 0) {
+        std::cout << "连续使用同一预测器: " << predictor_reuse_count << " (" 
+                  << std::fixed << std::setprecision(2)
+                  << (100.0 * predictor_reuse_count / moving_points) << "%)" << std::endl;
+        std::cout << "切换预测器:         " << predictor_switch_count << " (" 
+                  << (100.0 * predictor_switch_count / moving_points) << "%)" << std::endl;
+        
+        if (predictor_reuse_count + predictor_switch_count > 0) {
+            double reuse_ratio = 100.0 * predictor_reuse_count / (predictor_reuse_count + predictor_switch_count);
+            std::cout << "预测器重用率:       " << std::setprecision(2) << reuse_ratio << "%" << std::endl;
+        }
+    }
+    
     std::cout << "\n=== 预测精度统计 ===" << std::endl;
     if (moving_points > 0) {
         double avg_error = total_prediction_error / moving_points;
@@ -334,6 +366,14 @@ void TrajCompressSPCompressor::CompressionStats::PrintDetailedStats() const {
 
 TrajCompressSPDecompressor::TrajCompressSPDecompressor(uint8_t* compressed_data, int data_size) {
     input_bit_stream_ = std::make_unique<InputBitStream>(compressed_data, data_size);
+    predictor_window_.reserve(kSlidingWindowSize);
+    
+    // 初始化频率统计（与压缩器保持一致）
+    predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_LDR] = 60;
+    predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_CP] = 10;
+    predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_ZP] = 30;
+    UpdateHuffmanDecoder();
+    
     ReadHeader();
 }
 
@@ -360,26 +400,14 @@ bool TrajCompressSPDecompressor::ReadNextPoint(GpsPoint& point) {
         return true;
     }
     
-    // 尝试读取预测器标志（基于频率的最优编码）
+    // 尝试读取预测器标志（使用动态 Huffman 解码）
     // 如果读取失败，说明已经到达数据流末尾
     try {
-        bool bit1 = input_bit_stream_->ReadBit();
+        // 使用动态 Huffman 解码预测器标志
+        PredictorType predictor = DecodeWithHuffman();
         
-        PredictorType predictor;
-        if (!bit1) {
-            // 0: LDR (最高频率，1 bit)
-            predictor = TrajCompressSPCompressor::PREDICTOR_LDR;
-        } else {
-            // 需要读取第二位
-            bool bit2 = input_bit_stream_->ReadBit();
-            if (!bit2) {
-                // 10: ZP (中等频率，2 bits)
-                predictor = TrajCompressSPCompressor::PREDICTOR_ZP;
-            } else {
-                // 11: CP (最低频率，2 bits)
-                predictor = TrajCompressSPCompressor::PREDICTOR_CP;
-            }
-        }
+        // 更新滑动窗口和频率统计（与编码器保持同步）
+        AddPredictorToWindow(predictor);
         
         // 更新最后使用的预测器
         last_used_predictor_ = predictor;
@@ -475,51 +503,34 @@ void TrajCompressSPDecompressor::UpdateHistory(const GpsPoint& reconstructed_poi
 void TrajCompressSPCompressor::EncodePredictionOptimized(PredictorType predictor,
                                                         const GpsPoint& current_point,
                                                         const GpsPoint& predicted_point) {
-    // 基于频率的最优编码：LDR=0, ZP=10, CP=11
-    // 根据预测器使用频率设计的最优编码方案
-    int bits_written = 0;
+    // 1. 使用动态 Huffman 编码预测器标志
+    EncodeWithHuffman(predictor);
     
-    switch (predictor) {
-        case PREDICTOR_LDR:
-            // LDR: 0 (1 bit) - 最高频率
-            compressed_size_in_bits_ += output_bit_stream_->WriteBit(false);
-            bits_written = 1;
-            break;
-        case PREDICTOR_ZP:
-            // ZP: 10 (2 bits) - 中等频率
-            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
-            compressed_size_in_bits_ += output_bit_stream_->WriteBit(false);
-            bits_written = 2;
-            break;
-        case PREDICTOR_CP:
-            // CP: 11 (2 bits) - 最低频率
-            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
-            compressed_size_in_bits_ += output_bit_stream_->WriteBit(true);
-            bits_written = 2;
-            break;
-    }
+    // 2. 更新滑动窗口和频率统计
+    AddPredictorToWindow(predictor);
     
-    stats_.predictor_flag_bits += bits_written;
-    
-    // 2. 计算预测误差（二维向量）
+    // 3. 计算预测误差（二维向量）
     GpsPoint delta = current_point - predicted_point;
     
-    // 3. 量化误差（使用epsilon作为量化步长，确保重构误差≤epsilon）
+    // 4. 量化误差
+    // 注意：这里量化保证的是每个维度的误差 ≤ epsilon/2
+    // 因此欧几里得距离的量化误差 ≤ sqrt((epsilon/2)² + (epsilon/2)²) ≈ 0.707*epsilon
+    // 但如果预测误差本身很大（预测失败），重构误差会等于预测误差+量化误差
     int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kEpsilon));
     int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kEpsilon));
     
-    // 4. ZigZag编码（将有符号整数转换为非负整数）
+    // 5. ZigZag编码（将有符号整数转换为非负整数）
     uint64_t zigzag_lon = ZigZagCodec::Encode(quantized_delta_lon);
     uint64_t zigzag_lat = ZigZagCodec::Encode(quantized_delta_lat);
     
-    // 5. Elias Gamma编码（+1避免零值）
+    // 6. Elias Gamma编码（+1避免零值）
     int bits_lon = EliasGammaCodec::Encode(zigzag_lon + 1, output_bit_stream_.get());
     int bits_lat = EliasGammaCodec::Encode(zigzag_lat + 1, output_bit_stream_.get());
     
     compressed_size_in_bits_ += bits_lon + bits_lat;
     stats_.quantization_bits += bits_lon + bits_lat;
     
-    // 6. 重构当前点（用于下一个点的预测）
+    // 7. 重构当前点（用于下一个点的预测）
     GpsPoint reconstructed_point = predicted_point + GpsPoint(
         quantized_delta_lon * kEpsilon,
         quantized_delta_lat * kEpsilon
@@ -546,5 +557,149 @@ void TrajCompressSPCompressor::UpdateReconstructedState(const GpsPoint& reconstr
     // 保持历史状态大小不超过限制
     if (history_states_.size() > kMaxHistorySize) {
         history_states_.erase(history_states_.begin());
+    }
+}
+
+// ==================== 动态 Huffman 编码实现 ====================
+
+void TrajCompressSPCompressor::UpdateHuffmanCodes() {
+    // 根据当前频率统计生成最优 Huffman 编码
+    // 对于三个符号，我们使用简化的 Huffman 编码构建方法
+    
+    // 创建频率-预测器对，并排序（频率从高到低）
+    struct FreqPair {
+        int freq;
+        PredictorType predictor;
+        
+        bool operator<(const FreqPair& other) const {
+            return freq > other.freq;  // 降序排列
+        }
+    };
+    
+    std::vector<FreqPair> freq_pairs = {
+        {predictor_frequency_[PREDICTOR_LDR], PREDICTOR_LDR},
+        {predictor_frequency_[PREDICTOR_CP], PREDICTOR_CP},
+        {predictor_frequency_[PREDICTOR_ZP], PREDICTOR_ZP}
+    };
+    
+    std::sort(freq_pairs.begin(), freq_pairs.end());
+    
+    // 为三个符号构建最优前缀编码
+    // 最高频率：1 bit (0)
+    // 第二频率：2 bits (10)
+    // 最低频率：2 bits (11)
+    
+    if (freq_pairs[0].freq > 0) {
+        huffman_codes_[freq_pairs[0].predictor] = HuffmanCode({false});  // "0"
+    }
+    if (freq_pairs[1].freq > 0) {
+        huffman_codes_[freq_pairs[1].predictor] = HuffmanCode({true, false});  // "10"
+    }
+    if (freq_pairs[2].freq > 0) {
+        huffman_codes_[freq_pairs[2].predictor] = HuffmanCode({true, true});  // "11"
+    }
+}
+
+void TrajCompressSPCompressor::EncodeWithHuffman(PredictorType predictor) {
+    // 使用当前 Huffman 编码表编码预测器标志
+    const HuffmanCode& code = huffman_codes_[predictor];
+    
+    for (bool bit : code.bits) {
+        compressed_size_in_bits_ += output_bit_stream_->WriteBit(bit);
+    }
+    
+    stats_.predictor_flag_bits += code.length;
+}
+
+void TrajCompressSPCompressor::AddPredictorToWindow(PredictorType predictor) {
+    // 添加新的预测器到滑动窗口
+    predictor_window_.push_back(predictor);
+    predictor_frequency_[predictor]++;
+    
+    // 如果窗口已满，移除最旧的预测器
+    if (predictor_window_.size() > kSlidingWindowSize) {
+        PredictorType oldest = predictor_window_.front();
+        predictor_window_.erase(predictor_window_.begin());
+        predictor_frequency_[oldest]--;
+    }
+    
+    // 每处理 100 个点更新一次 Huffman 编码表
+    // 这样在高采样率数据上能快速适应频率变化，同时避免频繁更新
+    if (predictor_window_.size() % 100 == 0 && predictor_window_.size() >= 100) {
+        UpdateHuffmanCodes();
+    }
+}
+
+// ==================== 解压器的动态 Huffman 解码实现 ====================
+
+void TrajCompressSPDecompressor::UpdateHuffmanDecoder() {
+    // 解压器使用与压缩器完全相同的 Huffman 编码更新逻辑
+    // 这样可以保证编码器和解码器同步
+    
+    struct FreqPair {
+        int freq;
+        PredictorType predictor;
+        
+        bool operator<(const FreqPair& other) const {
+            return freq > other.freq;
+        }
+    };
+    
+    std::vector<FreqPair> freq_pairs = {
+        {predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_LDR], 
+         TrajCompressSPCompressor::PREDICTOR_LDR},
+        {predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_CP], 
+         TrajCompressSPCompressor::PREDICTOR_CP},
+        {predictor_frequency_[TrajCompressSPCompressor::PREDICTOR_ZP], 
+         TrajCompressSPCompressor::PREDICTOR_ZP}
+    };
+    
+    std::sort(freq_pairs.begin(), freq_pairs.end());
+    
+    // 构建并缓存解码表
+    // 解码规则：0 -> 最高频率, 10 -> 第二频率, 11 -> 最低频率
+    huffman_decoder_map_[0] = freq_pairs[0].predictor;  // 最高频率
+    huffman_decoder_map_[1] = freq_pairs[1].predictor;  // 第二频率
+    huffman_decoder_map_[2] = freq_pairs[2].predictor;  // 最低频率
+}
+
+TrajCompressSPCompressor::PredictorType TrajCompressSPDecompressor::DecodeWithHuffman() {
+    // 使用缓存的 Huffman 解码表（与编码器同步）
+    // 关键：不能每次都重新排序，必须使用上一次更新的解码表
+    
+    // 读取第一位
+    bool first_bit = input_bit_stream_->ReadBit();
+    
+    if (!first_bit) {
+        // 0 -> 最高频率预测器
+        return huffman_decoder_map_[0];
+    } else {
+        // 需要读取第二位
+        bool second_bit = input_bit_stream_->ReadBit();
+        if (!second_bit) {
+            // 10 -> 第二频率预测器
+            return huffman_decoder_map_[1];
+        } else {
+            // 11 -> 最低频率预测器
+            return huffman_decoder_map_[2];
+        }
+    }
+}
+
+void TrajCompressSPDecompressor::AddPredictorToWindow(PredictorType predictor) {
+    // 添加新的预测器到滑动窗口
+    predictor_window_.push_back(predictor);
+    predictor_frequency_[predictor]++;
+    
+    // 如果窗口已满，移除最旧的预测器
+    if (predictor_window_.size() > kSlidingWindowSize) {
+        PredictorType oldest = predictor_window_.front();
+        predictor_window_.erase(predictor_window_.begin());
+        predictor_frequency_[oldest]--;
+    }
+    
+    // 每处理 100 个点更新一次解码表（与编码器保持同步）
+    if (predictor_window_.size() % 100 == 0 && predictor_window_.size() >= 100) {
+        UpdateHuffmanDecoder();
     }
 }

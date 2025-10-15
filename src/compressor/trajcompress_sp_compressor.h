@@ -75,6 +75,10 @@ public:
         int cp_count = 0;
         int zp_count = 0;
         
+        // 预测器重用统计
+        int predictor_reuse_count = 0;      // 连续使用同一预测器的次数
+        int predictor_switch_count = 0;     // 切换预测器的次数
+        
         // 编码成本统计
         int total_bits = 0;
         int predictor_flag_bits = 0;
@@ -144,6 +148,26 @@ private:
     
     // 统计信息
     CompressionStats stats_;
+    
+    // 动态 Huffman 编码相关（滑动窗口）
+    static constexpr int kSlidingWindowSize = 1000;  // 滑动窗口大小
+    std::vector<PredictorType> predictor_window_;    // 滑动窗口，保存最近的预测器选择
+    int predictor_frequency_[3] = {0, 0, 0};         // 预测器频率统计 [LDR, CP, ZP]
+    
+    // Huffman 编码表（根据频率动态生成）
+    struct HuffmanCode {
+        std::vector<bool> bits;  // 编码比特序列
+        int length;              // 编码长度
+        
+        HuffmanCode() : length(0) {}
+        HuffmanCode(const std::vector<bool>& b) : bits(b), length(b.size()) {}
+    };
+    HuffmanCode huffman_codes_[3];  // 三个预测器的 Huffman 编码
+    
+    // Huffman 编码辅助函数
+    void UpdateHuffmanCodes();
+    void EncodeWithHuffman(PredictorType predictor);
+    void AddPredictorToWindow(PredictorType predictor);
     
     // 核心算法函数
     
@@ -240,6 +264,19 @@ private:
     
     // 预测器重用状态
     PredictorType last_used_predictor_ = TrajCompressSPCompressor::PREDICTOR_ZP;  // 初始化为ZP
+    
+    // 动态 Huffman 编码相关（滑动窗口）
+    static constexpr int kSlidingWindowSize = 1000;  // 滑动窗口大小
+    std::vector<PredictorType> predictor_window_;    // 滑动窗口
+    int predictor_frequency_[3] = {0, 0, 0};         // 预测器频率统计
+    
+    // Huffman 解码表（缓存，与编码器同步）
+    PredictorType huffman_decoder_map_[3];  // [0]=最高频率, [1]=第二频率, [2]=最低频率
+    
+    // Huffman 解码辅助函数
+    void UpdateHuffmanDecoder();
+    PredictorType DecodeWithHuffman();
+    void AddPredictorToWindow(PredictorType predictor);
     
     // 辅助函数
     void ReadHeader();
