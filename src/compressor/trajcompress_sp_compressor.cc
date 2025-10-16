@@ -105,15 +105,52 @@ void TrajCompressSPCompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pre
     GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
     pred_ldr = current_reconstructed_point_ + velocity;
     
-    // 曲线预测（CP）：假设匀加速运动
-    // acceleration = velocity_{i-1} - velocity_{i-2}
-    // predicted = P_{i-1} + velocity_{i-1} + acceleration
-    if (history_states_.size() >= 3) {
+    // 曲线预测（CP）：三阶预测，考虑jerk（加速度变化率）
+    // 在强曲线场景（加速/减速/转弯）下获得更大优势
+    if (history_states_.size() >= 5) {
+        // 使用5个点进行三阶预测
+        GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
+        GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
+        GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
+        GpsPoint v4 = history_states_[history_states_.size() - 4].velocity;
+        
+        // 速度：轻微平滑最近3个速度，权重偏向最近
+        GpsPoint smoothed_velocity(
+            0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+        );
+        
+        // 加速度：最近2个
+        GpsPoint a1 = v1 - v2;
+        GpsPoint a2 = v2 - v3;
+        
+        // Jerk（加速度变化率）：捕捉加速度趋势
+        GpsPoint jerk(
+            (a1.longitude - a2.longitude),
+            (a1.latitude - a2.latitude)
+        );
+        
+        // 三阶预测：速度 + 加速度 + 0.5*jerk（jerk用系数0.5以避免过拟合）
+        pred_cp = current_reconstructed_point_ + smoothed_velocity + a1 + GpsPoint(0.5 * jerk.longitude, 0.5 * jerk.latitude);
+    } else if (history_states_.size() >= 4) {
+        // 二阶预测（平滑版）
+        GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
+        GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
+        GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
+        GpsPoint smoothed_velocity(
+            0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+        );
+        GpsPoint acceleration = v1 - v2;
+        pred_cp = current_reconstructed_point_ + smoothed_velocity + acceleration;
+    } else if (history_states_.size() >= 3) {
+        // 历史较少，使用原始二阶
+        GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
         GpsPoint prev_velocity = history_states_[history_states_.size() - 2].velocity;
         GpsPoint acceleration = velocity - prev_velocity;
         pred_cp = current_reconstructed_point_ + velocity + acceleration;
     } else {
-        // 历史不足，曲线预测退化为线性预测
+        // 历史不足，退化为线性预测
         pred_cp = pred_ldr;
     }
 }
@@ -475,11 +512,38 @@ void TrajCompressSPDecompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& p
     GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
     pred_ldr = current_reconstructed_point_ + velocity;
     
-    // 曲线预测（CP）
-    if (history_states_.size() >= 3) {
+    // 曲线预测（CP）：三阶预测（与编码器保持一致）
+    if (history_states_.size() >= 5) {
+        GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
+        GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
+        GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
+        GpsPoint v4 = history_states_[history_states_.size() - 4].velocity;
+        
+        GpsPoint smoothed_velocity(
+            0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+        );
+        
+        GpsPoint a1 = v1 - v2;
+        GpsPoint a2 = v2 - v3;
+        GpsPoint jerk(a1.longitude - a2.longitude, a1.latitude - a2.latitude);
+        
+        pred_cp = current_reconstructed_point_ + smoothed_velocity + a1 + GpsPoint(0.5 * jerk.longitude, 0.5 * jerk.latitude);
+    } else if (history_states_.size() >= 4) {
+        GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
+        GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
+        GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
+        GpsPoint smoothed_velocity(
+            0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+        );
+        GpsPoint acceleration = v1 - v2;
+        pred_cp = current_reconstructed_point_ + smoothed_velocity + acceleration;
+    } else if (history_states_.size() >= 3) {
+        GpsPoint velocity_curr = history_states_[history_states_.size() - 1].velocity;
         GpsPoint prev_velocity = history_states_[history_states_.size() - 2].velocity;
-        GpsPoint acceleration = velocity - prev_velocity;
-        pred_cp = current_reconstructed_point_ + velocity + acceleration;
+        GpsPoint acceleration = velocity_curr - prev_velocity;
+        pred_cp = current_reconstructed_point_ + velocity_curr + acceleration;
     } else {
         pred_cp = pred_ldr;
     }
