@@ -393,8 +393,8 @@ void TestTrajCompressSPAdaptive(const std::vector<GpsPoint>& gps_data, double ep
         gps_data.size(), 
         epsilon,
         true,  // enable_adaptive = true（启用动态参数调整）
-        32,    // min_window
-        128,   // max_window
+        16,    // min_window（优化配置）
+        192,   // max_window（优化配置）
         256    // observe_window
     );
     
@@ -455,8 +455,8 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
         gps_data.size(), 
         epsilon,
         true,  // enable_adaptive = true（启用动态参数调整）
-        32,    // min_window
-        128,   // max_window
+        16,    // min_window（优化配置）
+        192,   // max_window（优化配置）
         256    // observe_window
     );
     for (const auto& point : gps_data) {
@@ -943,23 +943,14 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
             gps_data.size(), 
             epsilon,
             true,  // enable_adaptive = true（启用动态参数调整）
-            32,    // min_window
-            128,   // max_window
+            16,    // min_window（优化配置）
+            192,   // max_window（优化配置）
             256    // observe_window
         );
         for (const auto& point : gps_data) {
             adaptive_compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
         }
         adaptive_compressor.Close();
-        
-        // 调试输出：打印Track原始数据的adaptive bits
-        if (dataset.name.find("Track") != std::string::npos && 
-            dataset.name.find("原始") != std::string::npos) {
-            long adaptive_bits_debug = adaptive_compressor.GetCompressedSizeInBits();
-            double adaptive_avg_debug = static_cast<double>(adaptive_bits_debug) / gps_data.size();
-            std::cout << "🔍 DEBUG - Track原始: adaptive_bits=" << adaptive_bits_debug 
-                      << ", avg=" << std::fixed << std::setprecision(6) << adaptive_avg_debug << std::endl;
-        }
         
         // Serf-QT
         SerfQtCompressor qt_lon(gps_data.size(), epsilon);
@@ -1017,14 +1008,29 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     std::cout << std::string(100, '=') << std::endl;
     std::cout << std::endl;
     
+    // 生成带时间戳的CSV文件名
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+    std::stringstream csv_filename;
+    csv_filename << "compression_results_" 
+                 << std::put_time(std::localtime(&now_c), "%Y%m%d_%H%M%S") 
+                 << ".csv";
+    
+    // 打开CSV文件
+    std::ofstream csv_file(csv_filename.str());
+    if (csv_file.is_open()) {
+        // 写入CSV头
+        csv_file << "Dataset,Points,TrajSP,Adaptive,QT,Linear,Curve,Best\n";
+    }
+    
     // 表头
     std::cout << std::setw(25) << "数据集" 
-              << std::setw(10) << "点数"
-              << std::setw(10) << "TrajSP"
-              << std::setw(10) << "Adaptive"
-              << std::setw(10) << "QT(前值)"
-              << std::setw(10) << "Linear"
-              << std::setw(10) << "Curve"
+              << std::setw(12) << "点数"
+              << std::setw(12) << "TrajSP"
+              << std::setw(12) << "Adaptive"
+              << std::setw(12) << "QT(前值)"
+              << std::setw(12) << "Linear"
+              << std::setw(12) << "Curve"
               << std::setw(12) << "最优" << std::endl;
     std::cout << std::string(100, '-') << std::endl;
     
@@ -1037,18 +1043,38 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         else if (result.linear_avg == min_avg) best = "Linear";
         else best = "Curve";
         
+        // 控制台输出（6位有效数字）
         std::cout << std::setw(25) << result.dataset_name
-                  << std::setw(10) << result.points
-                  << std::setw(10) << std::fixed << std::setprecision(2) << result.sp_avg
-                  << std::setw(10) << result.adaptive_avg
-                  << std::setw(10) << result.qt_avg
-                  << std::setw(10) << result.linear_avg
-                  << std::setw(10) << result.curve_avg
+                  << std::setw(12) << result.points
+                  << std::setw(12) << std::fixed << std::setprecision(6) << result.sp_avg
+                  << std::setw(12) << result.adaptive_avg
+                  << std::setw(12) << result.qt_avg
+                  << std::setw(12) << result.linear_avg
+                  << std::setw(12) << result.curve_avg
                   << std::setw(12) << best << std::endl;
+        
+        // 写入CSV（6位有效数字）
+        if (csv_file.is_open()) {
+            csv_file << result.dataset_name << ","
+                     << result.points << ","
+                     << std::fixed << std::setprecision(6)
+                     << result.sp_avg << ","
+                     << result.adaptive_avg << ","
+                     << result.qt_avg << ","
+                     << result.linear_avg << ","
+                     << result.curve_avg << ","
+                     << best << "\n";
+        }
     }
     
     std::cout << std::string(100, '-') << std::endl;
-    std::cout << "注: 数值为平均每点比特数 (bits/点)" << std::endl;
+    std::cout << "注: 数值为平均每点比特数 (bits/点，保留6位有效数字)" << std::endl;
+    
+    // 关闭CSV文件
+    if (csv_file.is_open()) {
+        csv_file.close();
+        std::cout << "\n✅ 结果已导出到: " << csv_filename.str() << std::endl;
+    }
     
     // 统计最优算法出现次数
     int sp_wins = 0, adaptive_wins = 0, qt_wins = 0, linear_wins = 0, curve_wins = 0;

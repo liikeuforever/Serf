@@ -337,21 +337,28 @@ void TrajCompressSPAdaptiveCompressor::UpdateAdaptiveParameters() {
     double churn_rate = CalculateChurnRate();
     
     // 2. 动态调整 kCostWindowSize
-    // 低流失率（稳定轨迹）→ 大窗口（长期视角）
-    // 高流失率（混乱轨迹）→ 小窗口（短期灵活）
-    kCostWindowSize = kMaxWindowSize - static_cast<int>((kMaxWindowSize - kMinWindowSize) * churn_rate);
+    // **修正逻辑**：
+    // 低流失率（简单轨迹，如Track）→ 小窗口（快速锁定到LDR-Only）
+    // 高流失率（复杂轨迹，如Geolife）→ 大窗口（长期观察）
+    kCostWindowSize = kMinWindowSize + static_cast<int>((kMaxWindowSize - kMinWindowSize) * churn_rate);
     
     // 3. 计算成本差的标准差
     double cost_diff_stddev = CalculateCostDiffStdDev();
     
     // 4. 动态调整 kStabilityMargin
-    // 成本差异稳定（stddev小）→ 小边际（容易切换）
-    // 成本差异波动大（stddev大）→ 大边际（防止抖动）
-    kStabilityMargin = static_cast<int>(0.5 * cost_diff_stddev);
+    // **修正逻辑**：
+    // 低波动性（竞争激烈，stddev小）→ 高边际（谨慎决策，避免因噪声切换）
+    // 高波动性（优劣明显，stddev大）→ 低边际（果断决策，快速切换到更优模式）
+    const double MAX_REASONABLE_STDDEV = 10.0;  // 设置上限防止极端值
+    double normalized_stddev = std::min(cost_diff_stddev, MAX_REASONABLE_STDDEV) / MAX_REASONABLE_STDDEV;
+    
+    const int MAX_MARGIN = 4;
+    const int MIN_MARGIN = 1;
+    kStabilityMargin = MAX_MARGIN - static_cast<int>((MAX_MARGIN - MIN_MARGIN) * normalized_stddev);
     
     // 确保参数在合理范围内
     kCostWindowSize = std::max(kMinWindowSize, std::min(kCostWindowSize, kMaxWindowSize));
-    kStabilityMargin = std::max(0, std::min(kStabilityMargin, 5));  // 边际不超过5 bits
+    kStabilityMargin = std::max(MIN_MARGIN, std::min(kStabilityMargin, MAX_MARGIN));
 }
 
 double TrajCompressSPAdaptiveCompressor::CalculateChurnRate() const {
