@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/serf.dir/compressor/net_serf_xor_compressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.o"
   "CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.o.d"
+  "CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o"
+  "CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o"
   "CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o"

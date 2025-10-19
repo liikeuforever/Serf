@@ -97,7 +97,7 @@ public:
     /**
      * 构造函数
      * @param block_size 块大小（用于预分配缓冲区）
-     * @param epsilon 最大允许误差（度）
+     * @param epsilon 最大允许误差（度），内部会乘以0.999系数，与Serf-QT保持一致
      */
     TrajCompressSPCompressor(int block_size, double epsilon);
     
@@ -130,8 +130,8 @@ public:
 private:
     // 参数
     const int kBlockSize;
-    const double kEpsilon;          // 误差阈值
-    const double kQuantStep;        // 量化步长 = 2 * epsilon
+    const double kEpsilon;          // 误差阈值（经过0.999系数处理，与Serf-QT保持一致）
+    const double kQuantStep;        // 量化步长 = 2 * epsilon * 0.999（与Serf-QT一维量化完全对应）
     
     // 状态
     std::unique_ptr<OutputBitStream> output_bit_stream_;

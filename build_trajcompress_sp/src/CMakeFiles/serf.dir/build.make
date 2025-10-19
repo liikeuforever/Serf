@@ -114,10 +114,24 @@ src/CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.s"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_compressor.cc -o CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.s
 
+src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
+src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_curve_compressor.cc
+src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o"
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_curve_compressor.cc
+
+src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.i"
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_curve_compressor.cc > CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.i
+
+src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.s"
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_curve_compressor.cc -o CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.s
+
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_configurable_compressor.cc
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_configurable_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.i: cmake_force
@@ -131,7 +145,7 @@ src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.s: cma
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_stats_compressor.cc
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_stats_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.i: cmake_force
@@ -145,7 +159,7 @@ src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.s: cmake_forc
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_trajectory_compressor.cc
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_gps_trajectory_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.i: cmake_force
@@ -159,7 +173,7 @@ src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.s: cmake
 src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_linear_compressor.cc
 src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_qt_linear_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.i: cmake_force
@@ -173,7 +187,7 @@ src/CMakeFiles/serf.dir/compressor/serf_qt_linear_compressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor.cc
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.i: cmake_force
@@ -187,7 +201,7 @@ src/CMakeFiles/serf.dir/compressor/serf_xor_compressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_no_fast_search.cc
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o -MF CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_no_fast_search.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.i: cmake_force
@@ -201,7 +215,7 @@ src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_fast_search.cc.s: cmak
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_no_opt_appr.cc
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o -MF CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_no_opt_appr.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.i: cmake_force
@@ -215,7 +229,7 @@ src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_no_opt_appr.cc.s: cmake_f
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_rel.cc
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o -MF CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o.d -o CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/serf_xor_compressor_rel.cc
 
 src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.i: cmake_force
@@ -229,7 +243,7 @@ src/CMakeFiles/serf.dir/compressor/serf_xor_compressor_rel.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/sfc_compressor.cc
 src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/sfc_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/sfc_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.i: cmake_force
@@ -243,7 +257,7 @@ src/CMakeFiles/serf.dir/compressor/sfc_compressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/sfc_decompressor.cc
 src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o -MF CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o.d -o CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/sfc_decompressor.cc
 
 src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.i: cmake_force
@@ -257,7 +271,7 @@ src/CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/space_filling_curve.cc
 src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o -MF CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o.d -o CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/space_filling_curve.cc
 
 src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.i: cmake_force
@@ -271,7 +285,7 @@ src/CMakeFiles/serf.dir/compressor/space_filling_curve.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor/trajcompress_sp_compressor.cc
 src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o -MF CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o.d -o CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor/trajcompress_sp_compressor.cc
 
 src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.i: cmake_force
@@ -285,7 +299,7 @@ src/CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor_32/serf_qt_compressor_32.cc
 src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o -MF CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o.d -o CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor_32/serf_qt_compressor_32.cc
 
 src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.i: cmake_force
@@ -299,7 +313,7 @@ src/CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.s: cmake_force
 src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/compressor_32/serf_xor_compressor_32.cc
 src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o -MF CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o.d -o CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/compressor_32/serf_xor_compressor_32.cc
 
 src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.i: cmake_force
@@ -313,7 +327,7 @@ src/CMakeFiles/serf.dir/compressor_32/serf_xor_compressor_32.cc.s: cmake_force
 src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/net_serf_qt_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/net_serf_qt_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.i: cmake_force
@@ -327,7 +341,7 @@ src/CMakeFiles/serf.dir/decompressor/net_serf_qt_decompressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/net_serf_xor_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/net_serf_xor_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.i: cmake_force
@@ -341,7 +355,7 @@ src/CMakeFiles/serf.dir/decompressor/net_serf_xor_decompressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.i: cmake_force
@@ -355,7 +369,7 @@ src/CMakeFiles/serf.dir/decompressor/serf_qt_decompressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_gps_configurable_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_gps_configurable_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.i: cmake_force
@@ -369,7 +383,7 @@ src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_configurable_decompressor.cc.s:
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_gps_trajectory_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_gps_trajectory_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.i: cmake_force
@@ -383,7 +397,7 @@ src/CMakeFiles/serf.dir/decompressor/serf_qt_gps_trajectory_decompressor.cc.s: c
 src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_linear_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_qt_linear_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.i: cmake_force
@@ -397,7 +411,7 @@ src/CMakeFiles/serf.dir/decompressor/serf_qt_linear_decompressor.cc.s: cmake_for
 src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_xor_decompressor.cc
 src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o -MF CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o.d -o CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor/serf_xor_decompressor.cc
 
 src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.i: cmake_force
@@ -411,7 +425,7 @@ src/CMakeFiles/serf.dir/decompressor/serf_xor_decompressor.cc.s: cmake_force
 src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor_32/serf_qt_decompressor_32.cc
 src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o -MF CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o.d -o CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor_32/serf_qt_decompressor_32.cc
 
 src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.i: cmake_force
@@ -425,7 +439,7 @@ src/CMakeFiles/serf.dir/decompressor_32/serf_qt_decompressor_32.cc.s: cmake_forc
 src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/decompressor_32/serf_xor_decompressor_32.cc
 src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o -MF CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o.d -o CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/decompressor_32/serf_xor_decompressor_32.cc
 
 src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.i: cmake_force
@@ -439,7 +453,7 @@ src/CMakeFiles/serf.dir/decompressor_32/serf_xor_decompressor_32.cc.s: cmake_for
 src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/elias_delta_codec.cc
 src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o -MF CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o.d -o CMakeFiles/serf.dir/utils/elias_delta_codec.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/elias_delta_codec.cc
 
 src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.i: cmake_force
@@ -453,7 +467,7 @@ src/CMakeFiles/serf.dir/utils/elias_delta_codec.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/elias_gamma_codec.cc
 src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o -MF CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o.d -o CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/elias_gamma_codec.cc
 
 src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.i: cmake_force
@@ -467,7 +481,7 @@ src/CMakeFiles/serf.dir/utils/elias_gamma_codec.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/input_bit_stream.cc
 src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.o -MF CMakeFiles/serf.dir/utils/input_bit_stream.cc.o.d -o CMakeFiles/serf.dir/utils/input_bit_stream.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/input_bit_stream.cc
 
 src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.i: cmake_force
@@ -481,7 +495,7 @@ src/CMakeFiles/serf.dir/utils/input_bit_stream.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/output_bit_stream.cc
 src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.o -MF CMakeFiles/serf.dir/utils/output_bit_stream.cc.o.d -o CMakeFiles/serf.dir/utils/output_bit_stream.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/output_bit_stream.cc
 
 src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.i: cmake_force
@@ -495,7 +509,7 @@ src/CMakeFiles/serf.dir/utils/output_bit_stream.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/post_office_solver.cc
 src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/post_office_solver.cc.o -MF CMakeFiles/serf.dir/utils/post_office_solver.cc.o.d -o CMakeFiles/serf.dir/utils/post_office_solver.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/post_office_solver.cc
 
 src/CMakeFiles/serf.dir/utils/post_office_solver.cc.i: cmake_force
@@ -509,7 +523,7 @@ src/CMakeFiles/serf.dir/utils/post_office_solver.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/post_office_solver_32.cc
 src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o -MF CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o.d -o CMakeFiles/serf.dir/utils/post_office_solver_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/post_office_solver_32.cc
 
 src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.i: cmake_force
@@ -523,7 +537,7 @@ src/CMakeFiles/serf.dir/utils/post_office_solver_32.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/serf_utils_32.cc
 src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o -MF CMakeFiles/serf.dir/utils/serf_utils_32.cc.o.d -o CMakeFiles/serf.dir/utils/serf_utils_32.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/serf_utils_32.cc
 
 src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.i: cmake_force
@@ -537,7 +551,7 @@ src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.s: cmake_force
 src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o: src/CMakeFiles/serf.dir/flags.make
 src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o: /Users/xuzihang/GitProject/GG/Serf/src/utils/serf_utils_64.cc
 src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o: src/CMakeFiles/serf.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o -MF CMakeFiles/serf.dir/utils/serf_utils_64.cc.o.d -o CMakeFiles/serf.dir/utils/serf_utils_64.cc.o -c /Users/xuzihang/GitProject/GG/Serf/src/utils/serf_utils_64.cc
 
 src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.i: cmake_force
@@ -553,6 +567,7 @@ serf_OBJECTS = \
 "CMakeFiles/serf.dir/compressor/net_serf_qt_compressor.cc.o" \
 "CMakeFiles/serf.dir/compressor/net_serf_xor_compressor.cc.o" \
 "CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.o" \
+"CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o" \
 "CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o" \
 "CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o" \
 "CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o" \
@@ -591,6 +606,7 @@ serf_EXTERNAL_OBJECTS =
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/net_serf_qt_compressor.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/net_serf_xor_compressor.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.o
+src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/serf_qt_gps_configurable_compressor.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/serf_qt_gps_stats_compressor.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/compressor/serf_qt_gps_trajectory_compressor.cc.o
@@ -624,7 +640,7 @@ src/libserf.dylib: src/CMakeFiles/serf.dir/utils/serf_utils_32.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/utils/serf_utils_64.cc.o
 src/libserf.dylib: src/CMakeFiles/serf.dir/build.make
 src/libserf.dylib: src/CMakeFiles/serf.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Linking CXX shared library libserf.dylib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Linking CXX shared library libserf.dylib"
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/serf.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

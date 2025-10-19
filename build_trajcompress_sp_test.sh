@@ -41,6 +41,8 @@ g++ -std=c++17 -O3 \
     trajcompress_sp_test.cc \
     src/compressor/trajcompress_sp_compressor.cc \
     src/compressor/serf_qt_compressor.cc \
+    src/compressor/serf_qt_linear_compressor.cc \
+    src/compressor/serf_qt_curve_compressor.cc \
     src/utils/output_bit_stream.cc \
     src/utils/input_bit_stream.cc \
     src/utils/elias_gamma_codec.cc \

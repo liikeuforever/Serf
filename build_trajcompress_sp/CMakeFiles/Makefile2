@@ -799,7 +799,7 @@ test/CMakeFiles/elf_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/g
 test/CMakeFiles/elf_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/elf_test.dir/build.make test/CMakeFiles/elf_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/elf_test.dir/build.make test/CMakeFiles/elf_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Built target elf_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=29 "Built target elf_test"
 .PHONY : test/CMakeFiles/elf_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -816,7 +816,7 @@ elf_test: test/CMakeFiles/elf_test.dir/rule
 # codegen rule for target.
 test/CMakeFiles/elf_test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/elf_test.dir/build.make test/CMakeFiles/elf_test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Finished codegen for target elf_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=29 "Finished codegen for target elf_test"
 .PHONY : test/CMakeFiles/elf_test.dir/codegen
 
 # clean rule for target.
@@ -868,12 +868,12 @@ test/CMakeFiles/gorilla_test.dir/all: _deps/googletest-build/googletest/CMakeFil
 test/CMakeFiles/gorilla_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gorilla_test.dir/build.make test/CMakeFiles/gorilla_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gorilla_test.dir/build.make test/CMakeFiles/gorilla_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=35 "Built target gorilla_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Built target gorilla_test"
 .PHONY : test/CMakeFiles/gorilla_test.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/gorilla_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/gorilla_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : test/CMakeFiles/gorilla_test.dir/rule
@@ -885,7 +885,7 @@ gorilla_test: test/CMakeFiles/gorilla_test.dir/rule
 # codegen rule for target.
 test/CMakeFiles/gorilla_test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/gorilla_test.dir/build.make test/CMakeFiles/gorilla_test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=35 "Finished codegen for target gorilla_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Finished codegen for target gorilla_test"
 .PHONY : test/CMakeFiles/gorilla_test.dir/codegen
 
 # clean rule for target.
@@ -936,12 +936,12 @@ test/CMakeFiles/lz77_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/
 test/CMakeFiles/lz77_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/lz77_test.dir/build.make test/CMakeFiles/lz77_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/lz77_test.dir/build.make test/CMakeFiles/lz77_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=64 "Built target lz77_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Built target lz77_test"
 .PHONY : test/CMakeFiles/lz77_test.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/lz77_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/lz77_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : test/CMakeFiles/lz77_test.dir/rule
@@ -953,7 +953,7 @@ lz77_test: test/CMakeFiles/lz77_test.dir/rule
 # codegen rule for target.
 test/CMakeFiles/lz77_test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/lz77_test.dir/build.make test/CMakeFiles/lz77_test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=64 "Finished codegen for target lz77_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Finished codegen for target lz77_test"
 .PHONY : test/CMakeFiles/lz77_test.dir/codegen
 
 # clean rule for target.
@@ -975,7 +975,7 @@ test/CMakeFiles/machete_test.dir/all: _deps/googletest-build/googletest/CMakeFil
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/machete_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/machete_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : test/CMakeFiles/machete_test.dir/rule
@@ -1377,12 +1377,12 @@ test/baselines/gorilla/CMakeFiles/gorilla.dir/clean:
 test/baselines/elf/CMakeFiles/elf.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/baselines/elf/CMakeFiles/elf.dir/build.make test/baselines/elf/CMakeFiles/elf.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/baselines/elf/CMakeFiles/elf.dir/build.make test/baselines/elf/CMakeFiles/elf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=28,29 "Built target elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=28 "Built target elf"
 .PHONY : test/baselines/elf/CMakeFiles/elf.dir/all
 
 # Build rule for subdir invocation for target.
 test/baselines/elf/CMakeFiles/elf.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/baselines/elf/CMakeFiles/elf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : test/baselines/elf/CMakeFiles/elf.dir/rule
@@ -1394,7 +1394,7 @@ elf: test/baselines/elf/CMakeFiles/elf.dir/rule
 # codegen rule for target.
 test/baselines/elf/CMakeFiles/elf.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f test/baselines/elf/CMakeFiles/elf.dir/build.make test/baselines/elf/CMakeFiles/elf.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=28,29 "Finished codegen for target elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=28 "Finished codegen for target elf"
 .PHONY : test/baselines/elf/CMakeFiles/elf.dir/codegen
 
 # clean rule for target.
@@ -1409,12 +1409,12 @@ test/baselines/elf/CMakeFiles/elf.dir/clean:
 test/baselines/machete/CMakeFiles/machete.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/baselines/machete/CMakeFiles/machete.dir/build.make test/baselines/machete/CMakeFiles/machete.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/baselines/machete/CMakeFiles/machete.dir/build.make test/baselines/machete/CMakeFiles/machete.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=65 "Built target machete"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=64,65 "Built target machete"
 .PHONY : test/baselines/machete/CMakeFiles/machete.dir/all
 
 # Build rule for subdir invocation for target.
 test/baselines/machete/CMakeFiles/machete.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/baselines/machete/CMakeFiles/machete.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : test/baselines/machete/CMakeFiles/machete.dir/rule
@@ -1426,7 +1426,7 @@ machete: test/baselines/machete/CMakeFiles/machete.dir/rule
 # codegen rule for target.
 test/baselines/machete/CMakeFiles/machete.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f test/baselines/machete/CMakeFiles/machete.dir/build.make test/baselines/machete/CMakeFiles/machete.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=65 "Finished codegen for target machete"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=64,65 "Finished codegen for target machete"
 .PHONY : test/baselines/machete/CMakeFiles/machete.dir/codegen
 
 # clean rule for target.
@@ -2850,12 +2850,12 @@ demo/CMakeFiles/gps_trajectory_compression_demo.dir/clean:
 demo/CMakeFiles/gps_simple_test.dir/all: src/CMakeFiles/serf.dir/all
 	$(MAKE) $(MAKESILENT) -f demo/CMakeFiles/gps_simple_test.dir/build.make demo/CMakeFiles/gps_simple_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f demo/CMakeFiles/gps_simple_test.dir/build.make demo/CMakeFiles/gps_simple_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Built target gps_simple_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=35 "Built target gps_simple_test"
 .PHONY : demo/CMakeFiles/gps_simple_test.dir/all
 
 # Build rule for subdir invocation for target.
 demo/CMakeFiles/gps_simple_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo/CMakeFiles/gps_simple_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles 0
 .PHONY : demo/CMakeFiles/gps_simple_test.dir/rule
@@ -2867,7 +2867,7 @@ gps_simple_test: demo/CMakeFiles/gps_simple_test.dir/rule
 # codegen rule for target.
 demo/CMakeFiles/gps_simple_test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demo/CMakeFiles/gps_simple_test.dir/build.make demo/CMakeFiles/gps_simple_test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num= "Finished codegen for target gps_simple_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles --progress-num=35 "Finished codegen for target gps_simple_test"
 .PHONY : demo/CMakeFiles/gps_simple_test.dir/codegen
 
 # clean rule for target.

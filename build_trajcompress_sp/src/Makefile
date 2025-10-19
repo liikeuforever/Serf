@@ -247,6 +247,30 @@ compressor/serf_qt_compressor.cc.s:
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/serf_qt_compressor.cc.s
 .PHONY : compressor/serf_qt_compressor.cc.s
 
+compressor/serf_qt_curve_compressor.o: compressor/serf_qt_curve_compressor.cc.o
+.PHONY : compressor/serf_qt_curve_compressor.o
+
+# target to build an object file
+compressor/serf_qt_curve_compressor.cc.o:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.o
+.PHONY : compressor/serf_qt_curve_compressor.cc.o
+
+compressor/serf_qt_curve_compressor.i: compressor/serf_qt_curve_compressor.cc.i
+.PHONY : compressor/serf_qt_curve_compressor.i
+
+# target to preprocess a source file
+compressor/serf_qt_curve_compressor.cc.i:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.i
+.PHONY : compressor/serf_qt_curve_compressor.cc.i
+
+compressor/serf_qt_curve_compressor.s: compressor/serf_qt_curve_compressor.cc.s
+.PHONY : compressor/serf_qt_curve_compressor.s
+
+# target to generate assembly for a file
+compressor/serf_qt_curve_compressor.cc.s:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/serf_qt_curve_compressor.cc.s
+.PHONY : compressor/serf_qt_curve_compressor.cc.s
+
 compressor/serf_qt_gps_configurable_compressor.o: compressor/serf_qt_gps_configurable_compressor.cc.o
 .PHONY : compressor/serf_qt_gps_configurable_compressor.o
 
@@ -1013,6 +1037,9 @@ help:
 	@echo "... compressor/serf_qt_compressor.o"
 	@echo "... compressor/serf_qt_compressor.i"
 	@echo "... compressor/serf_qt_compressor.s"
+	@echo "... compressor/serf_qt_curve_compressor.o"
+	@echo "... compressor/serf_qt_curve_compressor.i"
+	@echo "... compressor/serf_qt_curve_compressor.s"
 	@echo "... compressor/serf_qt_gps_configurable_compressor.o"
 	@echo "... compressor/serf_qt_gps_configurable_compressor.i"
 	@echo "... compressor/serf_qt_gps_configurable_compressor.s"

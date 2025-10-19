@@ -10,7 +10,7 @@
 // ==================== 压缩器实现 ====================
 
 TrajCompressSPCompressor::TrajCompressSPCompressor(int block_size, double epsilon)
-    : kBlockSize(block_size), kEpsilon(epsilon), kQuantStep(epsilon) {
+    : kBlockSize(block_size), kEpsilon(epsilon * 0.999), kQuantStep(2 * epsilon * 0.999) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
     predictor_window_.reserve(kSlidingWindowSize);
@@ -219,9 +219,9 @@ void TrajCompressSPCompressor::EncodePrediction(PredictorType predictor,
     // 2. 计算预测误差（二维向量）
     GpsPoint delta = current_point - predicted_point;
     
-    // 3. 量化误差（使用epsilon作为量化步长，确保重构误差≤epsilon）
-    int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kEpsilon));
-    int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kEpsilon));
+    // 3. 量化误差（使用kQuantStep = 2 * epsilon * 0.999作为量化步长，与Serf-QT一致）
+    int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kQuantStep));
+    int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kQuantStep));
     
     // 4. ZigZag + Elias Gamma 编码量化误差
     int bits_lon = EliasGammaCodec::Encode(
@@ -238,8 +238,8 @@ void TrajCompressSPCompressor::EncodePrediction(PredictorType predictor,
     
     // 5. 重构点（与解压器保持同步）
     GpsPoint reconstructed_delta(
-        quantized_delta_lon * kEpsilon,
-        quantized_delta_lat * kEpsilon
+        quantized_delta_lon * kQuantStep,
+        quantized_delta_lat * kQuantStep
     );
     GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
     
@@ -418,7 +418,7 @@ void TrajCompressSPDecompressor::ReadHeader() {
     // 读取头部信息
     block_size_ = input_bit_stream_->ReadInt(16);
     epsilon_ = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
-    quant_step_ = epsilon_;
+    quant_step_ = 2 * epsilon_;  // 量化步长 = 2 * epsilon（压缩器存储的epsilon已经乘了0.999）
     
     // 读取第一个点的原始坐标
     double first_lon = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
@@ -469,10 +469,10 @@ bool TrajCompressSPDecompressor::ReadNextPoint(GpsPoint& point) {
             EliasGammaCodec::Decode(input_bit_stream_.get()) - 1
         );
         
-        // 重构点
+        // 重构点（使用quant_step_进行反量化，与压缩器保持一致）
         GpsPoint reconstructed_delta(
-            quantized_delta_lon * epsilon_,
-            quantized_delta_lat * epsilon_
+            quantized_delta_lon * quant_step_,
+            quantized_delta_lat * quant_step_
         );
         GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
     
@@ -576,12 +576,12 @@ void TrajCompressSPCompressor::EncodePredictionOptimized(PredictorType predictor
     // 3. 计算预测误差（二维向量）
     GpsPoint delta = current_point - predicted_point;
     
-    // 4. 量化误差
-    // 注意：这里量化保证的是每个维度的误差 ≤ epsilon/2
-    // 因此欧几里得距离的量化误差 ≤ sqrt((epsilon/2)² + (epsilon/2)²) ≈ 0.707*epsilon
+    // 4. 量化误差（使用kQuantStep = 2 * epsilon * 0.999作为量化步长，与Serf-QT一致）
+    // 注意：这里量化保证的是每个维度的误差 ≤ kQuantStep/2 = epsilon * 0.999
+    // 因此欧几里得距离的量化误差 ≤ sqrt(2) * epsilon * 0.999 ≈ 1.41*epsilon*0.999
     // 但如果预测误差本身很大（预测失败），重构误差会等于预测误差+量化误差
-    int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kEpsilon));
-    int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kEpsilon));
+    int64_t quantized_delta_lon = static_cast<int64_t>(std::round(delta.longitude / kQuantStep));
+    int64_t quantized_delta_lat = static_cast<int64_t>(std::round(delta.latitude / kQuantStep));
     
     // 5. ZigZag编码（将有符号整数转换为非负整数）
     uint64_t zigzag_lon = ZigZagCodec::Encode(quantized_delta_lon);
@@ -596,8 +596,8 @@ void TrajCompressSPCompressor::EncodePredictionOptimized(PredictorType predictor
     
     // 7. 重构当前点（用于下一个点的预测）
     GpsPoint reconstructed_point = predicted_point + GpsPoint(
-        quantized_delta_lon * kEpsilon,
-        quantized_delta_lat * kEpsilon
+        quantized_delta_lon * kQuantStep,
+        quantized_delta_lat * kQuantStep
     );
     
     // 更新重构状态
