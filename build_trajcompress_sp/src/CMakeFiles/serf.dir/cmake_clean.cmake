@@ -29,6 +29,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/serf.dir/compressor/sfc_decompressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o"
   "CMakeFiles/serf.dir/compressor/space_filling_curve.cc.o.d"
+  "CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_compressor.cc.o"
+  "CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_compressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o"
   "CMakeFiles/serf.dir/compressor/trajcompress_sp_compressor.cc.o.d"
   "CMakeFiles/serf.dir/compressor_32/serf_qt_compressor_32.cc.o"

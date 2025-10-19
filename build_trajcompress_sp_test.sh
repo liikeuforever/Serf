@@ -40,6 +40,7 @@ g++ -std=c++17 -O3 \
     -o trajcompress_sp_test \
     trajcompress_sp_test.cc \
     src/compressor/trajcompress_sp_compressor.cc \
+    src/compressor/trajcompress_sp_adaptive_compressor.cc \
     src/compressor/serf_qt_compressor.cc \
     src/compressor/serf_qt_linear_compressor.cc \
     src/compressor/serf_qt_curve_compressor.cc \
