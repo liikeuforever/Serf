@@ -11,22 +11,27 @@
 
 TrajCompressSPAdaptiveCompressor::TrajCompressSPAdaptiveCompressor(
     int block_size, double epsilon,
-    int cost_window_size,
-    int stability_margin,
-    bool clear_after_switch,
-    int evaluation_interval)
+    bool enable_adaptive,
+    int min_window,
+    int max_window,
+    int observe_window)
     : kBlockSize(block_size), 
       kEpsilon(epsilon * 0.999), 
       kQuantStep(2 * epsilon * 0.999),
-      kCostWindowSize(cost_window_size),
+      kCostWindowSize((min_window + max_window) / 2),  // 初始中等窗口
       kSwitchCost(4),  // 固定值：'111' + '0'/'1'
-      kStabilityMargin(stability_margin),
-      kEvaluationInterval(evaluation_interval),
-      kClearWindowAfterSwitch(clear_after_switch) {
+      kStabilityMargin(1),  // 初始边际为1
+      kEvaluationInterval(16),
+      kClearWindowAfterSwitch(false),
+      kEnableAdaptive(enable_adaptive),
+      kMinWindowSize(min_window),
+      kMaxWindowSize(max_window),
+      kObserveWindowSize(observe_window) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
     predictor_window_.reserve(kSlidingWindowSize);
     mode_evaluation_window_.reserve(kModeEvaluationWindow);
+    // predictor_history_ 是 deque，不需要 reserve
     
     // 初始化 Huffman 编码表（假设初始频率分布）
     predictor_frequency_[PREDICTOR_LDR] = 60;  // LDR最常用
@@ -86,6 +91,12 @@ void TrajCompressSPAdaptiveCompressor::AddGpsPoint(const GpsPoint& point) {
     // 更新成本窗口
     UpdateCostWindows(multi_model_cost, ldr_only_model_cost);
     
+    // 记录预测器选择历史（用于计算流失率）
+    predictor_history_.push_back(best_predictor);
+    if (predictor_history_.size() > static_cast<size_t>(kObserveWindowSize)) {
+        predictor_history_.pop_front();
+    }
+    
     // === 3. 根据当前模式进行实际编码 ===
     if (current_mode_ == MODE_LDR_ONLY) {
         EncodeLDROnly(point);
@@ -95,8 +106,15 @@ void TrajCompressSPAdaptiveCompressor::AddGpsPoint(const GpsPoint& point) {
         stats_.multi_predictor_mode_points++;
     }
     
-    // === 4. 周期性地基于成本进行模式切换决策（无魔法数字） ===
-    if (stats_.total_points % kEvaluationInterval == 0 && stats_.total_points > kCostWindowSize) {
+    // === 4. 周期性地更新自适应参数（基于轨迹可预测性） ===
+    points_since_last_param_update_++;
+    if (kEnableAdaptive && points_since_last_param_update_ >= kObserveWindowSize) {
+        UpdateAdaptiveParameters();
+        points_since_last_param_update_ = 0;
+    }
+    
+    // === 5. 周期性地基于成本进行模式切换决策（无魔法数字） ===
+    if (stats_.total_points % kEvaluationInterval == 0 && stats_.total_points > static_cast<size_t>(kCostWindowSize)) {
         EvaluateAndSwitchModeBasedOnCost();
     }
 }
@@ -252,8 +270,15 @@ void TrajCompressSPAdaptiveCompressor::UpdateCostWindows(int multi_cost, int ldr
     point_costs_ldr_only_.push_back(ldr_only_cost);
     window_total_cost_ldr_only_ += ldr_only_cost;
     
+    // 记录成本差异（用于动态调整 kStabilityMargin）
+    int cost_diff = multi_cost - ldr_only_cost;
+    cost_diffs_.push_back(cost_diff);
+    if (cost_diffs_.size() > static_cast<size_t>(kCostWindowSize)) {
+        cost_diffs_.pop_front();
+    }
+    
     // 如果窗口满了，出队旧成本
-    if (point_costs_multi_.size() > kCostWindowSize) {
+    if (point_costs_multi_.size() > static_cast<size_t>(kCostWindowSize)) {
         window_total_cost_multi_ -= point_costs_multi_.front();
         point_costs_multi_.pop_front();
         
@@ -301,6 +326,74 @@ void TrajCompressSPAdaptiveCompressor::EvaluateAndSwitchModeBasedOnCost() {
             // 否则保持窗口连续滑动，以便更快响应模式变化
         }
     }
+}
+
+// ========== 动态参数调整（基于轨迹可预测性） ==========
+
+void TrajCompressSPAdaptiveCompressor::UpdateAdaptiveParameters() {
+    if (!kEnableAdaptive) return;
+    
+    // 1. 计算预测器流失率（Churn Rate）
+    double churn_rate = CalculateChurnRate();
+    
+    // 2. 动态调整 kCostWindowSize
+    // 低流失率（稳定轨迹）→ 大窗口（长期视角）
+    // 高流失率（混乱轨迹）→ 小窗口（短期灵活）
+    kCostWindowSize = kMaxWindowSize - static_cast<int>((kMaxWindowSize - kMinWindowSize) * churn_rate);
+    
+    // 3. 计算成本差的标准差
+    double cost_diff_stddev = CalculateCostDiffStdDev();
+    
+    // 4. 动态调整 kStabilityMargin
+    // 成本差异稳定（stddev小）→ 小边际（容易切换）
+    // 成本差异波动大（stddev大）→ 大边际（防止抖动）
+    kStabilityMargin = static_cast<int>(0.5 * cost_diff_stddev);
+    
+    // 确保参数在合理范围内
+    kCostWindowSize = std::max(kMinWindowSize, std::min(kCostWindowSize, kMaxWindowSize));
+    kStabilityMargin = std::max(0, std::min(kStabilityMargin, 5));  // 边际不超过5 bits
+}
+
+double TrajCompressSPAdaptiveCompressor::CalculateChurnRate() const {
+    if (predictor_history_.size() < 10) {
+        return 0.5;  // 初始阶段，返回中等流失率
+    }
+    
+    // 计算预测器切换次数
+    int switches = 0;
+    for (size_t i = 1; i < predictor_history_.size(); i++) {
+        if (predictor_history_[i] != predictor_history_[i - 1]) {
+            switches++;
+        }
+    }
+    
+    // 流失率 = 切换次数 / (总点数 - 1)
+    double churn_rate = static_cast<double>(switches) / (predictor_history_.size() - 1);
+    
+    return std::min(std::max(churn_rate, 0.0), 1.0);  // 限制在[0, 1]
+}
+
+double TrajCompressSPAdaptiveCompressor::CalculateCostDiffStdDev() const {
+    if (cost_diffs_.size() < 10) {
+        return 2.0;  // 初始阶段，返回默认标准差
+    }
+    
+    // 计算均值
+    double mean = 0.0;
+    for (int diff : cost_diffs_) {
+        mean += diff;
+    }
+    mean /= cost_diffs_.size();
+    
+    // 计算标准差
+    double variance = 0.0;
+    for (int diff : cost_diffs_) {
+        double deviation = diff - mean;
+        variance += deviation * deviation;
+    }
+    variance /= cost_diffs_.size();
+    
+    return std::sqrt(variance);
 }
 
 // ========== Huffman 编码相关 ==========

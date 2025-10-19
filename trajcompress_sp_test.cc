@@ -38,6 +38,9 @@ std::vector<GpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_po
     std::string line;
     int count = 0;
     
+    // 跳过CSV header行
+    std::getline(file, line);
+    
     while (std::getline(file, line) && (max_points < 0 || count < max_points)) {
         std::stringstream ss(line);
         std::string lon_str, lat_str;
@@ -383,10 +386,17 @@ void TestTrajCompressSPAdaptive(const std::vector<GpsPoint>& gps_data, double ep
     std::cout << "误差阈值: " << std::scientific << epsilon << " 度 (约 " 
               << std::fixed << std::setprecision(2) << (epsilon * 111000) << " 米)" << std::endl;
     
-    // 压缩
+    // 压缩（启用动态自适应参数）
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    TrajCompressSPAdaptiveCompressor compressor(gps_data.size(), epsilon);
+    TrajCompressSPAdaptiveCompressor compressor(
+        gps_data.size(), 
+        epsilon,
+        true,  // enable_adaptive = true（启用动态参数调整）
+        32,    // min_window
+        128,   // max_window
+        256    // observe_window
+    );
     
     for (const auto& point : gps_data) {
         compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
@@ -440,8 +450,15 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     int sp_bits = sp_compressor.GetCompressedSizeInBits();
     double sp_avg_bits = static_cast<double>(sp_bits) / gps_data.size();
     
-    // TrajCompress-SP-Adaptive (自适应多预测器)
-    TrajCompressSPAdaptiveCompressor adaptive_compressor(gps_data.size(), epsilon);
+    // TrajCompress-SP-Adaptive (自适应多预测器，启用动态参数调整)
+    TrajCompressSPAdaptiveCompressor adaptive_compressor(
+        gps_data.size(), 
+        epsilon,
+        true,  // enable_adaptive = true（启用动态参数调整）
+        32,    // min_window
+        128,   // max_window
+        256    // observe_window
+    );
     for (const auto& point : gps_data) {
         adaptive_compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
     }
@@ -921,12 +938,28 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         }
         sp_compressor.Close();
         
-        // TrajCompress-SP-Adaptive
-        TrajCompressSPAdaptiveCompressor adaptive_compressor(gps_data.size(), epsilon);
+        // TrajCompress-SP-Adaptive（启用动态参数调整）
+        TrajCompressSPAdaptiveCompressor adaptive_compressor(
+            gps_data.size(), 
+            epsilon,
+            true,  // enable_adaptive = true（启用动态参数调整）
+            32,    // min_window
+            128,   // max_window
+            256    // observe_window
+        );
         for (const auto& point : gps_data) {
             adaptive_compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
         }
         adaptive_compressor.Close();
+        
+        // 调试输出：打印Track原始数据的adaptive bits
+        if (dataset.name.find("Track") != std::string::npos && 
+            dataset.name.find("原始") != std::string::npos) {
+            long adaptive_bits_debug = adaptive_compressor.GetCompressedSizeInBits();
+            double adaptive_avg_debug = static_cast<double>(adaptive_bits_debug) / gps_data.size();
+            std::cout << "🔍 DEBUG - Track原始: adaptive_bits=" << adaptive_bits_debug 
+                      << ", avg=" << std::fixed << std::setprecision(6) << adaptive_avg_debug << std::endl;
+        }
         
         // Serf-QT
         SerfQtCompressor qt_lon(gps_data.size(), epsilon);

@@ -98,16 +98,16 @@ public:
      * 构造函数（支持参数调优）
      * @param block_size 块大小（用于预分配缓冲区）
      * @param epsilon 最大允许误差（度），内部会乘以0.999系数，与Serf-QT保持一致
-     * @param cost_window_size 成本评估窗口大小（默认160，平衡配置）
-     * @param stability_margin 防抖动边际（默认0，激进优化）
-     * @param clear_after_switch 切换后是否清空成本窗口（默认false，连续追踪）
-     * @param evaluation_interval 评估间隔（默认12，适中频率）
+     * @param enable_adaptive 是否启用动态参数调整（默认true）
+     * @param min_window 最小窗口大小（默认32）
+     * @param max_window 最大窗口大小（默认128）
+     * @param observe_window 观察窗口大小（默认256）
      */
     TrajCompressSPAdaptiveCompressor(int block_size, double epsilon,
-                                    int cost_window_size = 160,
-                                    int stability_margin = 0,
-                                    bool clear_after_switch = false,
-                                    int evaluation_interval = 12);
+                                    bool enable_adaptive = true,
+                                    int min_window = 32,
+                                    int max_window = 128,
+                                    int observe_window = 256);
     
     /**
      * 添加GPS点进行压缩
@@ -184,11 +184,20 @@ private:
     HuffmanCode huffman_codes_[3];
     
     // 基于成本的模式切换系统（可配置参数）
-    const int kCostWindowSize;              // 成本评估窗口大小（默认64）
+    int kCostWindowSize;                    // 成本评估窗口大小（动态调整：32-128）
     const int kSwitchCost;                  // 模式切换成本（111 + 0/1，固定4）
-    const int kStabilityMargin;             // 防抖动边际（默认2）
+    int kStabilityMargin;                   // 防抖动边际（动态调整：基于成本差标准差）
     const int kEvaluationInterval;          // 评估间隔（默认16）
     const bool kClearWindowAfterSwitch;     // 切换后是否清空成本窗口（默认true）
+    
+    // 动态参数调整系统
+    const bool kEnableAdaptive;             // 是否启用动态参数调整
+    const int kMinWindowSize;               // 最小窗口（默认32）
+    const int kMaxWindowSize;               // 最大窗口（默认128）
+    const int kObserveWindowSize;           // 观察窗口大小（用于计算流失率，默认256）
+    std::deque<PredictorType> predictor_history_;  // 预测器选择历史（用于计算流失率）
+    std::deque<int> cost_diffs_;            // 逐点成本差（multi - ldr_only）
+    int points_since_last_param_update_ = 0; // 距离上次参数更新的点数
     
     std::deque<int> point_costs_multi_;          // 多预测器模型窗口成本
     std::deque<int> point_costs_ldr_only_;       // LDR-Only模型窗口成本
@@ -230,6 +239,11 @@ private:
     
     // 成本窗口管理
     void UpdateCostWindows(int multi_cost, int ldr_only_cost);
+    
+    // 动态参数调整（基于轨迹可预测性）
+    void UpdateAdaptiveParameters();
+    double CalculateChurnRate() const;
+    double CalculateCostDiffStdDev() const;
     
     // Huffman 编码相关
     void UpdateHuffmanCodes();
