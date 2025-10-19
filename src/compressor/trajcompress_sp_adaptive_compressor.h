@@ -95,11 +95,19 @@ public:
     };
 
     /**
-     * 构造函数
+     * 构造函数（支持参数调优）
      * @param block_size 块大小（用于预分配缓冲区）
      * @param epsilon 最大允许误差（度），内部会乘以0.999系数，与Serf-QT保持一致
+     * @param cost_window_size 成本评估窗口大小（默认160，平衡配置）
+     * @param stability_margin 防抖动边际（默认0，激进优化）
+     * @param clear_after_switch 切换后是否清空成本窗口（默认false，连续追踪）
+     * @param evaluation_interval 评估间隔（默认12，适中频率）
      */
-    TrajCompressSPAdaptiveCompressor(int block_size, double epsilon);
+    TrajCompressSPAdaptiveCompressor(int block_size, double epsilon,
+                                    int cost_window_size = 160,
+                                    int stability_margin = 0,
+                                    bool clear_after_switch = false,
+                                    int evaluation_interval = 12);
     
     /**
      * 添加GPS点进行压缩
@@ -175,11 +183,12 @@ private:
     };
     HuffmanCode huffman_codes_[3];
     
-    // 基于成本的模式切换系统（无魔法数字）
-    static constexpr int kCostWindowSize = 64;        // 成本评估窗口大小
-    static constexpr int kSwitchCost = 4;             // 模式切换成本（111 + 0/1）
-    static constexpr int kStabilityMargin = 2;        // 防抖动边际
-    static constexpr int kEvaluationInterval = 16;    // 评估间隔
+    // 基于成本的模式切换系统（可配置参数）
+    const int kCostWindowSize;              // 成本评估窗口大小（默认64）
+    const int kSwitchCost;                  // 模式切换成本（111 + 0/1，固定4）
+    const int kStabilityMargin;             // 防抖动边际（默认2）
+    const int kEvaluationInterval;          // 评估间隔（默认16）
+    const bool kClearWindowAfterSwitch;     // 切换后是否清空成本窗口（默认true）
     
     std::deque<int> point_costs_multi_;          // 多预测器模型窗口成本
     std::deque<int> point_costs_ldr_only_;       // LDR-Only模型窗口成本

@@ -9,8 +9,20 @@
 
 // ==================== 压缩器实现 ====================
 
-TrajCompressSPAdaptiveCompressor::TrajCompressSPAdaptiveCompressor(int block_size, double epsilon)
-    : kBlockSize(block_size), kEpsilon(epsilon * 0.999), kQuantStep(2 * epsilon * 0.999) {
+TrajCompressSPAdaptiveCompressor::TrajCompressSPAdaptiveCompressor(
+    int block_size, double epsilon,
+    int cost_window_size,
+    int stability_margin,
+    bool clear_after_switch,
+    int evaluation_interval)
+    : kBlockSize(block_size), 
+      kEpsilon(epsilon * 0.999), 
+      kQuantStep(2 * epsilon * 0.999),
+      kCostWindowSize(cost_window_size),
+      kSwitchCost(4),  // 固定值：'111' + '0'/'1'
+      kStabilityMargin(stability_margin),
+      kEvaluationInterval(evaluation_interval),
+      kClearWindowAfterSwitch(clear_after_switch) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
     predictor_window_.reserve(kSlidingWindowSize);
@@ -254,7 +266,7 @@ void TrajCompressSPAdaptiveCompressor::UpdateCostWindows(int multi_cost, int ldr
 
 void TrajCompressSPAdaptiveCompressor::EvaluateAndSwitchModeBasedOnCost() {
     // 确保有足够的数据进行决策
-    if (point_costs_multi_.size() < kCostWindowSize) return;
+    if (point_costs_multi_.size() < static_cast<size_t>(kCostWindowSize)) return;
     
     if (current_mode_ == MODE_MULTI_PREDICTOR) {
         // 检查是否切换到 LDR-Only 更划算
@@ -263,11 +275,14 @@ void TrajCompressSPAdaptiveCompressor::EvaluateAndSwitchModeBasedOnCost() {
             EncodeModeSwitch(MODE_LDR_ONLY);
             current_mode_ = MODE_LDR_ONLY;
             
-            // 清空成本窗口，重新开始累积
-            point_costs_multi_.clear();
-            point_costs_ldr_only_.clear();
-            window_total_cost_multi_ = 0;
-            window_total_cost_ldr_only_ = 0;
+            // 根据配置决定是否清空成本窗口
+            if (kClearWindowAfterSwitch) {
+                point_costs_multi_.clear();
+                point_costs_ldr_only_.clear();
+                window_total_cost_multi_ = 0;
+                window_total_cost_ldr_only_ = 0;
+            }
+            // 否则保持窗口连续滑动，以便更快响应模式变化
         }
     } else {  // current_mode_ == MODE_LDR_ONLY
         // 检查是否切换回 Multi-Predictor 更划算
@@ -276,11 +291,14 @@ void TrajCompressSPAdaptiveCompressor::EvaluateAndSwitchModeBasedOnCost() {
             EncodeModeSwitch(MODE_MULTI_PREDICTOR);
             current_mode_ = MODE_MULTI_PREDICTOR;
             
-            // 清空成本窗口，重新开始累积
-            point_costs_multi_.clear();
-            point_costs_ldr_only_.clear();
-            window_total_cost_multi_ = 0;
-            window_total_cost_ldr_only_ = 0;
+            // 根据配置决定是否清空成本窗口
+            if (kClearWindowAfterSwitch) {
+                point_costs_multi_.clear();
+                point_costs_ldr_only_.clear();
+                window_total_cost_multi_ = 0;
+                window_total_cost_ldr_only_ = 0;
+            }
+            // 否则保持窗口连续滑动，以便更快响应模式变化
         }
     }
 }
