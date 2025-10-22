@@ -11,6 +11,7 @@
 
 #include "src/compressor/trajcompress_sp_compressor.h"
 #include "src/compressor/trajcompress_sp_adaptive_compressor.h"
+#include "src/compressor/trajcompress_sp_adaptive_simple_compressor.h"
 #include "src/compressor/serf_qt_compressor.h"
 #include "src/compressor/serf_qt_linear_compressor.h"
 #include "src/compressor/serf_qt_curve_compressor.h"
@@ -24,6 +25,7 @@
 
 using GpsPoint = TrajCompressSPCompressor::GpsPoint;
 using AdaptiveGpsPoint = TrajCompressSPAdaptiveCompressor::GpsPoint;
+using SimpleGpsPoint = TrajCompressSPAdaptiveSimpleCompressor::GpsPoint;
 
 // 从CSV文件读取GPS数据
 std::vector<GpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_points = -1) {
@@ -906,11 +908,13 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         int points;
         int sp_bits;
         int adaptive_bits;
+        int simple_bits;  // 新增：极简版
         int qt_bits;
         int linear_bits;
         int curve_bits;
         double sp_avg;
         double adaptive_avg;
+        double simple_avg;  // 新增：极简版
         double qt_avg;
         double linear_avg;
         double curve_avg;
@@ -952,6 +956,16 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         }
         adaptive_compressor.Close();
         
+        // TrajCompress-SP-Adaptive-Simple（极简版：固定参数，无动态调整）
+        TrajCompressSPAdaptiveSimpleCompressor simple_compressor(
+            gps_data.size(), 
+            epsilon
+        );
+        for (const auto& point : gps_data) {
+            simple_compressor.AddGpsPoint(SimpleGpsPoint(point.longitude, point.latitude));
+        }
+        simple_compressor.Close();
+        
         // Serf-QT
         SerfQtCompressor qt_lon(gps_data.size(), epsilon);
         SerfQtCompressor qt_lat(gps_data.size(), epsilon);
@@ -988,11 +1002,13 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         result.points = gps_data.size();
         result.sp_bits = sp_compressor.GetCompressedSizeInBits();
         result.adaptive_bits = adaptive_compressor.GetCompressedSizeInBits();
+        result.simple_bits = simple_compressor.GetCompressedSizeInBits();
         result.qt_bits = qt_lon.get_compressed_size_in_bits() + qt_lat.get_compressed_size_in_bits();
         result.linear_bits = linear_lon.get_compressed_size_in_bits() + linear_lat.get_compressed_size_in_bits();
         result.curve_bits = curve_lon.get_compressed_size_in_bits() + curve_lat.get_compressed_size_in_bits();
         result.sp_avg = static_cast<double>(result.sp_bits) / result.points;
         result.adaptive_avg = static_cast<double>(result.adaptive_bits) / result.points;
+        result.simple_avg = static_cast<double>(result.simple_bits) / result.points;
         result.qt_avg = static_cast<double>(result.qt_bits) / result.points;
         result.linear_avg = static_cast<double>(result.linear_bits) / result.points;
         result.curve_avg = static_cast<double>(result.curve_bits) / result.points;
@@ -1020,37 +1036,40 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     std::ofstream csv_file(csv_filename.str());
     if (csv_file.is_open()) {
         // 写入CSV头
-        csv_file << "Dataset,Points,TrajSP,Adaptive,QT,Linear,Curve,Best\n";
+        csv_file << "Dataset,Points,TrajSP,Adaptive,Simple,QT,Linear,Curve,Best\n";
     }
     
     // 表头
     std::cout << std::setw(25) << "数据集" 
-              << std::setw(12) << "点数"
-              << std::setw(12) << "TrajSP"
-              << std::setw(12) << "Adaptive"
-              << std::setw(12) << "QT(前值)"
-              << std::setw(12) << "Linear"
-              << std::setw(12) << "Curve"
+              << std::setw(10) << "点数"
+              << std::setw(10) << "TrajSP"
+              << std::setw(10) << "Adaptive"
+              << std::setw(10) << "Simple"
+              << std::setw(10) << "QT(前值)"
+              << std::setw(10) << "Linear"
+              << std::setw(10) << "Curve"
               << std::setw(12) << "最优" << std::endl;
-    std::cout << std::string(100, '-') << std::endl;
+    std::cout << std::string(110, '-') << std::endl;
     
     for (const auto& result : summary_results) {
-        double min_avg = std::min({result.sp_avg, result.adaptive_avg, result.qt_avg, result.linear_avg, result.curve_avg});
+        double min_avg = std::min({result.sp_avg, result.adaptive_avg, result.simple_avg, result.qt_avg, result.linear_avg, result.curve_avg});
         std::string best;
         if (result.sp_avg == min_avg) best = "TrajSP";
         else if (result.adaptive_avg == min_avg) best = "Adaptive";
+        else if (result.simple_avg == min_avg) best = "Simple";
         else if (result.qt_avg == min_avg) best = "QT";
         else if (result.linear_avg == min_avg) best = "Linear";
         else best = "Curve";
         
         // 控制台输出（6位有效数字）
         std::cout << std::setw(25) << result.dataset_name
-                  << std::setw(12) << result.points
-                  << std::setw(12) << std::fixed << std::setprecision(6) << result.sp_avg
-                  << std::setw(12) << result.adaptive_avg
-                  << std::setw(12) << result.qt_avg
-                  << std::setw(12) << result.linear_avg
-                  << std::setw(12) << result.curve_avg
+                  << std::setw(10) << result.points
+                  << std::setw(10) << std::fixed << std::setprecision(2) << result.sp_avg
+                  << std::setw(10) << result.adaptive_avg
+                  << std::setw(10) << result.simple_avg
+                  << std::setw(10) << result.qt_avg
+                  << std::setw(10) << result.linear_avg
+                  << std::setw(10) << result.curve_avg
                   << std::setw(12) << best << std::endl;
         
         // 写入CSV（6位有效数字）
@@ -1060,6 +1079,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                      << std::fixed << std::setprecision(6)
                      << result.sp_avg << ","
                      << result.adaptive_avg << ","
+                     << result.simple_avg << ","
                      << result.qt_avg << ","
                      << result.linear_avg << ","
                      << result.curve_avg << ","
@@ -1077,22 +1097,24 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     }
     
     // 统计最优算法出现次数
-    int sp_wins = 0, adaptive_wins = 0, qt_wins = 0, linear_wins = 0, curve_wins = 0;
+    int sp_wins = 0, adaptive_wins = 0, simple_wins = 0, qt_wins = 0, linear_wins = 0, curve_wins = 0;
     for (const auto& result : summary_results) {
-        double min_avg = std::min({result.sp_avg, result.adaptive_avg, result.qt_avg, result.linear_avg, result.curve_avg});
+        double min_avg = std::min({result.sp_avg, result.adaptive_avg, result.simple_avg, result.qt_avg, result.linear_avg, result.curve_avg});
         if (result.sp_avg == min_avg) sp_wins++;
         else if (result.adaptive_avg == min_avg) adaptive_wins++;
+        else if (result.simple_avg == min_avg) simple_wins++;
         else if (result.qt_avg == min_avg) qt_wins++;
         else if (result.linear_avg == min_avg) linear_wins++;
         else curve_wins++;
     }
     
     std::cout << "\n最优算法统计:" << std::endl;
-    std::cout << "  TrajCompress-SP:          " << sp_wins << " 个数据集" << std::endl;
-    std::cout << "  TrajCompress-SP-Adaptive: " << adaptive_wins << " 个数据集" << std::endl;
-    std::cout << "  Serf-QT (前值):           " << qt_wins << " 个数据集" << std::endl;
-    std::cout << "  Serf-QT-Linear:           " << linear_wins << " 个数据集" << std::endl;
-    std::cout << "  Serf-QT-Curve:            " << curve_wins << " 个数据集" << std::endl;
+    std::cout << "  TrajCompress-SP:               " << sp_wins << " 个数据集" << std::endl;
+    std::cout << "  TrajCompress-SP-Adaptive:      " << adaptive_wins << " 个数据集" << std::endl;
+    std::cout << "  TrajCompress-SP-Simple (极简): " << simple_wins << " 个数据集" << std::endl;
+    std::cout << "  Serf-QT (前值):                " << qt_wins << " 个数据集" << std::endl;
+    std::cout << "  Serf-QT-Linear:                " << linear_wins << " 个数据集" << std::endl;
+    std::cout << "  Serf-QT-Curve:                 " << curve_wins << " 个数据集" << std::endl;
 }
 
 int main(int argc, char* argv[]) {

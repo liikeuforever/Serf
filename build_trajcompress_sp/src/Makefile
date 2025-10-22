@@ -559,6 +559,54 @@ compressor/trajcompress_sp_adaptive_compressor.cc.s:
 	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_compressor.cc.s
 .PHONY : compressor/trajcompress_sp_adaptive_compressor.cc.s
 
+compressor/trajcompress_sp_adaptive_simple_compressor.o: compressor/trajcompress_sp_adaptive_simple_compressor.cc.o
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.o
+
+# target to build an object file
+compressor/trajcompress_sp_adaptive_simple_compressor.cc.o:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_simple_compressor.cc.o
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.cc.o
+
+compressor/trajcompress_sp_adaptive_simple_compressor.i: compressor/trajcompress_sp_adaptive_simple_compressor.cc.i
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.i
+
+# target to preprocess a source file
+compressor/trajcompress_sp_adaptive_simple_compressor.cc.i:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_simple_compressor.cc.i
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.cc.i
+
+compressor/trajcompress_sp_adaptive_simple_compressor.s: compressor/trajcompress_sp_adaptive_simple_compressor.cc.s
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.s
+
+# target to generate assembly for a file
+compressor/trajcompress_sp_adaptive_simple_compressor.cc.s:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_simple_compressor.cc.s
+.PHONY : compressor/trajcompress_sp_adaptive_simple_compressor.cc.s
+
+compressor/trajcompress_sp_adaptive_smart_compressor.o: compressor/trajcompress_sp_adaptive_smart_compressor.cc.o
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.o
+
+# target to build an object file
+compressor/trajcompress_sp_adaptive_smart_compressor.cc.o:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_smart_compressor.cc.o
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.cc.o
+
+compressor/trajcompress_sp_adaptive_smart_compressor.i: compressor/trajcompress_sp_adaptive_smart_compressor.cc.i
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.i
+
+# target to preprocess a source file
+compressor/trajcompress_sp_adaptive_smart_compressor.cc.i:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_smart_compressor.cc.i
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.cc.i
+
+compressor/trajcompress_sp_adaptive_smart_compressor.s: compressor/trajcompress_sp_adaptive_smart_compressor.cc.s
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.s
+
+# target to generate assembly for a file
+compressor/trajcompress_sp_adaptive_smart_compressor.cc.s:
+	cd /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/serf.dir/build.make src/CMakeFiles/serf.dir/compressor/trajcompress_sp_adaptive_smart_compressor.cc.s
+.PHONY : compressor/trajcompress_sp_adaptive_smart_compressor.cc.s
+
 compressor/trajcompress_sp_compressor.o: compressor/trajcompress_sp_compressor.cc.o
 .PHONY : compressor/trajcompress_sp_compressor.o
 
@@ -1100,6 +1148,12 @@ help:
 	@echo "... compressor/trajcompress_sp_adaptive_compressor.o"
 	@echo "... compressor/trajcompress_sp_adaptive_compressor.i"
 	@echo "... compressor/trajcompress_sp_adaptive_compressor.s"
+	@echo "... compressor/trajcompress_sp_adaptive_simple_compressor.o"
+	@echo "... compressor/trajcompress_sp_adaptive_simple_compressor.i"
+	@echo "... compressor/trajcompress_sp_adaptive_simple_compressor.s"
+	@echo "... compressor/trajcompress_sp_adaptive_smart_compressor.o"
+	@echo "... compressor/trajcompress_sp_adaptive_smart_compressor.i"
+	@echo "... compressor/trajcompress_sp_adaptive_smart_compressor.s"
 	@echo "... compressor/trajcompress_sp_compressor.o"
 	@echo "... compressor/trajcompress_sp_compressor.i"
 	@echo "... compressor/trajcompress_sp_compressor.s"
