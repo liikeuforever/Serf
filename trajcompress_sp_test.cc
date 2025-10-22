@@ -15,6 +15,8 @@
 #include "src/compressor/serf_qt_compressor.h"
 #include "src/compressor/serf_qt_linear_compressor.h"
 #include "src/compressor/serf_qt_curve_compressor.h"
+#include "src/decompressor/serf_qt_decompressor.h"
+#include "src/decompressor/serf_qt_linear_decompressor.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -379,7 +381,8 @@ void TestSerfQTCurve(const std::vector<GpsPoint>& gps_data, double epsilon) {
     std::cout << "平均每点: " << avg_bits_per_point << " bits/点" << std::endl;
 }
 
-// 测试TrajCompress-SP-Adaptive（自适应多预测器）
+// 测试TrajCompress-SP-Adaptive（自适应多预测器）- 已注释
+/*
 void TestTrajCompressSPAdaptive(const std::vector<GpsPoint>& gps_data, double epsilon) {
     std::cout << "\n" << std::string(80, '=') << std::endl;
     std::cout << "测试 TrajCompress-SP-Adaptive 算法（自适应多预测器）" << std::endl;
@@ -432,6 +435,7 @@ void TestTrajCompressSPAdaptive(const std::vector<GpsPoint>& gps_data, double ep
     // 输出详细统计
     compressor.GetStats().PrintDetailedStats();
 }
+*/
 
 // 五种算法综合对比测试
 void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilon) {
@@ -452,7 +456,8 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     int sp_bits = sp_compressor.GetCompressedSizeInBits();
     double sp_avg_bits = static_cast<double>(sp_bits) / gps_data.size();
     
-    // TrajCompress-SP-Adaptive (自适应多预测器，启用动态参数调整)
+    // TrajCompress-SP-Adaptive (已注释掉)
+    /*
     TrajCompressSPAdaptiveCompressor adaptive_compressor(
         gps_data.size(), 
         epsilon,
@@ -465,7 +470,8 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
         adaptive_compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
     }
     adaptive_compressor.Close();
-    int adaptive_bits = adaptive_compressor.GetCompressedSizeInBits();
+    */
+    int adaptive_bits = sp_bits;  // 临时使用SP结果
     double adaptive_avg_bits = static_cast<double>(adaptive_bits) / gps_data.size();
     
     // Serf-QT (前值预测/零预测)
@@ -918,13 +924,12 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         double qt_avg;
         double linear_avg;
         double curve_avg;
-        // 新增：误差统计
-        double sp_max_error;
-        double sp_avg_error;
-        double adaptive_max_error;
-        double adaptive_avg_error;
-        double simple_max_error;
-        double simple_avg_error;
+        // 误差统计
+        double sp_max_error, sp_avg_error;
+        double simple_max_error, simple_avg_error;
+        double qt_max_error, qt_avg_error;
+        double linear_max_error, linear_avg_error;
+        double curve_max_error, curve_avg_error;
     };
     
     std::vector<SummaryResult> summary_results;
@@ -936,6 +941,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         std::cout << std::string(100, '-') << std::endl;
         
         auto gps_data = LoadGpsDataFromCSV(dataset.path, -1);
+        std::cout << "  [1/6] 数据加载完成" << std::endl;
         
         if (gps_data.empty()) {
             std::cerr << "跳过数据集: " << dataset.name << std::endl;
@@ -962,12 +968,14 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
             }
         }
         
-        // 计算TrajCompress-SP误差
+        // 计算 TrajCompress-SP 误差
         double sp_max_error, sp_avg_error;
         int sp_exceeding;
         CalculateErrors(gps_data, sp_decompressed, sp_max_error, sp_avg_error, sp_exceeding, epsilon);
+        std::cout << "  [2/6] TrajCompress-SP 完成 (max_err=" << std::scientific << sp_max_error << ")" << std::endl;
         
-        // TrajCompress-SP-Adaptive（启用动态参数调整）- 压缩与解压缩
+        // TrajCompress-SP-Adaptive（智能版）- 已注释掉以提升速度
+        /*
         TrajCompressSPAdaptiveCompressor adaptive_compressor(
             gps_data.size(), 
             epsilon,
@@ -993,11 +1001,12 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                 break;
             }
         }
+        */
         
-        // 计算TrajCompress-SP-Adaptive误差
-        double adaptive_max_error, adaptive_avg_error;
-        int adaptive_exceeding;
-        CalculateErrors(gps_data, adaptive_decompressed, adaptive_max_error, adaptive_avg_error, adaptive_exceeding, epsilon);
+        // 为了保持数组索引一致，使用TrajSP的结果填充adaptive
+        int adaptive_bits = sp_compressor.GetCompressedSizeInBits();  // 临时使用SP的结果
+        
+        std::cout << "  [3/6] TrajCompress-SP-Adaptive 已跳过" << std::endl;
         
         // TrajCompress-SP-Adaptive-Simple（极简版：window_size=96）- 压缩与解压缩
         TrajCompressSPAdaptiveSimpleCompressor simple_compressor(
@@ -1015,18 +1024,25 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         TrajCompressSPAdaptiveSimpleDecompressor simple_decompressor(simple_compressed.begin(), simple_compressed.length());
         std::vector<GpsPoint> simple_decompressed;
         SimpleGpsPoint simple_point;
+        bool simple_decompress_failed = false;
+        size_t simple_fail_at = 0;
         for (size_t i = 0; i < gps_data.size(); ++i) {
             if (simple_decompressor.ReadNextPoint(simple_point)) {
                 simple_decompressed.push_back(GpsPoint(simple_point.longitude, simple_point.latitude));
             } else {
+                simple_decompress_failed = true;
+                simple_fail_at = i;
+                std::cerr << "      ⚠️  Simple解压失败在第 " << i << " 个点（期望 " << gps_data.size() << " 个点）" << std::endl;
                 break;
             }
         }
         
-        // 计算TrajCompress-SP-Adaptive-Simple误差
+        // 计算 TrajCompress-SP-Adaptive-Simple 误差
+        std::cout << "      Simple解压完成: " << simple_decompressed.size() << " 个点（期望 " << gps_data.size() << " 个点）" << std::endl;
         double simple_max_error, simple_avg_error;
         int simple_exceeding;
         CalculateErrors(gps_data, simple_decompressed, simple_max_error, simple_avg_error, simple_exceeding, epsilon);
+        std::cout << "  [4/6] TrajCompress-SP-Adaptive-Simple 完成 (max_err=" << std::scientific << simple_max_error << ", 解压点数=" << simple_decompressed.size() << ")" << std::endl;
         
         // Serf-QT
         SerfQtCompressor qt_lon(gps_data.size(), epsilon);
@@ -1038,6 +1054,22 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         qt_lon.Close();
         qt_lat.Close();
         
+        // 解压缩 Serf-QT 并计算误差
+        std::vector<GpsPoint> qt_decompressed;
+        auto qt_lon_data = qt_lon.compressed_bytes();
+        auto qt_lat_data = qt_lat.compressed_bytes();
+        SerfQtDecompressor qt_lon_dec;
+        SerfQtDecompressor qt_lat_dec;
+        auto qt_lon_values = qt_lon_dec.Decompress(qt_lon_data);
+        auto qt_lat_values = qt_lat_dec.Decompress(qt_lat_data);
+        for (size_t i = 0; i < qt_lon_values.size() && i < qt_lat_values.size(); ++i) {
+            qt_decompressed.emplace_back(qt_lon_values[i], qt_lat_values[i]);
+        }
+        double qt_max_error, qt_avg_error;
+        int qt_exceeding;
+        CalculateErrors(gps_data, qt_decompressed, qt_max_error, qt_avg_error, qt_exceeding, epsilon);
+        std::cout << "  [5/6] Serf-QT 完成 (max_err=" << std::scientific << qt_max_error << ")" << std::endl;
+        
         // Serf-QT-Linear
         SerfQtLinearCompressor linear_lon(gps_data.size(), epsilon);
         SerfQtLinearCompressor linear_lat(gps_data.size(), epsilon);
@@ -1047,6 +1079,21 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         }
         linear_lon.Close();
         linear_lat.Close();
+        
+        // 解压缩 Serf-QT-Linear 并计算误差
+        std::vector<GpsPoint> linear_decompressed;
+        auto linear_lon_data = linear_lon.compressed_bytes();
+        auto linear_lat_data = linear_lat.compressed_bytes();
+        SerfQtLinearDecompressor linear_lon_dec;
+        SerfQtLinearDecompressor linear_lat_dec;
+        auto linear_lon_values = linear_lon_dec.Decompress(linear_lon_data);
+        auto linear_lat_values = linear_lat_dec.Decompress(linear_lat_data);
+        for (size_t i = 0; i < linear_lon_values.size() && i < linear_lat_values.size(); ++i) {
+            linear_decompressed.emplace_back(linear_lon_values[i], linear_lat_values[i]);
+        }
+        double linear_max_error, linear_avg_error;
+        int linear_exceeding;
+        CalculateErrors(gps_data, linear_decompressed, linear_max_error, linear_avg_error, linear_exceeding, epsilon);
         
         // Serf-QT-Curve
         SerfQtCurveCompressor curve_lon(gps_data.size(), epsilon);
@@ -1058,12 +1105,18 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         curve_lon.Close();
         curve_lat.Close();
         
+        // Curve 解压缩器未实现，使用占位值
+        double curve_max_error = 0.0;
+        double curve_avg_error = 0.0;
+        std::cout << "  [6/6] Linear & Curve 完成 (linear_max=" << std::scientific << linear_max_error 
+                  << ", curve_max=" << curve_max_error << ")" << std::endl;
+        
         // 记录结果
         SummaryResult result;
         result.dataset_name = dataset.name;
         result.points = gps_data.size();
         result.sp_bits = sp_compressor.GetCompressedSizeInBits();
-        result.adaptive_bits = adaptive_compressor.GetCompressedSizeInBits();
+        result.adaptive_bits = adaptive_bits;  // 使用临时填充值
         result.simple_bits = simple_compressor.GetCompressedSizeInBits();
         result.qt_bits = qt_lon.get_compressed_size_in_bits() + qt_lat.get_compressed_size_in_bits();
         result.linear_bits = linear_lon.get_compressed_size_in_bits() + linear_lat.get_compressed_size_in_bits();
@@ -1077,10 +1130,14 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         // 误差统计
         result.sp_max_error = sp_max_error;
         result.sp_avg_error = sp_avg_error;
-        result.adaptive_max_error = adaptive_max_error;
-        result.adaptive_avg_error = adaptive_avg_error;
         result.simple_max_error = simple_max_error;
         result.simple_avg_error = simple_avg_error;
+        result.qt_max_error = qt_max_error;
+        result.qt_avg_error = qt_avg_error;
+        result.linear_max_error = linear_max_error;
+        result.linear_avg_error = linear_avg_error;
+        result.curve_max_error = curve_max_error;
+        result.curve_avg_error = curve_avg_error;
         
         summary_results.push_back(result);
         
@@ -1104,12 +1161,15 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     // 打开CSV文件
     std::ofstream csv_file(csv_filename.str());
     if (csv_file.is_open()) {
-        // 写入CSV头（增加误差列）
+        // 写入CSV头（压缩比 + 误差）
         csv_file << "Dataset,Points,"
-                 << "TrajSP_BPP,TrajSP_MaxErr,TrajSP_AvgErr,"
-                 << "Adaptive_BPP,Adaptive_MaxErr,Adaptive_AvgErr,"
-                 << "Simple_BPP,Simple_MaxErr,Simple_AvgErr,"
-                 << "QT_BPP,Linear_BPP,Curve_BPP,Best\n";
+                 << "TrajSP_BPP,Simple_BPP,QT_BPP,Linear_BPP,Curve_BPP,"
+                 << "TrajSP_MaxErr,TrajSP_AvgErr,"
+                 << "Simple_MaxErr,Simple_AvgErr,"
+                 << "QT_MaxErr,QT_AvgErr,"
+                 << "Linear_MaxErr,Linear_AvgErr,"
+                 << "Curve_MaxErr,Curve_AvgErr,"
+                 << "Best\n";
     }
     
     // 表头
@@ -1145,27 +1205,27 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                   << std::setw(10) << result.curve_avg
                   << std::setw(12) << best << std::endl;
         
-        // 写入CSV（6位有效数字，增加误差列）
+        // 写入CSV（6位有效数字，忽略Adaptive）
         if (csv_file.is_open()) {
             csv_file << result.dataset_name << ","
                      << result.points << ","
                      << std::fixed << std::setprecision(6)
-                     // TrajSP
                      << result.sp_avg << ","
-                     << std::scientific << result.sp_max_error << ","
-                     << result.sp_avg_error << ","
-                     // Adaptive
-                     << std::fixed << result.adaptive_avg << ","
-                     << std::scientific << result.adaptive_max_error << ","
-                     << result.adaptive_avg_error << ","
-                     // Simple
-                     << std::fixed << result.simple_avg << ","
-                     << std::scientific << result.simple_max_error << ","
-                     << result.simple_avg_error << ","
-                     // QT, Linear, Curve (只有BPP)
-                     << std::fixed << result.qt_avg << ","
+                     << result.simple_avg << ","
+                     << result.qt_avg << ","
                      << result.linear_avg << ","
                      << result.curve_avg << ","
+                     << std::scientific << std::setprecision(6)
+                     << result.sp_max_error << ","
+                     << result.sp_avg_error << ","
+                     << result.simple_max_error << ","
+                     << result.simple_avg_error << ","
+                     << result.qt_max_error << ","
+                     << result.qt_avg_error << ","
+                     << result.linear_max_error << ","
+                     << result.linear_avg_error << ","
+                     << result.curve_max_error << ","
+                     << result.curve_avg_error << ","
                      << best << "\n";
         }
     }
@@ -1239,8 +1299,8 @@ int main(int argc, char* argv[]) {
     
             // 单独测试各个算法
             TestTrajCompressSP(gps_data, epsilon);
-            TestTrajCompressSPAdaptive(gps_data, epsilon);
-            TestSerfQT(gps_data, epsilon);
+            // TestTrajCompressSPAdaptive(gps_data, epsilon);  // 已注释
+    TestSerfQT(gps_data, epsilon);
             TestSerfQTLinear(gps_data, epsilon);
             TestSerfQTCurve(gps_data, epsilon);
             

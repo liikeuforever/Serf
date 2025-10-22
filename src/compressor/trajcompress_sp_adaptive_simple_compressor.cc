@@ -293,10 +293,16 @@ void TrajCompressSPAdaptiveSimpleCompressor::UpdateHuffmanCodes() {
         {PREDICTOR_ZP, predictor_frequency_[PREDICTOR_ZP]}
     };
     
+    // 稳定排序：频率相同时按类型排序
     std::sort(freq_list.begin(), freq_list.end(), 
               [](const PredictorFreq& a, const PredictorFreq& b) {
-                  return a.frequency > b.frequency;
+                  if (a.frequency != b.frequency) {
+                      return a.frequency > b.frequency;
+                  }
+                  // 频率相同时，按类型排序以保证压缩器和解压器一致
+                  return static_cast<int>(a.type) < static_cast<int>(b.type);
               });
+    
     
     // 分配Huffman编码：最高频率用0 (1 bit)，次高用10 (2 bits)，最低用11 (2 bits)
     // 模式切换标志单独在评估窗口边界写入，不再需要逃逸码
@@ -523,7 +529,7 @@ void TrajCompressSPAdaptiveSimpleDecompressor::ReadHeader() {
     block_size_ = input_bit_stream_->ReadInt(16);
     epsilon_ = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
     evaluation_window_ = input_bit_stream_->ReadInt(16);  // 读取评估窗口大小
-    quant_step_ = 2 * epsilon_;
+    quant_step_ = 2 * epsilon_;  // epsilon 已经包含了 0.999 系数
     
     // 初始化Huffman解码器
     predictor_frequency_[PredictorType::PREDICTOR_LDR] = 60;
@@ -556,7 +562,7 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
         // LDR-Only模式：直接使用LDR预测，不读取预测器标志
         predicted_point = pred_ldr;
     } else {
-        // Multi-Predictor模式：解码预测器标志（使用简化的Huffman: 0, 10, 110）
+        // Multi-Predictor模式：解码预测器标志（使用简化的Huffman: 0, 10, 11）
         PredictorType predictor = DecodeWithHuffman();
         
         switch (predictor) {
@@ -589,18 +595,25 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
         point = reconstructed_point;
         points_read_++;  // 递增点计数
         
-    // 在评估窗口边界（第96, 192, 288...个点解压完后），读取1比特模式标志
-    if (points_read_ % evaluation_window_ == 0) {
-        bool mode_bit = input_bit_stream_->ReadBit();
-        // 0 = Multi-Predictor, 1 = LDR-Only
-        current_mode_ = mode_bit ? CompressionMode::MODE_LDR_ONLY : CompressionMode::MODE_MULTI_PREDICTOR;
-    }
-        
-        return true;
     } catch (...) {
         // 流结束或解码错误
         return false;
     }
+    
+    // 在评估窗口边界（第96, 192, 288...个点解压完后），读取1比特模式标志
+    // 注意：这必须在 try-catch 之外，以确保当前点成功解压后再读取模式标志
+    if (points_read_ % evaluation_window_ == 0) {
+        try {
+            bool mode_bit = input_bit_stream_->ReadBit();
+            // 0 = Multi-Predictor, 1 = LDR-Only
+            current_mode_ = mode_bit ? CompressionMode::MODE_LDR_ONLY : CompressionMode::MODE_MULTI_PREDICTOR;
+        } catch (...) {
+            // 如果读取模式标志失败（流结束），忽略错误（当前点已成功）
+            // 这通常发生在最后一个点，不影响已解压的数据
+        }
+    }
+    
+    return true;
 }
 
 
@@ -667,10 +680,16 @@ void TrajCompressSPAdaptiveSimpleDecompressor::UpdateHuffmanDecoder() {
         {PredictorType::PREDICTOR_ZP, predictor_frequency_[PredictorType::PREDICTOR_ZP]}
     };
     
+    // 稳定排序：频率相同时按类型排序（与压缩器保持一致）
     std::sort(freq_list.begin(), freq_list.end(), 
               [](const PredictorFreq& a, const PredictorFreq& b) {
-                  return a.frequency > b.frequency;
+                  if (a.frequency != b.frequency) {
+                      return a.frequency > b.frequency;
+                  }
+                  // 频率相同时，按类型排序以保证压缩器和解压器一致
+                  return static_cast<int>(a.type) < static_cast<int>(b.type);
               });
+    
     
     huffman_decoder_map_[0] = freq_list[0].type;  // 0 -> 最高频率
     huffman_decoder_map_[1] = freq_list[1].type;  // 10 -> 次高频率
@@ -682,24 +701,27 @@ TrajCompressSPAdaptiveSimpleDecompressor::PredictorType
 TrajCompressSPAdaptiveSimpleDecompressor::DecodeWithHuffman() {
     bool first_bit = input_bit_stream_->ReadBit();
     
+    PredictorType decoded_predictor;
+    
     if (!first_bit) {
         // 0 -> 最高频率预测器 (1 bit)
-        AddPredictorToWindow(huffman_decoder_map_[0]);
-        return huffman_decoder_map_[0];
-    }
-    
-    // 第一个比特是1，读取第二个比特
-    bool second_bit = input_bit_stream_->ReadBit();
-    
-    if (!second_bit) {
-        // 10 -> 次高频率预测器 (2 bits)
-        AddPredictorToWindow(huffman_decoder_map_[1]);
-        return huffman_decoder_map_[1];
+        decoded_predictor = huffman_decoder_map_[0];
     } else {
-        // 11 -> 最低频率预测器 (2 bits)
-        AddPredictorToWindow(huffman_decoder_map_[2]);
-        return huffman_decoder_map_[2];
+        // 第一个比特是1，读取第二个比特
+        bool second_bit = input_bit_stream_->ReadBit();
+        
+        if (!second_bit) {
+            // 10 -> 次高频率预测器 (2 bits)
+            decoded_predictor = huffman_decoder_map_[1];
+        } else {
+            // 11 -> 最低频率预测器 (2 bits)
+            decoded_predictor = huffman_decoder_map_[2];
+        }
     }
+    
+    // 解码完成后再更新窗口（与压缩器保持一致）
+    AddPredictorToWindow(decoded_predictor);
+    return decoded_predictor;
 }
 
 void TrajCompressSPAdaptiveSimpleDecompressor::AddPredictorToWindow(PredictorType predictor) {
