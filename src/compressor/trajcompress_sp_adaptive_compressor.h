@@ -2,12 +2,9 @@
 
 #include "utils/output_bit_stream.h"
 #include "utils/array.h"
-#include "utils/double.h"
 #include <vector>
 #include <deque>
 #include <memory>
-#include <cmath>
-#include <string>
 
 /**
  * TrajCompress-SP-Adaptive: Trajectory Compression with Adaptive Switched Predictors
@@ -141,11 +138,7 @@ private:
     const double kEpsilon;          // 误差阈值（经过0.999系数处理）
     const double kQuantStep;        // 量化步长 = 2 * epsilon * 0.999
     
-    // 自适应模式控制参数
-    static constexpr int kModeEvaluationWindow = 32;     // 模式评估滑动窗口大小
-    static constexpr double kLDROnlyThreshold = 0.95;    // 进入LDR-Only模式的阈值（95%）
-    static constexpr int kModeExitCheckCount = 3;        // 退出LDR-Only模式需要连续N次
-    static constexpr double kModeExitErrorRatio = 0.7;   // 退出时误差比例阈值
+    // 注意：原始基于频率的模式切换参数已移除，现在使用基于成本的智能决策
     
     // 状态
     std::unique_ptr<OutputBitStream> output_bit_stream_;
@@ -155,9 +148,7 @@ private:
     // 当前压缩模式
     CompressionMode current_mode_ = MODE_MULTI_PREDICTOR;
     
-    // 模式切换控制
-    std::vector<PredictorType> mode_evaluation_window_;  // 用于评估是否进入LDR-Only模式
-    int consecutive_non_ldr_wins_ = 0;                   // 连续非LDR预测器更优的次数
+    // 注意：原始基于频率的模式切换控制已移除，现在使用基于成本的智能决策
     
     // 预测器选择
     PredictorType last_used_predictor_ = PREDICTOR_ZP;
@@ -257,7 +248,6 @@ private:
     
     // 辅助函数
     double CalculateDistance(const GpsPoint& p1, const GpsPoint& p2) const;
-    double GetRecentLDRRatio() const;
 };
 
 /**

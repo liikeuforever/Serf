@@ -3,7 +3,6 @@
 #include "utils/zig_zag_codec.h"
 #include "utils/input_bit_stream.h"
 #include <iostream>
-#include <iomanip>
 #include <algorithm>
 #include <cmath>
 
@@ -30,7 +29,6 @@ TrajCompressSPAdaptiveCompressor::TrajCompressSPAdaptiveCompressor(
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
     predictor_window_.reserve(kSlidingWindowSize);
-    mode_evaluation_window_.reserve(kModeEvaluationWindow);
     // predictor_history_ 是 deque，不需要 reserve
     
     // 初始化 Huffman 编码表（假设初始频率分布）
@@ -135,12 +133,6 @@ void TrajCompressSPAdaptiveCompressor::EncodeMultiPredictor(const GpsPoint& poin
     
     // 更新最后使用的预测器
     last_used_predictor_ = best_predictor;
-    
-    // 添加到模式评估窗口
-    mode_evaluation_window_.push_back(best_predictor);
-    if (mode_evaluation_window_.size() > kModeEvaluationWindow) {
-        mode_evaluation_window_.erase(mode_evaluation_window_.begin());
-    }
     
     // 更新统计
     switch (best_predictor) {
