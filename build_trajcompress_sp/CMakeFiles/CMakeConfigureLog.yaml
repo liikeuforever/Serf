@@ -4448,3 +4448,299 @@ events:
         
       exitCode: 2
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-mMzDeG"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-mMzDeG"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-mMzDeG'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ecb7a/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_ecb7a.dir/build.make CMakeFiles/cmTC_ecb7a.dir/build
+        Building C object CMakeFiles/cmTC_ecb7a.dir/OpenMPTryFlag.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -Xclang -fopenmp -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_ecb7a.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_ecb7a.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_ecb7a.dir/OpenMPTryFlag.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-mMzDeG/OpenMPTryFlag.c
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-mMzDeG/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_ecb7a.dir/OpenMPTryFlag.c.o] Error 1
+        make: *** [cmTC_ecb7a/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-KqKIts"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-KqKIts"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-KqKIts'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_a95a3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_a95a3.dir/build.make CMakeFiles/cmTC_a95a3.dir/build
+        Building CXX object CMakeFiles/cmTC_a95a3.dir/OpenMPTryFlag.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -Xclang -fopenmp -std=c++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_a95a3.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_a95a3.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_a95a3.dir/OpenMPTryFlag.cpp.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-KqKIts/OpenMPTryFlag.cpp
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-KqKIts/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_a95a3.dir/OpenMPTryFlag.cpp.o] Error 1
+        make: *** [cmTC_a95a3/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-MfrAS1"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-MfrAS1"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-MfrAS1'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_92cc2/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_92cc2.dir/build.make CMakeFiles/cmTC_92cc2.dir/build
+        Building C object CMakeFiles/cmTC_92cc2.dir/OpenMPTryFlag.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -Xclang -fopenmp -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_92cc2.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_92cc2.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_92cc2.dir/OpenMPTryFlag.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-MfrAS1/OpenMPTryFlag.c
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-MfrAS1/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_92cc2.dir/OpenMPTryFlag.c.o] Error 1
+        make: *** [cmTC_92cc2/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-SrabNU"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-SrabNU"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-SrabNU'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_7f6ba/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_7f6ba.dir/build.make CMakeFiles/cmTC_7f6ba.dir/build
+        Building CXX object CMakeFiles/cmTC_7f6ba.dir/OpenMPTryFlag.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -Xclang -fopenmp -std=c++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_7f6ba.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_7f6ba.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_7f6ba.dir/OpenMPTryFlag.cpp.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-SrabNU/OpenMPTryFlag.cpp
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-SrabNU/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_7f6ba.dir/OpenMPTryFlag.cpp.o] Error 1
+        make: *** [cmTC_7f6ba/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cNGrXx"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cNGrXx"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cNGrXx'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1a861/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_1a861.dir/build.make CMakeFiles/cmTC_1a861.dir/build
+        Building C object CMakeFiles/cmTC_1a861.dir/OpenMPTryFlag.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -Xclang -fopenmp -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_1a861.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_1a861.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_1a861.dir/OpenMPTryFlag.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cNGrXx/OpenMPTryFlag.c
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cNGrXx/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_1a861.dir/OpenMPTryFlag.c.o] Error 1
+        make: *** [cmTC_1a861/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-Xq8P98"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-Xq8P98"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-Xq8P98'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_08f13/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_08f13.dir/build.make CMakeFiles/cmTC_08f13.dir/build
+        Building CXX object CMakeFiles/cmTC_08f13.dir/OpenMPTryFlag.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -Xclang -fopenmp -std=c++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_08f13.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_08f13.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_08f13.dir/OpenMPTryFlag.cpp.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-Xq8P98/OpenMPTryFlag.cpp
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-Xq8P98/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_08f13.dir/OpenMPTryFlag.cpp.o] Error 1
+        make: *** [cmTC_08f13/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-XZKpFN"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-XZKpFN"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-XZKpFN'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3bef6/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_3bef6.dir/build.make CMakeFiles/cmTC_3bef6.dir/build
+        Building C object CMakeFiles/cmTC_3bef6.dir/OpenMPTryFlag.c.o
+        /Library/Developer/CommandLineTools/usr/bin/cc   -Xclang -fopenmp -std=gnu99 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_3bef6.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_3bef6.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_3bef6.dir/OpenMPTryFlag.c.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-XZKpFN/OpenMPTryFlag.c
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-XZKpFN/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_3bef6.dir/OpenMPTryFlag.c.o] Error 1
+        make: *** [cmTC_3bef6/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:252 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:522 (_OPENMP_GET_FLAGS)"
+      - "test/baselines/sz2/CMakeLists.txt:107 (find_package)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cu0ARm"
+      binary: "/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cu0ARm"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cu0ARm'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0abc3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_0abc3.dir/build.make CMakeFiles/cmTC_0abc3.dir/build
+        Building CXX object CMakeFiles/cmTC_0abc3.dir/OpenMPTryFlag.cpp.o
+        /Library/Developer/CommandLineTools/usr/bin/c++   -Xclang -fopenmp -std=c++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -MD -MT CMakeFiles/cmTC_0abc3.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_0abc3.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_0abc3.dir/OpenMPTryFlag.cpp.o -c /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cu0ARm/OpenMPTryFlag.cpp
+        /Users/xuzihang/GitProject/GG/Serf/build_trajcompress_sp/CMakeFiles/CMakeScratch/TryCompile-cu0ARm/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        make[1]: *** [CMakeFiles/cmTC_0abc3.dir/OpenMPTryFlag.cpp.o] Error 1
+        make: *** [cmTC_0abc3/fast] Error 2
+        
+      exitCode: 2
+...

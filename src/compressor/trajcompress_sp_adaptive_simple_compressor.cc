@@ -9,10 +9,11 @@
 // ==================== 极简版压缩器实现 ====================
 
 TrajCompressSPAdaptiveSimpleCompressor::TrajCompressSPAdaptiveSimpleCompressor(
-    int block_size, double epsilon)
+    int block_size, double epsilon, int evaluation_window)
     : kBlockSize(block_size), 
       kEpsilon(epsilon * 0.999), 
-      kQuantStep(2 * epsilon * 0.999) {
+      kQuantStep(2 * epsilon * 0.999),
+      kEvaluationWindow(evaluation_window) {
     output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
     history_states_.reserve(kMaxHistorySize);
     predictor_window_.reserve(kSlidingWindowSize);
@@ -84,9 +85,19 @@ void TrajCompressSPAdaptiveSimpleCompressor::AddGpsPoint(const GpsPoint& point) 
         stats_.multi_predictor_mode_points++;
     }
     
-    // === 4. 周期性地基于成本进行模式切换决策 ===
-    if (stats_.total_points % kEvaluationInterval == 0 && stats_.total_points > static_cast<size_t>(kCostWindowSize)) {
-        EvaluateAndSwitchModeBasedOnCost();
+    // === 4. 每个评估窗口结束时进行模式切换决策 ===
+    // 在第96、192、288...个点时评估（窗口满时）
+    if (stats_.total_points % kEvaluationWindow == 0) {
+        // 如果cost window已满，进行智能决策；否则保持当前模式
+        if (point_costs_multi_.size() >= static_cast<size_t>(kEvaluationWindow)) {
+            EvaluateAndSwitchModeBasedOnCost();
+        }
+        
+        // 无论是否评估，都固定写入1比特表示当前模式（解压器需要同步）
+        // 0 = Multi-Predictor, 1 = LDR-Only
+        bool mode_bit = (current_mode_ == MODE_LDR_ONLY);
+        output_bit_stream_->WriteBit(mode_bit);
+        compressed_size_in_bits_ += 1;
     }
 }
 
@@ -155,19 +166,7 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodeLDROnly(const GpsPoint& point
 
 // 旧的基于魔法数字的模式切换方法已被基于成本的智能切换替代
 
-void TrajCompressSPAdaptiveSimpleCompressor::EncodeModeSwitch(CompressionMode new_mode) {
-    // 编码逃逸码：111 (3 bits)
-    output_bit_stream_->WriteBit(true);
-    output_bit_stream_->WriteBit(true);
-    output_bit_stream_->WriteBit(true);
-    
-    // 编码模式切换标志：0 = LDR-Only, 1 = Multi-Predictor (1 bit)
-    output_bit_stream_->WriteBit(new_mode == MODE_MULTI_PREDICTOR);
-    
-    compressed_size_in_bits_ += 4;
-    stats_.mode_switch_bits += 4;
-    stats_.mode_switch_count++;
-}
+// 模式切换现在通过固定的1比特标志实现，不再需要专门的EncodeModeSwitch函数
 
 TrajCompressSPAdaptiveSimpleCompressor::PredictorType TrajCompressSPAdaptiveSimpleCompressor::SelectBestPredictorByCost(
     const GpsPoint& current_point,
@@ -237,8 +236,8 @@ void TrajCompressSPAdaptiveSimpleCompressor::UpdateCostWindows(int multi_cost, i
     
     // 极简版：移除成本差异记录（不再用于动态调整）
     
-    // 如果窗口满了，出队旧成本
-    if (point_costs_multi_.size() > static_cast<size_t>(kCostWindowSize)) {
+    // 如果窗口满了，出队旧成本（维护固定大小的评估窗口）
+    if (point_costs_multi_.size() > static_cast<size_t>(kEvaluationWindow)) {
         window_total_cost_multi_ -= point_costs_multi_.front();
         point_costs_multi_.pop_front();
         
@@ -250,21 +249,24 @@ void TrajCompressSPAdaptiveSimpleCompressor::UpdateCostWindows(int multi_cost, i
 // ========== 基于成本的智能模式切换（无魔法数字） ==========
 
 void TrajCompressSPAdaptiveSimpleCompressor::EvaluateAndSwitchModeBasedOnCost() {
-    // 确保有足够的数据进行决策
-    if (point_costs_multi_.size() < static_cast<size_t>(kCostWindowSize)) return;
+    // 确保评估窗口已满
+    if (point_costs_multi_.size() < static_cast<size_t>(kEvaluationWindow)) return;
+    
+    // 切换成本现在是1比特（固定写入的模式标志）
+    const int kActualSwitchCost = 1;
     
     if (current_mode_ == MODE_MULTI_PREDICTOR) {
-        // 极简版：只考虑切换成本，不考虑额外边际
-        if (window_total_cost_ldr_only_ < window_total_cost_multi_ - kSwitchCost) {
-            EncodeModeSwitch(MODE_LDR_ONLY);
+        // 极简版：只考虑切换成本（1比特）
+        if (window_total_cost_ldr_only_ < window_total_cost_multi_ - kActualSwitchCost) {
             current_mode_ = MODE_LDR_ONLY;
+            stats_.mode_switch_count++;
             // kClearWindowAfterSwitch 固定为 false，保持窗口连续性
         }
     } else {  // current_mode_ == MODE_LDR_ONLY
-        // 极简版：只考虑切换成本，不考虑额外边际
-        if (window_total_cost_multi_ < window_total_cost_ldr_only_ - kSwitchCost) {
-            EncodeModeSwitch(MODE_MULTI_PREDICTOR);
+        // 极简版：只考虑切换成本（1比特）
+        if (window_total_cost_multi_ < window_total_cost_ldr_only_ - kActualSwitchCost) {
             current_mode_ = MODE_MULTI_PREDICTOR;
+            stats_.mode_switch_count++;
             // kClearWindowAfterSwitch 固定为 false，保持窗口连续性
         }
     }
@@ -297,9 +299,10 @@ void TrajCompressSPAdaptiveSimpleCompressor::UpdateHuffmanCodes() {
               });
     
     // 分配Huffman编码：最高频率用0 (1 bit)，次高用10 (2 bits)，最低用11 (2 bits)
-    huffman_codes_[freq_list[0].type] = HuffmanCode({false});               // 0
-    huffman_codes_[freq_list[1].type] = HuffmanCode({true, false});         // 10
-    huffman_codes_[freq_list[2].type] = HuffmanCode({true, true});          // 11
+    // 模式切换标志单独在评估窗口边界写入，不再需要逃逸码
+    huffman_codes_[freq_list[0].type] = HuffmanCode({false});                      // 0 (1 bit)
+    huffman_codes_[freq_list[1].type] = HuffmanCode({true, false});                // 10 (2 bits)
+    huffman_codes_[freq_list[2].type] = HuffmanCode({true, true});                 // 11 (2 bits)
 }
 
 void TrajCompressSPAdaptiveSimpleCompressor::EncodeWithHuffman(PredictorType predictor) {
@@ -345,6 +348,7 @@ void TrajCompressSPAdaptiveSimpleCompressor::ProcessFirstPoint(const GpsPoint& p
     // 写入头部信息
     compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 16);
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(kEpsilon), 64);
+    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kEvaluationWindow, 16);  // 写入评估窗口大小
     
     // 写入第一个点的原始坐标
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(point.longitude), 64);
@@ -518,6 +522,7 @@ TrajCompressSPAdaptiveSimpleDecompressor::TrajCompressSPAdaptiveSimpleDecompress
 void TrajCompressSPAdaptiveSimpleDecompressor::ReadHeader() {
     block_size_ = input_bit_stream_->ReadInt(16);
     epsilon_ = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
+    evaluation_window_ = input_bit_stream_->ReadInt(16);  // 读取评估窗口大小
     quant_step_ = 2 * epsilon_;
     
     // 初始化Huffman解码器
@@ -530,6 +535,7 @@ void TrajCompressSPAdaptiveSimpleDecompressor::ReadHeader() {
 bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
     if (first_point_) {
         first_point_ = false;
+        points_read_ = 1;  // 第一个点
         
         // 读取第一个点的原始坐标
         double lon = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
@@ -541,21 +547,16 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
         return true;
     }
     
-    // 检查是否有模式切换标志
-    if (CheckForModeSwitch()) {
-        // 模式已切换，继续读取下一个点
-    }
-    
     GpsPoint pred_ldr, pred_cp, pred_zp;
     ParallelPredict(pred_ldr, pred_cp, pred_zp);
     
     GpsPoint predicted_point;
     
     if (current_mode_ == CompressionMode::MODE_LDR_ONLY) {
-        // LDR-Only模式：直接使用LDR预测
+        // LDR-Only模式：直接使用LDR预测，不读取预测器标志
         predicted_point = pred_ldr;
     } else {
-        // Multi-Predictor模式：解码预测器标志（使用Huffman解码）
+        // Multi-Predictor模式：解码预测器标志（使用简化的Huffman: 0, 10, 110）
         PredictorType predictor = DecodeWithHuffman();
         
         switch (predictor) {
@@ -563,60 +564,45 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
             case PredictorType::PREDICTOR_CP: predicted_point = pred_cp; break;
             case PredictorType::PREDICTOR_ZP: predicted_point = pred_zp; break;
         }
-        
         last_used_predictor_ = predictor;
     }
     
     // 解码量化误差
-    uint64_t encoded_lon = EliasGammaCodec::Decode(input_bit_stream_.get());
-    uint64_t encoded_lat = EliasGammaCodec::Decode(input_bit_stream_.get());
+    try {
+        uint64_t encoded_lon = EliasGammaCodec::Decode(input_bit_stream_.get());
+        uint64_t encoded_lat = EliasGammaCodec::Decode(input_bit_stream_.get());
+        
+        int64_t quantized_delta_lon = ZigZagCodec::Decode(encoded_lon - 1);
+        int64_t quantized_delta_lat = ZigZagCodec::Decode(encoded_lat - 1);
     
-    int64_t quantized_delta_lon = ZigZagCodec::Decode(encoded_lon - 1);
-    int64_t quantized_delta_lat = ZigZagCodec::Decode(encoded_lat - 1);
-    
-    // 重构点
-    GpsPoint reconstructed_delta(
-        quantized_delta_lon * quant_step_,
-        quantized_delta_lat * quant_step_
-    );
-    GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
-    
-    // 更新历史状态
-    UpdateHistory(reconstructed_point);
-    current_reconstructed_point_ = reconstructed_point;
-    
-    point = reconstructed_point;
-    return true;
+        // 重构点
+        GpsPoint reconstructed_delta(
+            quantized_delta_lon * quant_step_,
+            quantized_delta_lat * quant_step_
+        );
+        GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
+        
+        // 更新历史状态
+        UpdateHistory(reconstructed_point);
+        current_reconstructed_point_ = reconstructed_point;
+        
+        point = reconstructed_point;
+        points_read_++;  // 递增点计数
+        
+    // 在评估窗口边界（第96, 192, 288...个点解压完后），读取1比特模式标志
+    if (points_read_ % evaluation_window_ == 0) {
+        bool mode_bit = input_bit_stream_->ReadBit();
+        // 0 = Multi-Predictor, 1 = LDR-Only
+        current_mode_ = mode_bit ? CompressionMode::MODE_LDR_ONLY : CompressionMode::MODE_MULTI_PREDICTOR;
+    }
+        
+        return true;
+    } catch (...) {
+        // 流结束或解码错误
+        return false;
+    }
 }
 
-bool TrajCompressSPAdaptiveSimpleDecompressor::CheckForModeSwitch() {
-    // 尝试读取3个比特，查看是否是逃逸码 111
-    bool bit1 = input_bit_stream_->ReadBit();
-    if (!bit1) {
-        // 第一位是0，不是逃逸码，回退
-        // 注意：InputBitStream可能需要支持回退功能，这里简化处理
-        // 实际实现中可以使用peek功能
-        return false;
-    }
-    
-    bool bit2 = input_bit_stream_->ReadBit();
-    if (!bit2) {
-        // 10...，不是逃逸码
-        return false;
-    }
-    
-    bool bit3 = input_bit_stream_->ReadBit();
-    if (!bit3) {
-        // 110，不是逃逸码
-        return false;
-    }
-    
-    // 111，是逃逸码，读取模式切换标志
-    bool mode_flag = input_bit_stream_->ReadBit();
-    current_mode_ = mode_flag ? CompressionMode::MODE_MULTI_PREDICTOR : CompressionMode::MODE_LDR_ONLY;
-    
-    return true;
-}
 
 std::vector<TrajCompressSPAdaptiveSimpleDecompressor::GpsPoint> 
 TrajCompressSPAdaptiveSimpleDecompressor::ReadAllPoints() {
@@ -691,26 +677,29 @@ void TrajCompressSPAdaptiveSimpleDecompressor::UpdateHuffmanDecoder() {
     huffman_decoder_map_[2] = freq_list[2].type;  // 11 -> 最低频率
 }
 
-TrajCompressSPAdaptiveSimpleDecompressor::PredictorType TrajCompressSPAdaptiveSimpleDecompressor::DecodeWithHuffman() {
+// 解码Huffman（简化版：0, 10, 11）
+TrajCompressSPAdaptiveSimpleDecompressor::PredictorType 
+TrajCompressSPAdaptiveSimpleDecompressor::DecodeWithHuffman() {
     bool first_bit = input_bit_stream_->ReadBit();
     
     if (!first_bit) {
-        // 0 -> 最高频率预测器
+        // 0 -> 最高频率预测器 (1 bit)
         AddPredictorToWindow(huffman_decoder_map_[0]);
         return huffman_decoder_map_[0];
     }
     
+    // 第一个比特是1，读取第二个比特
     bool second_bit = input_bit_stream_->ReadBit();
     
     if (!second_bit) {
-        // 10 -> 次高频率预测器
+        // 10 -> 次高频率预测器 (2 bits)
         AddPredictorToWindow(huffman_decoder_map_[1]);
         return huffman_decoder_map_[1];
+    } else {
+        // 11 -> 最低频率预测器 (2 bits)
+        AddPredictorToWindow(huffman_decoder_map_[2]);
+        return huffman_decoder_map_[2];
     }
-    
-    // 11 -> 最低频率预测器
-    AddPredictorToWindow(huffman_decoder_map_[2]);
-    return huffman_decoder_map_[2];
 }
 
 void TrajCompressSPAdaptiveSimpleDecompressor::AddPredictorToWindow(PredictorType predictor) {

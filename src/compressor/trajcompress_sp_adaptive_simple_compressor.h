@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/output_bit_stream.h"
+#include "utils/input_bit_stream.h"
 #include "utils/array.h"
 #include <vector>
 #include <deque>
@@ -94,8 +95,9 @@ public:
      * 极简构造函数
      * @param block_size 块大小（用于预分配缓冲区）
      * @param epsilon 最大允许误差（度），内部会乘以0.999系数，与Serf-QT保持一致
+     * @param evaluation_window 评估窗口大小（可选，默认96）
      */
-    TrajCompressSPAdaptiveSimpleCompressor(int block_size, double epsilon);
+    TrajCompressSPAdaptiveSimpleCompressor(int block_size, double epsilon, int evaluation_window = 96);
     
     /**
      * 添加GPS点进行压缩
@@ -129,9 +131,8 @@ private:
     const double kEpsilon;          // 误差阈值（经过0.999系数处理）
     const double kQuantStep;        // 量化步长 = 2 * epsilon * 0.999
     
-    // 极简版：固定所有参数为最优值
-    static constexpr int kCostWindowSize = 96;          // 固定窗口大小
-    static constexpr int kEvaluationInterval = 16;      // 固定评估间隔
+    // 极简版：固定所有参数为最优值（参数已优化简化）
+    const int kEvaluationWindow;                        // 评估窗口（唯一时间尺度参数，可配置）
     static constexpr bool kClearWindowAfterSwitch = false;  // 固定不清空
     
     // 状态
@@ -240,15 +241,17 @@ public:
     std::vector<GpsPoint> ReadAllPoints();
 
 private:
-    std::unique_ptr<class InputBitStream> input_bit_stream_;
+    std::unique_ptr<InputBitStream> input_bit_stream_;
     
     // 参数
     int block_size_;
     double epsilon_;
     double quant_step_;
+    int evaluation_window_;  // 评估窗口大小
     
     // 状态
     bool first_point_ = true;
+    int points_read_ = 0;  // 已读取的点数（用于同步评估窗口）
     CompressionMode current_mode_ = CompressionMode::MODE_MULTI_PREDICTOR;
     PredictorType last_used_predictor_ = PredictorType::PREDICTOR_ZP;
     
@@ -268,8 +271,7 @@ private:
     void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp);
     void UpdateHistory(const GpsPoint& reconstructed_point);
     void UpdateHuffmanDecoder();
-    PredictorType DecodeWithHuffman();
+    PredictorType DecodeWithHuffman();  // 解码Huffman（简化版）
     void AddPredictorToWindow(PredictorType predictor);
-    bool CheckForModeSwitch();  // 检查是否有模式切换标志
 };
 
