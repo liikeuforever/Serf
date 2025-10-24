@@ -176,7 +176,7 @@ private:
     
     // 基于成本的模式切换系统（可配置参数）
     int kCostWindowSize;                    // 成本评估窗口大小（动态调整：32-128）
-    const int kSwitchCost;                  // 模式切换成本（111 + 0/1，固定4）
+    const int kSwitchCost;                  // 模式切换成本（固定1 bit，对齐Simple版本）
     int kStabilityMargin;                   // 防抖动边际（动态调整：基于成本差标准差）
     const int kEvaluationInterval;          // 评估间隔（默认16）
     const bool kClearWindowAfterSwitch;     // 切换后是否清空成本窗口（默认true）
@@ -272,9 +272,11 @@ private:
     int block_size_;
     double epsilon_;
     double quant_step_;
+    int evaluation_interval_;  // 评估间隔（用于同步模式标志）
     
     // 状态
     bool first_point_ = true;
+    int points_read_ = 0;  // 已读取的点数（用于同步评估窗口）
     CompressionMode current_mode_ = CompressionMode::MODE_MULTI_PREDICTOR;
     PredictorType last_used_predictor_ = PredictorType::PREDICTOR_ZP;
     

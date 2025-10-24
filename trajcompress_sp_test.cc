@@ -926,6 +926,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         double curve_avg;
         // 误差统计
         double sp_max_error, sp_avg_error;
+        double adaptive_max_error, adaptive_avg_error;
         double simple_max_error, simple_avg_error;
         double qt_max_error, qt_avg_error;
         double linear_max_error, linear_avg_error;
@@ -974,8 +975,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         CalculateErrors(gps_data, sp_decompressed, sp_max_error, sp_avg_error, sp_exceeding, epsilon);
         std::cout << "  [2/6] TrajCompress-SP 完成 (max_err=" << std::scientific << sp_max_error << ")" << std::endl;
         
-        // TrajCompress-SP-Adaptive（智能版）- 已注释掉以提升速度
-        /*
+        // TrajCompress-SP-Adaptive（智能版）- 已重新启用（对齐Simple版本）
         TrajCompressSPAdaptiveCompressor adaptive_compressor(
             gps_data.size(), 
             epsilon,
@@ -1001,12 +1001,14 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                 break;
             }
         }
-        */
         
-        // 为了保持数组索引一致，使用TrajSP的结果填充adaptive
-        int adaptive_bits = sp_compressor.GetCompressedSizeInBits();  // 临时使用SP的结果
+        int adaptive_bits = adaptive_compressor.GetCompressedSizeInBits();
         
-        std::cout << "  [3/6] TrajCompress-SP-Adaptive 已跳过" << std::endl;
+        // 计算 TrajCompress-SP-Adaptive 误差
+        double adaptive_max_error, adaptive_avg_error;
+        int adaptive_exceeding;
+        CalculateErrors(gps_data, adaptive_decompressed, adaptive_max_error, adaptive_avg_error, adaptive_exceeding, epsilon);
+        std::cout << "  [3/6] TrajCompress-SP-Adaptive 完成 (max_err=" << std::scientific << adaptive_max_error << ", 解压点数=" << adaptive_decompressed.size() << ")" << std::endl;
         
         // TrajCompress-SP-Adaptive-Simple（极简版：window_size=96）- 压缩与解压缩
         TrajCompressSPAdaptiveSimpleCompressor simple_compressor(
@@ -1130,6 +1132,8 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         // 误差统计
         result.sp_max_error = sp_max_error;
         result.sp_avg_error = sp_avg_error;
+        result.adaptive_max_error = adaptive_max_error;
+        result.adaptive_avg_error = adaptive_avg_error;
         result.simple_max_error = simple_max_error;
         result.simple_avg_error = simple_avg_error;
         result.qt_max_error = qt_max_error;
@@ -1163,8 +1167,9 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     if (csv_file.is_open()) {
         // 写入CSV头（压缩比 + 误差）
         csv_file << "Dataset,Points,"
-                 << "TrajSP_BPP,Simple_BPP,QT_BPP,Linear_BPP,Curve_BPP,"
+                 << "TrajSP_BPP,Adaptive_BPP,Simple_BPP,QT_BPP,Linear_BPP,Curve_BPP,"
                  << "TrajSP_MaxErr,TrajSP_AvgErr,"
+                 << "Adaptive_MaxErr,Adaptive_AvgErr,"
                  << "Simple_MaxErr,Simple_AvgErr,"
                  << "QT_MaxErr,QT_AvgErr,"
                  << "Linear_MaxErr,Linear_AvgErr,"
@@ -1211,6 +1216,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                      << result.points << ","
                      << std::fixed << std::setprecision(6)
                      << result.sp_avg << ","
+                     << result.adaptive_avg << ","
                      << result.simple_avg << ","
                      << result.qt_avg << ","
                      << result.linear_avg << ","
@@ -1218,6 +1224,8 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                      << std::scientific << std::setprecision(6)
                      << result.sp_max_error << ","
                      << result.sp_avg_error << ","
+                     << result.adaptive_max_error << ","
+                     << result.adaptive_avg_error << ","
                      << result.simple_max_error << ","
                      << result.simple_avg_error << ","
                      << result.qt_max_error << ","
