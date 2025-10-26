@@ -18,7 +18,7 @@ class SerfQtLinearCompressor {
  public:
   SerfQtLinearCompressor(int block_size, double max_diff);
 
-  void AddValue(double v);
+  void AddValue(double v, uint64_t timestamp = 0);  // 添加时间戳参数（可选）
 
   Array<uint8_t> compressed_bytes();
 
@@ -35,10 +35,12 @@ class SerfQtLinearCompressor {
   Array<uint8_t> compressed_bytes_;
   double prev_value1_ = 2;  // most recent value
   double prev_value2_ = 2;  // second most recent value
+  uint64_t prev_timestamp1_ = 0;  // timestamp for prev_value1_
+  uint64_t prev_timestamp2_ = 0;  // timestamp for prev_value2_
   long compressed_size_in_bits_ = 0;
   long stored_compressed_size_in_bits_ = 0;
   
-  double LinearPredict() const;
+  double LinearPredict(uint64_t current_timestamp) const;
 };
 
 #endif  // SERF_QT_LINEAR_COMPRESSOR_H

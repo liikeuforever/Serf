@@ -9,24 +9,39 @@ SerfQtLinearCompressor::SerfQtLinearCompressor(int block_size, double max_diff)
   output_bit_stream_ = std::make_unique<OutputBitStream>(2 * block_size * 8);
 }
 
-double SerfQtLinearCompressor::LinearPredict() const {
+double SerfQtLinearCompressor::LinearPredict(uint64_t current_timestamp) const {
   if (first_) {
     return 2.0;  // default value for first point
   } else if (second_) {
     return prev_value1_;  // use previous value for second point
   } else {
-    // Linear prediction: predicted = 2 * prev1 - prev2
+    // 使用真实时间戳进行线性预测，使用int64_t避免timestamp回退时underflow
+    if (current_timestamp > 0 && prev_timestamp1_ > 0 && prev_timestamp2_ > 0) {
+      int64_t dt1_signed = static_cast<int64_t>(prev_timestamp1_) - static_cast<int64_t>(prev_timestamp2_);  // 前一段时间间隔
+      int64_t dt2_signed = static_cast<int64_t>(current_timestamp) - static_cast<int64_t>(prev_timestamp1_);  // 当前时间间隔
+      
+      if (dt1_signed > 0 && dt2_signed > 0) {
+        // velocity = (prev_value1_ - prev_value2_) / dt1 (度/秒)
+        // predicted = prev_value1_ + velocity * dt2
+        double velocity = (prev_value1_ - prev_value2_) / static_cast<double>(dt1_signed);
+        return prev_value1_ + velocity * static_cast<double>(dt2_signed);
+      }
+    }
+    
+    // 如果没有时间戳或时间戳无效，使用原始等时间间隔预测
+    // predicted = 2 * prev1 - prev2 (假设 dt1 = dt2 = 1)
     return 2.0 * prev_value1_ - prev_value2_;
   }
 }
 
-void SerfQtLinearCompressor::AddValue(double v) {
+void SerfQtLinearCompressor::AddValue(double v, uint64_t timestamp) {
   if (first_) {
     first_ = false;
     compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 16);
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(kMaxDiff), 64);
     // Store first value directly
     prev_value1_ = v;
+    prev_timestamp1_ = timestamp;
     // For first value, quantization is based on difference from default (2.0)
     long q = static_cast<long>(std::round((v - 2.0) / (2 * kMaxDiff)));
     double recoverValue = 2.0 + 2 * kMaxDiff * static_cast<double>(q);
@@ -44,12 +59,14 @@ void SerfQtLinearCompressor::AddValue(double v) {
     compressed_size_in_bits_ += EliasGammaCodec::Encode(ZigZagCodec::Encode(static_cast<int64_t>(q)) + 1,
                                                         output_bit_stream_.get());
     prev_value2_ = prev_value1_;
+    prev_timestamp2_ = prev_timestamp1_;
     prev_value1_ = recoverValue;
+    prev_timestamp1_ = timestamp;
     return;
   }
   
-  // For third value onwards, use linear prediction
-  double predicted = LinearPredict();
+  // For third value onwards, use linear prediction with timestamp
+  double predicted = LinearPredict(timestamp);
   long q = static_cast<long>(std::round((v - predicted) / (2 * kMaxDiff)));
   double recoverValue = predicted + 2 * kMaxDiff * static_cast<double>(q);
   compressed_size_in_bits_ += EliasGammaCodec::Encode(ZigZagCodec::Encode(static_cast<int64_t>(q)) + 1,
@@ -57,7 +74,9 @@ void SerfQtLinearCompressor::AddValue(double v) {
   
   // Update history
   prev_value2_ = prev_value1_;
+  prev_timestamp2_ = prev_timestamp1_;
   prev_value1_ = recoverValue;
+  prev_timestamp1_ = timestamp;
 }
 
 Array<uint8_t> SerfQtLinearCompressor::compressed_bytes() {
@@ -72,6 +91,8 @@ void SerfQtLinearCompressor::Close() {
   second_ = true;
   prev_value1_ = 2;
   prev_value2_ = 2;
+  prev_timestamp1_ = 0;
+  prev_timestamp2_ = 0;
   stored_compressed_size_in_bits_ = compressed_size_in_bits_;
   compressed_size_in_bits_ = 0;
 }

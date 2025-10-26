@@ -1,65 +1,76 @@
-#include "src/compressor/trajcompress_sp_adaptive_simple_compressor.h"
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include "src/compressor/trajcompress_sp_adaptive_simple_compressor.h"
 
-using SimpleGpsPoint = TrajCompressSPAdaptiveSimpleCompressor::GpsPoint;
-
-std::vector<SimpleGpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_points) {
-    std::vector<SimpleGpsPoint> points;
-    std::ifstream file(filename);
-    if (!file.is_open()) return points;
-    
-    std::string line;
-    std::getline(file, line); // skip header
-    
-    int count = 0;
-    while (std::getline(file, line) && (max_points < 0 || count < max_points)) {
-        std::stringstream ss(line);
-        std::string lon_str, lat_str;
-        if (std::getline(ss, lon_str, ',') && std::getline(ss, lat_str, ',')) {
-            points.emplace_back(std::stod(lon_str), std::stod(lat_str));
-            count++;
-        }
-    }
-    return points;
+// 解析时间戳
+uint64_t ParseTimestamp(const std::string& time_str) {
+    struct tm tm = {};
+    std::istringstream ss(time_str);
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return static_cast<uint64_t>(mktime(&tm));
 }
 
-int main() {
-    auto gps_data = LoadGpsDataFromCSV("/Users/xuzihang/GitProject/GG/Serf/test/data_set/Geolife_100k_longitude_latitude.csv", 99999);
-    std::cout << "加载 " << gps_data.size() << " 个点" << std::endl;
-    
-    double epsilon = 1e-5;
-    TrajCompressSPAdaptiveSimpleCompressor compressor(gps_data.size(), epsilon, 96);
-    
-    for (const auto& point : gps_data) {
-        compressor.AddGpsPoint(point);
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <csv_file> [max_points]\n";
+        return 1;
     }
-    compressor.Close();
     
-    std::cout << "压缩完成: " << compressor.GetCompressedSizeInBits() << " bits" << std::endl;
+    std::string csv_file = argv[1];
+    int max_points = (argc > 2) ? std::atoi(argv[2]) : 10000;
     
-    Array<uint8_t> compressed = compressor.GetCompressedData();
-    TrajCompressSPAdaptiveSimpleDecompressor decompressor(compressed.begin(), compressed.length());
+    // 加载数据
+    std::cout << "加载数据: " << csv_file << "\n";
+    std::vector<TrajCompressSPAdaptiveSimpleCompressor::GpsPoint> data;
     
-    std::vector<SimpleGpsPoint> decompressed;
-    SimpleGpsPoint point;
-    int fail_at = -1;
+    std::ifstream file(csv_file);
+    if (!file.is_open()) {
+        std::cerr << "无法打开文件: " << csv_file << "\n";
+        return 1;
+    }
     
-    for (size_t i = 0; i < gps_data.size(); ++i) {
-        if (!decompressor.ReadNextPoint(point)) {
-            fail_at = i;
-            std::cout << "解压失败在第 " << i << " 个点" << std::endl;
-            break;
+    std::string line;
+    std::getline(file, line); // 跳过header
+    
+    while (std::getline(file, line) && data.size() < static_cast<size_t>(max_points)) {
+        std::istringstream ss(line);
+        std::string lon_str, lat_str, time_str;
+        
+        if (std::getline(ss, lon_str, ',') && 
+            std::getline(ss, lat_str, ',') && 
+            std::getline(ss, time_str)) {
+            double lon = std::stod(lon_str);
+            double lat = std::stod(lat_str);
+            uint64_t timestamp = ParseTimestamp(time_str);
+            data.push_back({lon, lat, timestamp});
         }
-        decompressed.push_back(point);
     }
     
-    std::cout << "解压完成: " << decompressed.size() << " 个点" << std::endl;
-    if (fail_at >= 0) {
-        std::cout << "失败位置: " << fail_at << std::endl;
+    std::cout << "成功加载 " << data.size() << " 个点\n";
+    
+    // 压缩
+    std::cout << "\n=== 开始压缩 ===\n";
+    TrajCompressSPAdaptiveSimpleCompressor compressor(data.size(), 1e-5, 96);
+    
+    for (size_t i = 0; i < data.size(); i++) {
+        if (i >= 1155 && i <= 1165) {
+            std::cout << "Before AddGpsPoint(" << i << "): ts=" << data[i].timestamp << "\n";
+            std::cout.flush();
+        }
+        
+        compressor.AddGpsPoint(data[i]);
+        
+        if (i >= 1155 && i <= 1165) {
+            std::cout << "After AddGpsPoint(" << i << ")\n";
+            std::cout.flush();
+        }
     }
+    std::cout << "\n压缩完成\n";
+    
+    compressor.Close();
+    std::cout << "Close完成\n";
     
     return 0;
 }

@@ -29,9 +29,51 @@ using GpsPoint = TrajCompressSPCompressor::GpsPoint;
 using AdaptiveGpsPoint = TrajCompressSPAdaptiveCompressor::GpsPoint;
 using SimpleGpsPoint = TrajCompressSPAdaptiveSimpleCompressor::GpsPoint;
 
-// 从CSV文件读取GPS数据
-std::vector<GpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_points = -1) {
-    std::vector<GpsPoint> points;
+// 类型转换辅助函数
+inline GpsPoint ToGpsPoint(const SimpleGpsPoint& p) {
+    return GpsPoint(p.longitude, p.latitude, p.timestamp);
+}
+
+inline SimpleGpsPoint ToSimpleGpsPoint(const GpsPoint& p) {
+    return SimpleGpsPoint(p.longitude, p.latitude, p.timestamp);
+}
+
+// 批量转换辅助函数
+inline std::vector<GpsPoint> ToGpsPointVector(const std::vector<SimpleGpsPoint>& points) {
+    std::vector<GpsPoint> result;
+    result.reserve(points.size());
+    for (const auto& p : points) {
+        result.push_back(ToGpsPoint(p));
+    }
+    return result;
+}
+
+inline std::vector<SimpleGpsPoint> ToSimpleGpsPointVector(const std::vector<GpsPoint>& points) {
+    std::vector<SimpleGpsPoint> result;
+    result.reserve(points.size());
+    for (const auto& p : points) {
+        result.push_back(ToSimpleGpsPoint(p));
+    }
+    return result;
+}
+
+// 辅助函数：解析时间戳字符串为Unix时间戳（秒）
+uint64_t ParseTimestamp(const std::string& ts_str) {
+    // 格式: "YYYY-MM-DD HH:MM:SS"
+    std::tm tm = {};
+    std::istringstream ss(ts_str);
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+    
+    if (ss.fail()) {
+        return 0;  // 解析失败返回0
+    }
+    
+    return static_cast<uint64_t>(std::mktime(&tm));
+}
+
+// 从CSV文件读取GPS数据（支持带时间戳的格式）
+std::vector<SimpleGpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_points = -1) {
+    std::vector<SimpleGpsPoint> points;
     std::ifstream file(filename);
     
     if (!file.is_open()) {
@@ -47,13 +89,20 @@ std::vector<GpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_po
     
     while (std::getline(file, line) && (max_points < 0 || count < max_points)) {
         std::stringstream ss(line);
-        std::string lon_str, lat_str;
+        std::string lon_str, lat_str, ts_str;
         
         if (std::getline(ss, lon_str, ',') && std::getline(ss, lat_str, ',')) {
             try {
                 double longitude = std::stod(lon_str);
                 double latitude = std::stod(lat_str);
-                points.emplace_back(longitude, latitude);
+                
+                // 尝试读取时间戳（可选）
+                uint64_t timestamp = 0;
+                if (std::getline(ss, ts_str)) {
+                    timestamp = ParseTimestamp(ts_str);
+                }
+                
+                points.emplace_back(longitude, latitude, timestamp);
                 count++;
             } catch (const std::exception& e) {
                 std::cerr << "解析错误: " << line << std::endl;
@@ -62,11 +111,22 @@ std::vector<GpsPoint> LoadGpsDataFromCSV(const std::string& filename, int max_po
     }
     
     file.close();
-    std::cout << "成功加载 " << points.size() << " 个GPS点" << std::endl;
+    std::cout << "成功加载 " << points.size() << " 个GPS点";
+    if (!points.empty() && points[0].timestamp > 0) {
+        std::cout << "（带时间戳）";
+    }
+    std::cout << std::endl;
     return points;
 }
 
 // 计算两点间的距离（度）- 使用欧几里得距离，与标准测试一致
+double CalculateDistance(const SimpleGpsPoint& p1, const SimpleGpsPoint& p2) {
+    double dx = p1.longitude - p2.longitude;
+    double dy = p1.latitude - p2.latitude;
+    return std::sqrt(dx * dx + dy * dy);
+}
+
+// 重载版本：支持GpsPoint类型
 double CalculateDistance(const GpsPoint& p1, const GpsPoint& p2) {
     double dx = p1.longitude - p2.longitude;
     double dy = p1.latitude - p2.latitude;
@@ -74,6 +134,66 @@ double CalculateDistance(const GpsPoint& p1, const GpsPoint& p2) {
 }
 
 // 计算最大误差和平均误差
+void CalculateErrors(const std::vector<SimpleGpsPoint>& original,
+                    const std::vector<SimpleGpsPoint>& decompressed,
+                    double& max_error,
+                    double& avg_error,
+                    int& points_exceeding_threshold,
+                    double threshold) {
+    max_error = 0;
+    avg_error = 0;
+    points_exceeding_threshold = 0;
+    
+    if (original.size() != decompressed.size()) {
+        std::cerr << "警告: 原始数据和解压数据点数不一致 (" 
+                  << original.size() << " vs " << decompressed.size() << ")" << std::endl;
+        return;
+    }
+    
+    for (size_t i = 0; i < original.size(); ++i) {
+        double error = CalculateDistance(original[i], decompressed[i]);
+        max_error = std::max(max_error, error);
+        avg_error += error;
+        
+        if (error > threshold) {
+            points_exceeding_threshold++;
+        }
+    }
+    
+    avg_error /= original.size();
+}
+
+// 重载版本：支持GpsPoint和SimpleGpsPoint混合比较
+void CalculateErrors(const std::vector<SimpleGpsPoint>& original,
+                    const std::vector<GpsPoint>& decompressed,
+                    double& max_error,
+                    double& avg_error,
+                    int& points_exceeding_threshold,
+                    double threshold) {
+    max_error = 0;
+    avg_error = 0;
+    points_exceeding_threshold = 0;
+    
+    if (original.size() != decompressed.size()) {
+        std::cerr << "警告: 原始数据和解压数据点数不一致 (" 
+                  << original.size() << " vs " << decompressed.size() << ")" << std::endl;
+        return;
+    }
+    
+    for (size_t i = 0; i < original.size(); ++i) {
+        double error = CalculateDistance(ToGpsPoint(original[i]), decompressed[i]);
+        max_error = std::max(max_error, error);
+        avg_error += error;
+        
+        if (error > threshold) {
+            points_exceeding_threshold++;
+        }
+    }
+    
+    avg_error /= original.size();
+}
+
+// 重载版本：支持GpsPoint vs GpsPoint比较
 void CalculateErrors(const std::vector<GpsPoint>& original,
                     const std::vector<GpsPoint>& decompressed,
                     double& max_error,
@@ -303,8 +423,8 @@ void TestSerfQTLinear(const std::vector<GpsPoint>& gps_data, double epsilon) {
     SerfQtLinearCompressor lat_compressor(gps_data.size(), epsilon);
     
     for (const auto& point : gps_data) {
-        lon_compressor.AddValue(point.longitude);
-        lat_compressor.AddValue(point.latitude);
+        lon_compressor.AddValue(point.longitude, point.timestamp);
+        lat_compressor.AddValue(point.latitude, point.timestamp);
     }
     
     lon_compressor.Close();
@@ -350,8 +470,8 @@ void TestSerfQTCurve(const std::vector<GpsPoint>& gps_data, double epsilon) {
     SerfQtCurveCompressor lat_compressor(gps_data.size(), epsilon);
     
     for (const auto& point : gps_data) {
-        lon_compressor.AddValue(point.longitude);
-        lat_compressor.AddValue(point.latitude);
+        lon_compressor.AddValue(point.longitude, point.timestamp);
+        lat_compressor.AddValue(point.latitude, point.timestamp);
     }
     
     lon_compressor.Close();
@@ -453,8 +573,10 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
         sp_compressor.AddGpsPoint(point);
     }
     sp_compressor.Close();
-    int sp_bits = sp_compressor.GetCompressedSizeInBits();
-    double sp_avg_bits = static_cast<double>(sp_bits) / gps_data.size();
+    // 获取统计信息，排除timestamp bits（只统计空间压缩）
+    auto sp_stats_2 = sp_compressor.GetStats();
+    int sp_spatial_bits_2 = sp_stats_2.total_bits - sp_stats_2.timestamp_bits;
+    double sp_avg_bits = static_cast<double>(sp_spatial_bits_2) / gps_data.size();
     
     // TrajCompress-SP-Adaptive (已注释掉)
     /*
@@ -471,7 +593,7 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     }
     adaptive_compressor.Close();
     */
-    int adaptive_bits = sp_bits;  // 临时使用SP结果
+    int adaptive_bits = sp_spatial_bits_2;  // 临时使用SP结果
     double adaptive_avg_bits = static_cast<double>(adaptive_bits) / gps_data.size();
     
     // Serf-QT (前值预测/零预测)
@@ -521,17 +643,17 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     std::cout << std::string(120, '-') << std::endl;
     
     int original_bits = gps_data.size() * 128;
-    int min_bits = std::min({sp_bits, adaptive_bits, qt_bits, linear_bits, curve_bits});
+    int min_bits = std::min({sp_spatial_bits_2, adaptive_bits, qt_bits, linear_bits, curve_bits});
     
     // TrajCompress-SP
     std::cout << std::setw(30) << "TrajCompress-SP" 
-              << std::setw(20) << sp_bits
+              << std::setw(20) << sp_spatial_bits_2
               << std::setw(20) << std::fixed << std::setprecision(2) << sp_avg_bits
-              << std::setw(20) << (static_cast<double>(original_bits) / sp_bits) << ":1"
+              << std::setw(20) << (static_cast<double>(original_bits) / sp_spatial_bits_2) << ":1"
               << std::setw(15) << std::setprecision(1) 
-              << ((1.0 - static_cast<double>(sp_bits) / min_bits) * 100) << "%"
+              << ((1.0 - static_cast<double>(sp_spatial_bits_2) / min_bits) * 100) << "%"
               << std::setw(15)
-              << ((1.0 - static_cast<double>(sp_bits) / qt_bits) * 100) << "%" << std::endl;
+              << ((1.0 - static_cast<double>(sp_spatial_bits_2) / qt_bits) * 100) << "%" << std::endl;
     
     // TrajCompress-SP-Adaptive
     std::cout << std::setw(30) << "TrajCompress-SP-Adaptive" 
@@ -576,7 +698,7 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     
     // 找出最优算法
     std::string best_algorithm;
-    if (sp_bits == min_bits) best_algorithm = "TrajCompress-SP";
+    if (sp_spatial_bits_2 == min_bits) best_algorithm = "TrajCompress-SP";
     else if (adaptive_bits == min_bits) best_algorithm = "TrajCompress-SP-Adaptive";
     else if (qt_bits == min_bits) best_algorithm = "Serf-QT (前值)";
     else if (linear_bits == min_bits) best_algorithm = "Serf-QT-Linear";
@@ -589,7 +711,7 @@ void FiveWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     // 与Serf-QT基准对比
     std::cout << "\n相对Serf-QT (前值预测) 基准的改进:" << std::endl;
     std::cout << "  TrajCompress-SP:          " << std::fixed << std::setprecision(1)
-              << ((1.0 - static_cast<double>(sp_bits) / qt_bits) * 100) << "%" << std::endl;
+              << ((1.0 - static_cast<double>(sp_spatial_bits_2) / qt_bits) * 100) << "%" << std::endl;
     std::cout << "  TrajCompress-SP-Adaptive: "
               << ((1.0 - static_cast<double>(adaptive_bits) / qt_bits) * 100) << "%" << std::endl;
     std::cout << "  Serf-QT-Linear:           "
@@ -622,8 +744,10 @@ void FourWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
         sp_compressor.AddGpsPoint(point);
     }
     sp_compressor.Close();
-    int sp_bits = sp_compressor.GetCompressedSizeInBits();
-    double sp_avg_bits = static_cast<double>(sp_bits) / gps_data.size();
+    // 获取统计信息，排除timestamp bits（只统计空间压缩）
+    auto sp_stats_3 = sp_compressor.GetStats();
+    int sp_spatial_bits_3 = sp_stats_3.total_bits - sp_stats_3.timestamp_bits;
+    double sp_avg_bits = static_cast<double>(sp_spatial_bits_3) / gps_data.size();
     
     // Serf-QT (前值预测/零预测)
     SerfQtCompressor qt_lon(gps_data.size(), epsilon);
@@ -672,15 +796,15 @@ void FourWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     std::cout << std::string(100, '-') << std::endl;
     
     int original_bits = gps_data.size() * 128;
-    int min_bits = std::min({sp_bits, qt_bits, linear_bits, curve_bits});
+    int min_bits = std::min({sp_spatial_bits_3, qt_bits, linear_bits, curve_bits});
     
     // TrajCompress-SP
     std::cout << std::setw(25) << "TrajCompress-SP" 
-              << std::setw(20) << sp_bits
+              << std::setw(20) << sp_spatial_bits_3
               << std::setw(20) << std::fixed << std::setprecision(2) << sp_avg_bits
-              << std::setw(20) << (static_cast<double>(original_bits) / sp_bits) << ":1"
+              << std::setw(20) << (static_cast<double>(original_bits) / sp_spatial_bits_3) << ":1"
               << std::setw(15) << std::setprecision(1) 
-              << ((1.0 - static_cast<double>(sp_bits) / min_bits) * 100) << "%" << std::endl;
+              << ((1.0 - static_cast<double>(sp_spatial_bits_3) / min_bits) * 100) << "%" << std::endl;
     
     // Serf-QT (前值预测)
     std::cout << std::setw(25) << "Serf-QT (前值)" 
@@ -710,7 +834,7 @@ void FourWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     
     // 找出最优算法
     std::string best_algorithm;
-    if (sp_bits == min_bits) best_algorithm = "TrajCompress-SP";
+    if (sp_spatial_bits_3 == min_bits) best_algorithm = "TrajCompress-SP";
     else if (qt_bits == min_bits) best_algorithm = "Serf-QT (前值)";
     else if (linear_bits == min_bits) best_algorithm = "Serf-QT-Linear";
     else best_algorithm = "Serf-QT-Curve";
@@ -722,7 +846,7 @@ void FourWayComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilo
     // 与Serf-QT基准对比
     std::cout << "\n相对Serf-QT (前值预测) 基准的改进:" << std::endl;
     std::cout << "  TrajCompress-SP:    " << std::fixed << std::setprecision(1)
-              << ((1.0 - static_cast<double>(sp_bits) / qt_bits) * 100) << "%" << std::endl;
+              << ((1.0 - static_cast<double>(sp_spatial_bits_3) / qt_bits) * 100) << "%" << std::endl;
     std::cout << "  Serf-QT-Linear:     "
               << ((1.0 - static_cast<double>(linear_bits) / qt_bits) * 100) << "%" << std::endl;
     std::cout << "  Serf-QT-Curve:      "
@@ -754,8 +878,10 @@ void ComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilon) {
     }
     sp_compressor.Close();
     
-    int sp_bits = sp_compressor.GetCompressedSizeInBits();
-    double sp_avg_bits = static_cast<double>(sp_bits) / gps_data.size();
+    // 获取统计信息，排除timestamp bits（只统计空间压缩）
+    auto sp_stats = sp_compressor.GetStats();
+    int sp_spatial_bits = sp_stats.total_bits - sp_stats.timestamp_bits;
+    double sp_avg_bits = static_cast<double>(sp_spatial_bits) / gps_data.size();
     
     // Serf-QT (分别压缩经度和纬度，使用epsilon)
     SerfQtCompressor qt_lon(gps_data.size(), epsilon);
@@ -778,10 +904,10 @@ void ComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilon) {
     std::cout << std::string(80, '-') << std::endl;
     
     std::cout << std::setw(25) << "总压缩大小 (bits)" 
-              << std::setw(20) << sp_bits 
+              << std::setw(20) << sp_spatial_bits 
               << std::setw(20) << qt_bits
               << std::setw(15) << std::fixed << std::setprecision(1) 
-              << ((1.0 - static_cast<double>(sp_bits) / qt_bits) * 100) << "%" << std::endl;
+              << ((1.0 - static_cast<double>(sp_spatial_bits) / qt_bits) * 100) << "%" << std::endl;
     
     std::cout << std::setw(25) << "平均每点 (bits)" 
               << std::setw(20) << std::setprecision(2) << sp_avg_bits 
@@ -790,7 +916,7 @@ void ComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilon) {
               << ((1.0 - sp_avg_bits / qt_avg_bits) * 100) << "%" << std::endl;
     
     int original_bits = gps_data.size() * 128;
-    double sp_ratio = static_cast<double>(original_bits) / sp_bits;
+    double sp_ratio = static_cast<double>(original_bits) / sp_spatial_bits;
     double qt_ratio = static_cast<double>(original_bits) / qt_bits;
     
     std::cout << std::setw(25) << "压缩比" 
@@ -801,8 +927,8 @@ void ComparativeTest(const std::vector<GpsPoint>& gps_data, double epsilon) {
     
     std::cout << std::string(80, '-') << std::endl;
     
-    if (sp_bits < qt_bits) {
-        double improvement = (1.0 - static_cast<double>(sp_bits) / qt_bits) * 100;
+    if (sp_spatial_bits < qt_bits) {
+        double improvement = (1.0 - static_cast<double>(sp_spatial_bits) / qt_bits) * 100;
         std::cout << "\n✅ TrajCompress-SP 相比 Serf-QT 压缩率提升: " 
                   << std::fixed << std::setprecision(1) << improvement << "%" << std::endl;
     } else {
@@ -831,46 +957,46 @@ struct DatasetConfig {
         : name(n), path(p), total_points(pts) {}
 };
 
-// 获取所有测试数据集
+// 获取所有测试数据集（使用带时间戳的数据集）
 std::vector<DatasetConfig> GetAllDatasets() {
-    std::string base_path = "/Users/xuzihang/GitProject/GG/Serf/test/data_set/";
+    std::string base_path = "/Users/xuzihang/GitProject/GG/Serf/test/data_set/data_set_with_timestamp/";
     std::vector<DatasetConfig> datasets;
     
-    // Geolife 数据集
+    // Geolife 数据集（带时间戳）
     datasets.emplace_back("Geolife (原始)", 
-                         base_path + "Geolife_100k_longitude_latitude.csv", 100000);
+                         base_path + "Geolife_100k_with_timestamp.csv", 100000);
     datasets.emplace_back("Geolife (5x降采样)", 
-                         base_path + "downsampled/Geolife_100k_longitude_latitude_downsample_5x.csv", 19999);
+                         base_path + "Geolife_100k_with_timestamp_downsample_5x.csv", 20000);
     datasets.emplace_back("Geolife (10x降采样)", 
-                         base_path + "downsampled/Geolife_100k_longitude_latitude_downsample_10x.csv", 9999);
+                         base_path + "Geolife_100k_with_timestamp_downsample_10x.csv", 10000);
     datasets.emplace_back("Geolife (20x降采样)", 
-                         base_path + "downsampled/Geolife_100k_longitude_latitude_downsample_20x.csv", 4999);
+                         base_path + "Geolife_100k_with_timestamp_downsample_20x.csv", 5000);
     datasets.emplace_back("Geolife (40x降采样)", 
-                         base_path + "downsampled/Geolife_100k_longitude_latitude_downsample_40x.csv", 2499);
+                         base_path + "Geolife_100k_with_timestamp_downsample_40x.csv", 2500);
     
-    // Track 数据集
+    // Track 数据集（带时间戳）
     datasets.emplace_back("Track (原始)", 
-                         base_path + "Track_63530k_longitude_latitude.csv", 63530);
+                         base_path + "Track_63530k_with_timestamp.csv", 63530);
     datasets.emplace_back("Track (5x降采样)", 
-                         base_path + "downsampled/Track_63530k_longitude_latitude_downsample_5x.csv", 12705);
+                         base_path + "Track_63530k_with_timestamp_downsample_5x.csv", 12706);
     datasets.emplace_back("Track (10x降采样)", 
-                         base_path + "downsampled/Track_63530k_longitude_latitude_downsample_10x.csv", 6352);
+                         base_path + "Track_63530k_with_timestamp_downsample_10x.csv", 6353);
     datasets.emplace_back("Track (20x降采样)", 
-                         base_path + "downsampled/Track_63530k_longitude_latitude_downsample_20x.csv", 3176);
+                         base_path + "Track_63530k_with_timestamp_downsample_20x.csv", 3177);
     datasets.emplace_back("Track (40x降采样)", 
-                         base_path + "downsampled/Track_63530k_longitude_latitude_downsample_40x.csv", 1588);
+                         base_path + "Track_63530k_with_timestamp_downsample_40x.csv", 1589);
     
-    // Trajectory 数据集
+    // Trajectory 数据集（带时间戳）
     datasets.emplace_back("Trajectory (原始)", 
-                         base_path + "Trajtory_97k_longitude_latitude.csv", 97009);
+                         base_path + "Trajtory_100k_with_timestamp.csv", 97009);
     datasets.emplace_back("Trajectory (5x降采样)", 
-                         base_path + "downsampled/Trajtory_97k_longitude_latitude_downsample_5x.csv", 19402);
+                         base_path + "Trajtory_100k_with_timestamp_downsample_5x.csv", 19402);
     datasets.emplace_back("Trajectory (10x降采样)", 
-                         base_path + "downsampled/Trajtory_97k_longitude_latitude_downsample_10x.csv", 9701);
+                         base_path + "Trajtory_100k_with_timestamp_downsample_10x.csv", 9701);
     datasets.emplace_back("Trajectory (20x降采样)", 
-                         base_path + "downsampled/Trajtory_97k_longitude_latitude_downsample_20x.csv", 4851);
+                         base_path + "Trajtory_100k_with_timestamp_downsample_20x.csv", 4851);
     datasets.emplace_back("Trajectory (40x降采样)", 
-                         base_path + "downsampled/Trajtory_97k_longitude_latitude_downsample_40x.csv", 2426);
+                         base_path + "Trajtory_100k_with_timestamp_downsample_40x.csv", 2426);
     
     return datasets;
 }
@@ -894,7 +1020,7 @@ void TestSingleDataset(const DatasetConfig& dataset, double epsilon, int max_poi
               << std::fixed << std::setprecision(2) << (epsilon * 111000) << " 米)" << std::endl;
     
     // 四种算法综合对比
-    FourWayComparativeTest(gps_data, epsilon);
+    FourWayComparativeTest(ToGpsPointVector(gps_data), epsilon);
 }
 
 // 测试所有数据集并生成汇总报告
@@ -952,7 +1078,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         // TrajCompress-SP - 压缩与解压缩
         TrajCompressSPCompressor sp_compressor(gps_data.size(), epsilon);
         for (const auto& point : gps_data) {
-            sp_compressor.AddGpsPoint(point);
+            sp_compressor.AddGpsPoint(ToGpsPoint(point));
         }
         sp_compressor.Close();
         
@@ -975,7 +1101,8 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         CalculateErrors(gps_data, sp_decompressed, sp_max_error, sp_avg_error, sp_exceeding, epsilon);
         std::cout << "  [2/6] TrajCompress-SP 完成 (max_err=" << std::scientific << sp_max_error << ")" << std::endl;
         
-        // TrajCompress-SP-Adaptive（智能版）- 已重新启用（对齐Simple版本）
+        // TrajCompress-SP-Adaptive（智能版）- 已注释掉
+        /*
         TrajCompressSPAdaptiveCompressor adaptive_compressor(
             gps_data.size(), 
             epsilon,
@@ -988,8 +1115,10 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
             adaptive_compressor.AddGpsPoint(AdaptiveGpsPoint(point.longitude, point.latitude));
         }
         adaptive_compressor.Close();
+        */
         
-        // 解压缩TrajCompress-SP-Adaptive
+        // 解压缩TrajCompress-SP-Adaptive（已注释掉）
+        /*
         Array<uint8_t> adaptive_compressed = adaptive_compressor.GetCompressedData();
         TrajCompressSPAdaptiveDecompressor adaptive_decompressor(adaptive_compressed.begin(), adaptive_compressed.length());
         std::vector<GpsPoint> adaptive_decompressed;
@@ -1009,6 +1138,13 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         int adaptive_exceeding;
         CalculateErrors(gps_data, adaptive_decompressed, adaptive_max_error, adaptive_avg_error, adaptive_exceeding, epsilon);
         std::cout << "  [3/6] TrajCompress-SP-Adaptive 完成 (max_err=" << std::scientific << adaptive_max_error << ", 解压点数=" << adaptive_decompressed.size() << ")" << std::endl;
+        */
+        
+        // 使用临时填充值（TrajSP的空间压缩bits）
+        auto sp_stats_for_adaptive = sp_compressor.GetStats();
+        int adaptive_bits = sp_stats_for_adaptive.total_bits - sp_stats_for_adaptive.timestamp_bits;
+        double adaptive_max_error = 0.0;
+        double adaptive_avg_error = 0.0;
         
         // TrajCompress-SP-Adaptive-Simple（极简版：window_size=96）- 压缩与解压缩
         TrajCompressSPAdaptiveSimpleCompressor simple_compressor(
@@ -1017,7 +1153,8 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
             96  // kEvaluationWindow = 96（保持当前默认值）
         );
         for (const auto& point : gps_data) {
-            simple_compressor.AddGpsPoint(SimpleGpsPoint(point.longitude, point.latitude));
+            // Simple版本的timestamp编码已对齐TrajSP（Huffman/模式标志 -> timestamp -> 量化误差）
+            simple_compressor.AddGpsPoint(SimpleGpsPoint(point.longitude, point.latitude, point.timestamp));
         }
         simple_compressor.Close();
         
@@ -1117,9 +1254,16 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         SummaryResult result;
         result.dataset_name = dataset.name;
         result.points = gps_data.size();
-        result.sp_bits = sp_compressor.GetCompressedSizeInBits();
+        
+        // TrajSP: 排除timestamp bits
+        auto sp_stats_final = sp_compressor.GetStats();
+        result.sp_bits = sp_stats_final.total_bits - sp_stats_final.timestamp_bits;
+        
         result.adaptive_bits = adaptive_bits;  // 使用临时填充值
-        result.simple_bits = simple_compressor.GetCompressedSizeInBits();
+        
+        // Simple: 排除timestamp bits
+        auto simple_stats_final = simple_compressor.GetStats();
+        result.simple_bits = simple_stats_final.total_bits - simple_stats_final.timestamp_bits;
         result.qt_bits = qt_lon.get_compressed_size_in_bits() + qt_lat.get_compressed_size_in_bits();
         result.linear_bits = linear_lon.get_compressed_size_in_bits() + linear_lat.get_compressed_size_in_bits();
         result.curve_bits = curve_lon.get_compressed_size_in_bits() + curve_lat.get_compressed_size_in_bits();
@@ -1285,8 +1429,8 @@ int main(int argc, char* argv[]) {
             }
             TestAllDatasetsAndGenerateSummary(epsilon);
         } else if (mode == "single") {
-            // 测试单个数据集（旧模式兼容）
-            std::string dataset_path = "/Users/xuzihang/GitProject/GG/Serf/test/data_set/Geolife_100k_longitude_latitude.csv";
+            // 测试单个数据集（使用带时间戳的数据集）
+            std::string dataset_path = "/Users/xuzihang/GitProject/GG/Serf/test/data_set/data_set_with_timestamp/Geolife_100k_with_timestamp.csv";
             int max_points = -1;
             
     if (argc > 2) {
@@ -1306,18 +1450,18 @@ int main(int argc, char* argv[]) {
     }
     
             // 单独测试各个算法
-            TestTrajCompressSP(gps_data, epsilon);
+            TestTrajCompressSP(ToGpsPointVector(gps_data), epsilon);
             // TestTrajCompressSPAdaptive(gps_data, epsilon);  // 已注释
-    TestSerfQT(gps_data, epsilon);
-            TestSerfQTLinear(gps_data, epsilon);
-            TestSerfQTCurve(gps_data, epsilon);
+    TestSerfQT(ToGpsPointVector(gps_data), epsilon);
+            TestSerfQTLinear(ToGpsPointVector(gps_data), epsilon);
+            TestSerfQTCurve(ToGpsPointVector(gps_data), epsilon);
             
             // 五种算法综合对比
-            FiveWayComparativeTest(gps_data, epsilon);
+            FiveWayComparativeTest(ToGpsPointVector(gps_data), epsilon);
             
             // 保留旧的对比（向后兼容）
-            FourWayComparativeTest(gps_data, epsilon);
-    ComparativeTest(gps_data, epsilon);
+            FourWayComparativeTest(ToGpsPointVector(gps_data), epsilon);
+    ComparativeTest(ToGpsPointVector(gps_data), epsilon);
         } else {
             std::cout << "使用方法:" << std::endl;
             std::cout << "  测试所有数据集: " << argv[0] << " all [epsilon]" << std::endl;

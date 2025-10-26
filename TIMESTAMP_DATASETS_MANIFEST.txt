@@ -1,0 +1,81 @@
+================================================================================
+                    带时间戳的GPS轨迹数据集清单
+================================================================================
+
+生成时间: 2025-10-26
+生成工具: process_timestamp_datasets.py
+格式: longitude,latitude,timestamp (CSV)
+
+================================================================================
+                            原始数据集 (3个)
+================================================================================
+
+1. Geolife_100k_with_timestamp.csv
+   - 区域: 中国北京
+   - 点数: 100,000
+   - 采样: 5-10秒
+   - 路径: test/data_set/data_set_with_timestamp/Geolife_100k_with_timestamp.csv
+
+2. Track_63530k_with_timestamp.csv
+   - 区域: 南非开普敦
+   - 点数: 63,530
+   - 采样: 1秒
+   - 路径: test/data_set/data_set_with_timestamp/Track_63530k_with_timestamp.csv
+
+3. Trajtory_100k_with_timestamp.csv
+   - 区域: 美国佛罗里达
+   - 点数: 97,009
+   - 采样: 1秒
+   - 路径: test/data_set/data_set_with_timestamp/Trajtory_100k_with_timestamp.csv
+
+================================================================================
+                         降采样数据集 (12个)
+================================================================================
+
+Geolife 降采样:
+  - Geolife_100k_with_timestamp_downsample_5x.csv   (20,000 点)
+  - Geolife_100k_with_timestamp_downsample_10x.csv  (10,000 点)
+  - Geolife_100k_with_timestamp_downsample_20x.csv  ( 5,000 点)
+  - Geolife_100k_with_timestamp_downsample_40x.csv  ( 2,500 点)
+
+Track 降采样:
+  - Track_63530k_with_timestamp_downsample_5x.csv   (12,706 点)
+  - Track_63530k_with_timestamp_downsample_10x.csv  ( 6,353 点)
+  - Track_63530k_with_timestamp_downsample_20x.csv  ( 3,177 点)
+  - Track_63530k_with_timestamp_downsample_40x.csv  ( 1,589 点)
+
+Trajtory 降采样:
+  - Trajtory_100k_with_timestamp_downsample_5x.csv  (19,402 点)
+  - Trajtory_100k_with_timestamp_downsample_10x.csv ( 9,701 点)
+  - Trajtory_100k_with_timestamp_downsample_20x.csv ( 4,851 点)
+  - Trajtory_100k_with_timestamp_downsample_40x.csv ( 2,426 点)
+
+路径: test/data_set/data_set_with_timestamp/
+
+================================================================================
+                              使用示例
+================================================================================
+
+Python:
+    import pandas as pd
+    df = pd.read_csv('test/data_set/data_set_with_timestamp/Geolife_100k_with_timestamp.csv')
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+C++:
+    struct GpsPoint {
+        double longitude, latitude;
+        std::string timestamp;
+    };
+    // 解析CSV文件...
+
+================================================================================
+                              统计总结
+================================================================================
+
+总数据集:      15个文件
+总GPS点:       ~420,000 个点（所有文件累计）
+存储大小:      约15 MB（未压缩CSV格式）
+时间范围:      2008-2022
+地理覆盖:      亚洲、非洲、北美
+
+================================================================================

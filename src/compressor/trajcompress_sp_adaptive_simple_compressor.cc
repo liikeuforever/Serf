@@ -35,7 +35,7 @@ void TrajCompressSPAdaptiveSimpleCompressor::AddGpsPoint(const GpsPoint& point) 
     
     // === 1. 并行计算所有预测器的成本（双模型并行追踪） ===
     GpsPoint pred_ldr, pred_cp, pred_zp;
-    ParallelPredict(pred_ldr, pred_cp, pred_zp);
+    ParallelPredict(pred_ldr, pred_cp, pred_zp, point.timestamp);
     
     // 计算每个预测器的误差编码成本
     GpsPoint error_ldr = point - pred_ldr;
@@ -102,9 +102,9 @@ void TrajCompressSPAdaptiveSimpleCompressor::AddGpsPoint(const GpsPoint& point) 
 }
 
 void TrajCompressSPAdaptiveSimpleCompressor::EncodeMultiPredictor(const GpsPoint& point) {
-    // 并行预测
+    // 并行预测（使用真实timestamp）
     GpsPoint pred_ldr, pred_cp, pred_zp;
-    ParallelPredict(pred_ldr, pred_cp, pred_zp);
+    ParallelPredict(pred_ldr, pred_cp, pred_zp, point.timestamp);
     
     // 基于成本选择最优预测器（策略二）
     GpsPoint best_prediction;
@@ -112,7 +112,7 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodeMultiPredictor(const GpsPoint
     PredictorType best_predictor = SelectBestPredictorByCost(
         point, pred_ldr, pred_cp, pred_zp, best_prediction, best_cost);
     
-    // 编码预测器标志和量化误差
+    // 编码预测器标志、timestamp和量化误差
     EncodePrediction(best_predictor, point, best_prediction);
     
     // 更新最后使用的预测器
@@ -129,9 +129,18 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodeMultiPredictor(const GpsPoint
 void TrajCompressSPAdaptiveSimpleCompressor::EncodeLDROnly(const GpsPoint& point) {
     // 强制使用LDR预测
     GpsPoint pred_ldr, pred_cp, pred_zp;
-    ParallelPredict(pred_ldr, pred_cp, pred_zp);
+    ParallelPredict(pred_ldr, pred_cp, pred_zp, point.timestamp);
     
-    // 直接编码LDR的量化误差，不写预测器标志
+    // LDR-Only模式：不写预测器标志，直接编码timestamp和量化误差
+    // 1. 编码timestamp delta（参考TrajSP，在量化误差之前）
+    // 注意：timestamp可能回退（数据乱序），所以使用int64_t计算delta
+    int64_t timestamp_delta_signed = static_cast<int64_t>(point.timestamp) - static_cast<int64_t>(current_reconstructed_point_.timestamp);
+    uint64_t timestamp_delta = static_cast<uint64_t>(timestamp_delta_signed);
+    int ts_bits = output_bit_stream_->WriteLong(timestamp_delta, 64);
+    compressed_size_in_bits_ += ts_bits;
+    stats_.timestamp_bits += ts_bits;
+    
+    // 2. 计算并编码LDR的量化误差
     GpsPoint delta = point - pred_ldr;
     
     // 量化误差
@@ -146,12 +155,14 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodeLDROnly(const GpsPoint& point
         ZigZagCodec::Encode(quantized_delta_lat) + 1, output_bit_stream_.get());
     stats_.quantized_data_bits += (compressed_size_in_bits_ - bits_before);
     
-    // 重构点
+    // 重构点（包含时间戳）
     GpsPoint reconstructed_delta(
         quantized_delta_lon * kQuantStep,
-        quantized_delta_lat * kQuantStep
+        quantized_delta_lat * kQuantStep,
+        0
     );
     GpsPoint reconstructed_point = pred_ldr + reconstructed_delta;
+    reconstructed_point.timestamp = point.timestamp;  // 恢复时间戳
     
     // 更新重构状态
     UpdateReconstructedState(reconstructed_point);
@@ -360,12 +371,17 @@ void TrajCompressSPAdaptiveSimpleCompressor::ProcessFirstPoint(const GpsPoint& p
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(point.longitude), 64);
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(point.latitude), 64);
     
+    // 写入第一个点的timestamp（64位）
+    int ts_bits = output_bit_stream_->WriteLong(point.timestamp, 64);
+    compressed_size_in_bits_ += ts_bits;
+    stats_.timestamp_bits += ts_bits;
+    
     // 初始化重构状态
     current_reconstructed_point_ = point;
-    history_states_.emplace_back(point, GpsPoint(0, 0));
+    history_states_.emplace_back(point, GpsPoint(0, 0, 0));  // 初始速度为0
 }
 
-void TrajCompressSPAdaptiveSimpleCompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp) {
+void TrajCompressSPAdaptiveSimpleCompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp, uint64_t current_timestamp) {
     // 零预测（ZP）
     pred_zp = current_reconstructed_point_;
     
@@ -375,43 +391,65 @@ void TrajCompressSPAdaptiveSimpleCompressor::ParallelPredict(GpsPoint& pred_ldr,
         return;
     }
     
-    // 线性航位推算（LDR）
-    GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
-    pred_ldr = current_reconstructed_point_ + velocity;
+    // 计算真实时间间隔
+    uint64_t delta_time = current_timestamp - current_reconstructed_point_.timestamp;
+    double dt = static_cast<double>(delta_time);  // 秒数
     
-    // 曲线预测（CP）
-    if (history_states_.size() >= 5) {
+    // 线性航位推算（LDR）：使用真实速度（度/秒）和时间间隔
+    GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
+    pred_ldr = GpsPoint(
+        current_reconstructed_point_.longitude + velocity.longitude * dt,
+        current_reconstructed_point_.latitude + velocity.latitude * dt,
+        current_timestamp
+    );
+    
+    // 曲线预测（CP）：基于真实速度和时间间隔
+    if (history_states_.size() >= 5 && dt > 0) {
         GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
         GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
         GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
         
         GpsPoint smoothed_velocity(
             0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
-            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude,
+            0
         );
         
         GpsPoint a1 = v1 - v2;
         GpsPoint a2 = v2 - v3;
         GpsPoint jerk = a1 - a2;
         
-        pred_cp = current_reconstructed_point_ + smoothed_velocity + a1 + jerk * 0.5;
-    } else if (history_states_.size() >= 4) {
+        pred_cp = GpsPoint(
+            current_reconstructed_point_.longitude + smoothed_velocity.longitude * dt + a1.longitude * dt + jerk.longitude * dt * 0.5,
+            current_reconstructed_point_.latitude + smoothed_velocity.latitude * dt + a1.latitude * dt + jerk.latitude * dt * 0.5,
+            current_timestamp
+        );
+    } else if (history_states_.size() >= 4 && dt > 0) {
         GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
         GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
         GpsPoint v3 = history_states_[history_states_.size() - 3].velocity;
         
         GpsPoint smoothed_velocity(
             0.45 * v1.longitude + 0.35 * v2.longitude + 0.20 * v3.longitude,
-            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude
+            0.45 * v1.latitude + 0.35 * v2.latitude + 0.20 * v3.latitude,
+            0
         );
         
         GpsPoint acceleration = v1 - v2;
-        pred_cp = current_reconstructed_point_ + smoothed_velocity + acceleration;
-    } else if (history_states_.size() >= 3) {
+        pred_cp = GpsPoint(
+            current_reconstructed_point_.longitude + smoothed_velocity.longitude * dt + acceleration.longitude * dt,
+            current_reconstructed_point_.latitude + smoothed_velocity.latitude * dt + acceleration.latitude * dt,
+            current_timestamp
+        );
+    } else if (history_states_.size() >= 3 && dt > 0) {
         GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
         GpsPoint prev_velocity = history_states_[history_states_.size() - 2].velocity;
         GpsPoint acceleration = velocity - prev_velocity;
-        pred_cp = current_reconstructed_point_ + velocity + acceleration;
+        pred_cp = GpsPoint(
+            current_reconstructed_point_.longitude + velocity.longitude * dt + acceleration.longitude * dt,
+            current_reconstructed_point_.latitude + velocity.latitude * dt + acceleration.latitude * dt,
+            current_timestamp
+        );
     } else {
         pred_cp = pred_ldr;
     }
@@ -420,12 +458,20 @@ void TrajCompressSPAdaptiveSimpleCompressor::ParallelPredict(GpsPoint& pred_ldr,
 void TrajCompressSPAdaptiveSimpleCompressor::EncodePrediction(PredictorType predictor,
                                                        const GpsPoint& current_point,
                                                        const GpsPoint& predicted_point) {
-    // 编码预测器标志（使用Huffman编码）
+    // 1. 编码预测器标志（使用Huffman编码）
     int bits_before_flag = compressed_size_in_bits_;
     EncodeWithHuffman(predictor);
     stats_.predictor_flag_bits += (compressed_size_in_bits_ - bits_before_flag);
     
-    // 计算预测误差
+    // 2. 编码timestamp delta（完全参考TrajSP：在Huffman之后，量化误差之前）
+    // 注意：timestamp可能回退（数据乱序），所以使用int64_t计算delta，但写入时转为uint64_t
+    int64_t timestamp_delta_signed = static_cast<int64_t>(current_point.timestamp) - static_cast<int64_t>(current_reconstructed_point_.timestamp);
+    uint64_t timestamp_delta = static_cast<uint64_t>(timestamp_delta_signed);  // 这会保持bit pattern
+    int ts_bits = output_bit_stream_->WriteLong(timestamp_delta, 64);
+    compressed_size_in_bits_ += ts_bits;
+    stats_.timestamp_bits += ts_bits;
+    
+    // 3. 计算预测误差
     GpsPoint delta = current_point - predicted_point;
     
     // 量化误差
@@ -440,12 +486,14 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodePrediction(PredictorType pred
         ZigZagCodec::Encode(quantized_delta_lat) + 1, output_bit_stream_.get());
     stats_.quantized_data_bits += (compressed_size_in_bits_ - bits_before_data);
     
-    // 重构点
+    // 重构点（包含时间戳）
     GpsPoint reconstructed_delta(
         quantized_delta_lon * kQuantStep,
-        quantized_delta_lat * kQuantStep
+        quantized_delta_lat * kQuantStep,
+        0
     );
     GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
+    reconstructed_point.timestamp = current_point.timestamp;  // 恢复时间戳
     
     // 更新重构状态
     UpdateReconstructedState(reconstructed_point);
@@ -458,9 +506,21 @@ void TrajCompressSPAdaptiveSimpleCompressor::EncodePrediction(PredictorType pred
 }
 
 void TrajCompressSPAdaptiveSimpleCompressor::UpdateHistory(const GpsPoint& reconstructed_point) {
-    GpsPoint velocity(0, 0);
+    GpsPoint velocity(0, 0, 0);
+    
     if (!history_states_.empty()) {
-        velocity = reconstructed_point - history_states_.back().reconstructed_point;
+        const GpsPoint& prev_point = history_states_.back().reconstructed_point;
+        uint64_t delta_time = reconstructed_point.timestamp - prev_point.timestamp;
+        
+        if (delta_time > 0) {
+            // 计算真实速度（度/秒）
+            double dt = static_cast<double>(delta_time);
+            velocity = GpsPoint(
+                (reconstructed_point.longitude - prev_point.longitude) / dt,
+                (reconstructed_point.latitude - prev_point.latitude) / dt,
+                0
+            );
+        }
     }
     
     history_states_.emplace_back(reconstructed_point, velocity);
@@ -546,24 +606,46 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
         // 读取第一个点的原始坐标
         double lon = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
         double lat = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
-        point = GpsPoint(lon, lat);
+        
+        // 读取第一个点的timestamp
+        uint64_t timestamp = input_bit_stream_->ReadLong(64);
+        
+        point = GpsPoint(lon, lat, timestamp);
         
         current_reconstructed_point_ = point;
-        history_states_.emplace_back(point, GpsPoint(0, 0));
+        history_states_.emplace_back(point, GpsPoint(0, 0, 0));
         return true;
     }
     
-    GpsPoint pred_ldr, pred_cp, pred_zp;
-    ParallelPredict(pred_ldr, pred_cp, pred_zp);
-    
+    // 根据当前模式选择预测器和读取数据（参考TrajSP的顺序）
     GpsPoint predicted_point;
+    uint64_t current_timestamp;
     
     if (current_mode_ == CompressionMode::MODE_LDR_ONLY) {
-        // LDR-Only模式：直接使用LDR预测，不读取预测器标志
+        // LDR-Only模式：不读取预测器标志，直接读取timestamp和量化误差
+        // 1. 读取timestamp delta (作为uint64_t读取，但解释为int64_t以支持回退)
+        uint64_t timestamp_delta_bits = input_bit_stream_->ReadLong(64);
+        int64_t timestamp_delta = static_cast<int64_t>(timestamp_delta_bits);
+        current_timestamp = current_reconstructed_point_.timestamp + timestamp_delta;
+        
+        // 2. 使用timestamp进行LDR预测
+        GpsPoint pred_ldr, pred_cp, pred_zp;
+        ParallelPredict(pred_ldr, pred_cp, pred_zp, current_timestamp);
         predicted_point = pred_ldr;
+        
     } else {
-        // Multi-Predictor模式：解码预测器标志（使用简化的Huffman: 0, 10, 11）
+        // Multi-Predictor模式：先读Huffman，再读timestamp，最后读量化误差（完全参考TrajSP）
+        // 1. 解码预测器标志
         PredictorType predictor = DecodeWithHuffman();
+        
+        // 2. 读取timestamp delta（在Huffman之后，量化误差之前）(作为uint64_t读取，但解释为int64_t)
+        uint64_t timestamp_delta_bits = input_bit_stream_->ReadLong(64);
+        int64_t timestamp_delta = static_cast<int64_t>(timestamp_delta_bits);
+        current_timestamp = current_reconstructed_point_.timestamp + timestamp_delta;
+        
+        // 3. 使用timestamp进行预测
+        GpsPoint pred_ldr, pred_cp, pred_zp;
+        ParallelPredict(pred_ldr, pred_cp, pred_zp, current_timestamp);
         
         switch (predictor) {
             case PredictorType::PREDICTOR_LDR: predicted_point = pred_ldr; break;
@@ -587,6 +669,7 @@ bool TrajCompressSPAdaptiveSimpleDecompressor::ReadNextPoint(GpsPoint& point) {
             quantized_delta_lat * quant_step_
         );
         GpsPoint reconstructed_point = predicted_point + reconstructed_delta;
+        reconstructed_point.timestamp = current_timestamp;  // 恢复timestamp
         
         // 更新历史状态
         UpdateHistory(reconstructed_point);
@@ -633,7 +716,7 @@ TrajCompressSPAdaptiveSimpleDecompressor::ReadAllPoints() {
     return points;
 }
 
-void TrajCompressSPAdaptiveSimpleDecompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp) {
+void TrajCompressSPAdaptiveSimpleDecompressor::ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp, uint64_t current_timestamp) {
     pred_zp = current_reconstructed_point_;
     
     if (history_states_.size() < 2) {
@@ -642,23 +725,49 @@ void TrajCompressSPAdaptiveSimpleDecompressor::ParallelPredict(GpsPoint& pred_ld
         return;
     }
     
-    GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
-    pred_ldr = current_reconstructed_point_ + velocity;
+    // 计算真实时间间隔
+    uint64_t delta_time = current_timestamp - current_reconstructed_point_.timestamp;
+    double dt = static_cast<double>(delta_time);  // 秒数
     
-    if (history_states_.size() >= 3) {
+    // 线性预测：使用真实速度（度/秒）和时间间隔
+    GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
+    pred_ldr = GpsPoint(
+        current_reconstructed_point_.longitude + velocity.longitude * dt,
+        current_reconstructed_point_.latitude + velocity.latitude * dt,
+        current_timestamp
+    );
+    
+    // 曲线预测：基于真实速度和时间间隔
+    if (history_states_.size() >= 3 && dt > 0) {
         GpsPoint v1 = history_states_[history_states_.size() - 1].velocity;
         GpsPoint v2 = history_states_[history_states_.size() - 2].velocity;
         GpsPoint acceleration = v1 - v2;
-        pred_cp = current_reconstructed_point_ + v1 + acceleration;
+        pred_cp = GpsPoint(
+            current_reconstructed_point_.longitude + v1.longitude * dt + acceleration.longitude * dt,
+            current_reconstructed_point_.latitude + v1.latitude * dt + acceleration.latitude * dt,
+            current_timestamp
+        );
     } else {
         pred_cp = pred_ldr;
     }
 }
 
 void TrajCompressSPAdaptiveSimpleDecompressor::UpdateHistory(const GpsPoint& reconstructed_point) {
-    GpsPoint velocity(0, 0);
+    GpsPoint velocity(0, 0, 0);
+    
     if (!history_states_.empty()) {
-        velocity = reconstructed_point - history_states_.back().reconstructed_point;
+        const GpsPoint& prev_point = history_states_.back().reconstructed_point;
+        uint64_t delta_time = reconstructed_point.timestamp - prev_point.timestamp;
+        
+        if (delta_time > 0) {
+            // 计算真实速度（度/秒）
+            double dt = static_cast<double>(delta_time);
+            velocity = GpsPoint(
+                (reconstructed_point.longitude - prev_point.longitude) / dt,
+                (reconstructed_point.latitude - prev_point.latitude) / dt,
+                0
+            );
+        }
     }
     
     history_states_.emplace_back(reconstructed_point, velocity);

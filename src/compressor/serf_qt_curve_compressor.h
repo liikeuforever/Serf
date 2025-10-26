@@ -19,7 +19,7 @@ class SerfQtCurveCompressor {
  public:
   SerfQtCurveCompressor(int block_size, double max_diff);
 
-  void AddValue(double v);
+  void AddValue(double v, uint64_t timestamp = 0);  // 添加时间戳参数
 
   Array<uint8_t> compressed_bytes();
 
@@ -34,12 +34,13 @@ class SerfQtCurveCompressor {
   std::unique_ptr<OutputBitStream> output_bit_stream_;
   Array<uint8_t> compressed_bytes_;
   
-  // 历史值和速度（完全对齐TrajCompress-SP的CP预测器）
+  // 历史值、速度和时间戳（完全对齐TrajCompress-SP的CP预测器）
   struct HistoryState {
     double value;
     double velocity;
-    HistoryState() : value(2.0), velocity(0.0) {}
-    HistoryState(double v, double vel) : value(v), velocity(vel) {}
+    uint64_t timestamp;
+    HistoryState() : value(2.0), velocity(0.0), timestamp(0) {}
+    HistoryState(double v, double vel, uint64_t ts) : value(v), velocity(vel), timestamp(ts) {}
   };
   std::vector<HistoryState> history_states_;
   static constexpr int kMaxHistorySize = 5;  // 需要5个历史状态支持三阶预测
@@ -47,7 +48,7 @@ class SerfQtCurveCompressor {
   long compressed_size_in_bits_ = 0;
   long stored_compressed_size_in_bits_ = 0;
   
-  double CurvePredict() const;
+  double CurvePredict(uint64_t current_timestamp) const;
 };
 
 #endif  // SERF_QT_CURVE_COMPRESSOR_H

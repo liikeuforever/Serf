@@ -22,20 +22,22 @@ public:
     struct GpsPoint {
         double longitude;
         double latitude;
+        uint64_t timestamp;  // Unix时间戳（秒）
         
-        GpsPoint() : longitude(0), latitude(0) {}
-        GpsPoint(double lon, double lat) : longitude(lon), latitude(lat) {}
+        GpsPoint() : longitude(0), latitude(0), timestamp(0) {}
+        GpsPoint(double lon, double lat, uint64_t ts = 0) 
+            : longitude(lon), latitude(lat), timestamp(ts) {}
         
         GpsPoint operator+(const GpsPoint& other) const {
-            return GpsPoint(longitude + other.longitude, latitude + other.latitude);
+            return GpsPoint(longitude + other.longitude, latitude + other.latitude, timestamp);
         }
         
         GpsPoint operator-(const GpsPoint& other) const {
-            return GpsPoint(longitude - other.longitude, latitude - other.latitude);
+            return GpsPoint(longitude - other.longitude, latitude - other.latitude, 0);
         }
         
         GpsPoint operator*(double scale) const {
-            return GpsPoint(longitude * scale, latitude * scale);
+            return GpsPoint(longitude * scale, latitude * scale, timestamp);
         }
     };
     
@@ -81,6 +83,7 @@ public:
         int predictor_flag_bits = 0;
         int mode_switch_bits = 0;
         int quantized_data_bits = 0;
+        int timestamp_bits = 0;  // timestamp编码比特数（不计入spatial压缩比）
         
         // 预测误差统计
         double total_prediction_error = 0;
@@ -179,7 +182,7 @@ private:
     void ProcessFirstPoint(const GpsPoint& point);
     
     // 并行预测
-    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp);
+    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp, uint64_t current_timestamp);
     
     // 基于成本的预测器选择（策略二）
     PredictorType SelectBestPredictorByCost(const GpsPoint& current_point,
@@ -268,7 +271,7 @@ private:
     
     // 辅助函数
     void ReadHeader();
-    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp);
+    void ParallelPredict(GpsPoint& pred_ldr, GpsPoint& pred_cp, GpsPoint& pred_zp, uint64_t current_timestamp);
     void UpdateHistory(const GpsPoint& reconstructed_point);
     void UpdateHuffmanDecoder();
     PredictorType DecodeWithHuffman();  // 解码Huffman（简化版）
