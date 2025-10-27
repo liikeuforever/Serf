@@ -391,9 +391,9 @@ void TrajCompressSPAdaptiveSimpleCompressor::ParallelPredict(GpsPoint& pred_ldr,
         return;
     }
     
-    // 计算真实时间间隔
-    uint64_t delta_time = current_timestamp - current_reconstructed_point_.timestamp;
-    double dt = static_cast<double>(delta_time);  // 秒数
+    // 计算真实时间间隔，使用int64_t避免timestamp回退时underflow
+    int64_t delta_time_signed = static_cast<int64_t>(current_timestamp) - static_cast<int64_t>(current_reconstructed_point_.timestamp);
+    double dt = (delta_time_signed > 0) ? static_cast<double>(delta_time_signed) : 1.0;  // 回退时使用1秒fallback
     
     // 线性航位推算（LDR）：使用真实速度（度/秒）和时间间隔
     GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
@@ -510,11 +510,11 @@ void TrajCompressSPAdaptiveSimpleCompressor::UpdateHistory(const GpsPoint& recon
     
     if (!history_states_.empty()) {
         const GpsPoint& prev_point = history_states_.back().reconstructed_point;
-        uint64_t delta_time = reconstructed_point.timestamp - prev_point.timestamp;
+        int64_t delta_time_signed = static_cast<int64_t>(reconstructed_point.timestamp) - static_cast<int64_t>(prev_point.timestamp);
         
-        if (delta_time > 0) {
+        if (delta_time_signed > 0) {
             // 计算真实速度（度/秒）
-            double dt = static_cast<double>(delta_time);
+            double dt = static_cast<double>(delta_time_signed);
             velocity = GpsPoint(
                 (reconstructed_point.longitude - prev_point.longitude) / dt,
                 (reconstructed_point.latitude - prev_point.latitude) / dt,
@@ -725,9 +725,9 @@ void TrajCompressSPAdaptiveSimpleDecompressor::ParallelPredict(GpsPoint& pred_ld
         return;
     }
     
-    // 计算真实时间间隔
-    uint64_t delta_time = current_timestamp - current_reconstructed_point_.timestamp;
-    double dt = static_cast<double>(delta_time);  // 秒数
+    // 计算真实时间间隔，使用int64_t避免timestamp回退时underflow
+    int64_t delta_time_signed = static_cast<int64_t>(current_timestamp) - static_cast<int64_t>(current_reconstructed_point_.timestamp);
+    double dt = (delta_time_signed > 0) ? static_cast<double>(delta_time_signed) : 1.0;  // 回退时使用1秒fallback
     
     // 线性预测：使用真实速度（度/秒）和时间间隔
     GpsPoint velocity = history_states_[history_states_.size() - 1].velocity;
@@ -757,11 +757,11 @@ void TrajCompressSPAdaptiveSimpleDecompressor::UpdateHistory(const GpsPoint& rec
     
     if (!history_states_.empty()) {
         const GpsPoint& prev_point = history_states_.back().reconstructed_point;
-        uint64_t delta_time = reconstructed_point.timestamp - prev_point.timestamp;
+        int64_t delta_time_signed = static_cast<int64_t>(reconstructed_point.timestamp) - static_cast<int64_t>(prev_point.timestamp);
         
-        if (delta_time > 0) {
+        if (delta_time_signed > 0) {
             // 计算真实速度（度/秒）
-            double dt = static_cast<double>(delta_time);
+            double dt = static_cast<double>(delta_time_signed);
             velocity = GpsPoint(
                 (reconstructed_point.longitude - prev_point.longitude) / dt,
                 (reconstructed_point.latitude - prev_point.latitude) / dt,
