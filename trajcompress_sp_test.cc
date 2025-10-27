@@ -15,6 +15,7 @@
 #include "src/compressor/serf_qt_compressor.h"
 #include "src/compressor/serf_qt_linear_compressor.h"
 #include "src/compressor/serf_qt_curve_compressor.h"
+#include "src/decompressor/serf_qt_curve_decompressor.h"
 #include "src/decompressor/serf_qt_decompressor.h"
 #include "src/decompressor/serf_qt_linear_decompressor.h"
 #include <iostream>
@@ -1183,7 +1184,7 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         CalculateErrors(gps_data, simple_decompressed, simple_max_error, simple_avg_error, simple_exceeding, epsilon);
         std::cout << "  [4/6] TrajCompress-SP-Adaptive-Simple 完成 (max_err=" << std::scientific << simple_max_error << ", 解压点数=" << simple_decompressed.size() << ")" << std::endl;
         
-        // Serf-QT
+        // Serf-QT（前值预测不需要timestamp）
         SerfQtCompressor qt_lon(gps_data.size(), epsilon);
         SerfQtCompressor qt_lat(gps_data.size(), epsilon);
         for (const auto& point : gps_data) {
@@ -1213,8 +1214,8 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         SerfQtLinearCompressor linear_lon(gps_data.size(), epsilon);
         SerfQtLinearCompressor linear_lat(gps_data.size(), epsilon);
         for (const auto& point : gps_data) {
-            linear_lon.AddValue(point.longitude);
-            linear_lat.AddValue(point.latitude);
+            linear_lon.AddValue(point.longitude, point.timestamp);
+            linear_lat.AddValue(point.latitude, point.timestamp);
         }
         linear_lon.Close();
         linear_lat.Close();
@@ -1238,15 +1239,26 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         SerfQtCurveCompressor curve_lon(gps_data.size(), epsilon);
         SerfQtCurveCompressor curve_lat(gps_data.size(), epsilon);
         for (const auto& point : gps_data) {
-            curve_lon.AddValue(point.longitude);
-            curve_lat.AddValue(point.latitude);
+            curve_lon.AddValue(point.longitude, point.timestamp);
+            curve_lat.AddValue(point.latitude, point.timestamp);
         }
         curve_lon.Close();
         curve_lat.Close();
         
-        // Curve 解压缩器未实现，使用占位值
-        double curve_max_error = 0.0;
-        double curve_avg_error = 0.0;
+        // 解压缩 Serf-QT-Curve 并计算误差
+        std::vector<GpsPoint> curve_decompressed;
+        auto curve_lon_data = curve_lon.compressed_bytes();
+        auto curve_lat_data = curve_lat.compressed_bytes();
+        SerfQtCurveDecompressor curve_lon_dec;
+        SerfQtCurveDecompressor curve_lat_dec;
+        auto curve_lon_values = curve_lon_dec.Decompress(curve_lon_data);
+        auto curve_lat_values = curve_lat_dec.Decompress(curve_lat_data);
+        for (size_t i = 0; i < curve_lon_values.size() && i < curve_lat_values.size(); ++i) {
+            curve_decompressed.emplace_back(curve_lon_values[i], curve_lat_values[i]);
+        }
+        double curve_max_error, curve_avg_error;
+        int curve_exceeding;
+        CalculateErrors(gps_data, curve_decompressed, curve_max_error, curve_avg_error, curve_exceeding, epsilon);
         std::cout << "  [6/6] Linear & Curve 完成 (linear_max=" << std::scientific << linear_max_error 
                   << ", curve_max=" << curve_max_error << ")" << std::endl;
         
@@ -1265,8 +1277,12 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
         auto simple_stats_final = simple_compressor.GetStats();
         result.simple_bits = simple_stats_final.total_bits - simple_stats_final.timestamp_bits;
         result.qt_bits = qt_lon.get_compressed_size_in_bits() + qt_lat.get_compressed_size_in_bits();
-        result.linear_bits = linear_lon.get_compressed_size_in_bits() + linear_lat.get_compressed_size_in_bits();
-        result.curve_bits = curve_lon.get_compressed_size_in_bits() + curve_lat.get_compressed_size_in_bits();
+        
+        // Linear/Curve: 排除timestamp bits (每个点64位timestamp，经度+纬度各一次 = 128位/点)
+        int timestamp_bits_per_point = 128;  // 64位 × 2 (经度+纬度)
+        int total_timestamp_bits = timestamp_bits_per_point * gps_data.size();
+        result.linear_bits = linear_lon.get_compressed_size_in_bits() + linear_lat.get_compressed_size_in_bits() - total_timestamp_bits;
+        result.curve_bits = curve_lon.get_compressed_size_in_bits() + curve_lat.get_compressed_size_in_bits() - total_timestamp_bits;
         result.sp_avg = static_cast<double>(result.sp_bits) / result.points;
         result.adaptive_avg = static_cast<double>(result.adaptive_bits) / result.points;
         result.simple_avg = static_cast<double>(result.simple_bits) / result.points;
@@ -1309,11 +1325,10 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
     // 打开CSV文件
     std::ofstream csv_file(csv_filename.str());
     if (csv_file.is_open()) {
-        // 写入CSV头（压缩比 + 误差）
+        // 写入CSV头（压缩比 + 误差，排除Adaptive）
         csv_file << "Dataset,Points,"
-                 << "TrajSP_BPP,Adaptive_BPP,Simple_BPP,QT_BPP,Linear_BPP,Curve_BPP,"
+                 << "TrajSP_BPP,Simple_BPP,QT_BPP,Linear_BPP,Curve_BPP,"
                  << "TrajSP_MaxErr,TrajSP_AvgErr,"
-                 << "Adaptive_MaxErr,Adaptive_AvgErr,"
                  << "Simple_MaxErr,Simple_AvgErr,"
                  << "QT_MaxErr,QT_AvgErr,"
                  << "Linear_MaxErr,Linear_AvgErr,"
@@ -1354,13 +1369,12 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                   << std::setw(10) << result.curve_avg
                   << std::setw(12) << best << std::endl;
         
-        // 写入CSV（6位有效数字，忽略Adaptive）
+        // 写入CSV（6位有效数字，排除Adaptive）
         if (csv_file.is_open()) {
             csv_file << result.dataset_name << ","
                      << result.points << ","
                      << std::fixed << std::setprecision(6)
                      << result.sp_avg << ","
-                     << result.adaptive_avg << ","
                      << result.simple_avg << ","
                      << result.qt_avg << ","
                      << result.linear_avg << ","
@@ -1368,8 +1382,6 @@ void TestAllDatasetsAndGenerateSummary(double epsilon) {
                      << std::scientific << std::setprecision(6)
                      << result.sp_max_error << ","
                      << result.sp_avg_error << ","
-                     << result.adaptive_max_error << ","
-                     << result.adaptive_avg_error << ","
                      << result.simple_max_error << ","
                      << result.simple_avg_error << ","
                      << result.qt_max_error << ","

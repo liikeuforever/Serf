@@ -7,7 +7,7 @@ SerfQtCompressor::SerfQtCompressor(int block_size, double max_diff) :kBlockSize(
 void SerfQtCompressor::AddValue(double v) {
   if (first_) {
     first_ = false;
-    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 16);
+    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 32);  // 使用32位支持大数据集
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(kMaxDiff), 64);
   }
   long q = static_cast<long>(std::round((v - pre_value_) / (2 * kMaxDiff)));

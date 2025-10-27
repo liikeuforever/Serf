@@ -37,8 +37,10 @@ double SerfQtLinearCompressor::LinearPredict(uint64_t current_timestamp) const {
 void SerfQtLinearCompressor::AddValue(double v, uint64_t timestamp) {
   if (first_) {
     first_ = false;
-    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 16);
+    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 32);  // 使用32位支持大数据集
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(kMaxDiff), 64);
+    // 写入第一个点的timestamp（参考TrajSP）
+    compressed_size_in_bits_ += output_bit_stream_->WriteLong(timestamp, 64);
     // Store first value directly
     prev_value1_ = v;
     prev_timestamp1_ = timestamp;
@@ -53,6 +55,11 @@ void SerfQtLinearCompressor::AddValue(double v, uint64_t timestamp) {
   
   if (second_) {
     second_ = false;
+    // 写入timestamp delta（参考TrajSP）
+    int64_t timestamp_delta_signed = static_cast<int64_t>(timestamp) - static_cast<int64_t>(prev_timestamp1_);
+    uint64_t timestamp_delta = static_cast<uint64_t>(timestamp_delta_signed);
+    compressed_size_in_bits_ += output_bit_stream_->WriteLong(timestamp_delta, 64);
+    
     // For second value, use previous value as prediction
     long q = static_cast<long>(std::round((v - prev_value1_) / (2 * kMaxDiff)));
     double recoverValue = prev_value1_ + 2 * kMaxDiff * static_cast<double>(q);
@@ -64,6 +71,11 @@ void SerfQtLinearCompressor::AddValue(double v, uint64_t timestamp) {
     prev_timestamp1_ = timestamp;
     return;
   }
+  
+  // 写入timestamp delta（参考TrajSP）
+  int64_t timestamp_delta_signed = static_cast<int64_t>(timestamp) - static_cast<int64_t>(prev_timestamp1_);
+  uint64_t timestamp_delta = static_cast<uint64_t>(timestamp_delta_signed);
+  compressed_size_in_bits_ += output_bit_stream_->WriteLong(timestamp_delta, 64);
   
   // For third value onwards, use linear prediction with timestamp
   double predicted = LinearPredict(timestamp);

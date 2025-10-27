@@ -88,8 +88,10 @@ void SerfQtCurveCompressor::AddValue(double v, uint64_t timestamp) {
   if (first_) {
     first_ = false;
     // 写入头部信息
-    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 16);
+    compressed_size_in_bits_ += output_bit_stream_->WriteInt(kBlockSize, 32);  // 使用32位支持大数据集
     compressed_size_in_bits_ += output_bit_stream_->WriteLong(Double::DoubleToLongBits(kMaxDiff), 64);
+    // 写入第一个点的timestamp（参考TrajSP）
+    compressed_size_in_bits_ += output_bit_stream_->WriteLong(timestamp, 64);
     
     // 第一个点：基于默认值(2.0)的量化
     long q = static_cast<long>(std::round((v - 2.0) / (2 * kMaxDiff)));
@@ -102,6 +104,11 @@ void SerfQtCurveCompressor::AddValue(double v, uint64_t timestamp) {
     history_states_.emplace_back(recoverValue, 0.0, timestamp);
     return;
   }
+  
+  // 写入timestamp delta（参考TrajSP）
+  int64_t timestamp_delta_signed = static_cast<int64_t>(timestamp) - static_cast<int64_t>(history_states_.back().timestamp);
+  uint64_t timestamp_delta = static_cast<uint64_t>(timestamp_delta_signed);
+  compressed_size_in_bits_ += output_bit_stream_->WriteLong(timestamp_delta, 64);
   
   // 使用曲线预测（传入当前时间戳）
   double predicted = CurvePredict(timestamp);

@@ -18,11 +18,13 @@ class SerfQtLinearDecompressor {
   std::unique_ptr<InputBitStream> input_bit_stream_ = std::make_unique<InputBitStream>();
   double prev_value1_ = 2;  // most recent value
   double prev_value2_ = 2;  // second most recent value
+  uint64_t prev_timestamp1_ = 0;  // most recent timestamp
+  uint64_t prev_timestamp2_ = 0;  // second most recent timestamp
   bool first_ = true;
   bool second_ = true;
 
   double NextValue();
-  double LinearPredict() const;
+  double LinearPredict(uint64_t current_timestamp) const;
 };
 
 #endif //SERF_QT_LINEAR_DECOMPRESSOR_H

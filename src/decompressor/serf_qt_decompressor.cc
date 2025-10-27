@@ -2,7 +2,7 @@
 
 std::vector<double> SerfQtDecompressor::Decompress(const Array<uint8_t> &bs) {
   input_bit_stream_->SetBuffer(bs);
-  block_size_ = input_bit_stream_->ReadInt(16);
+  block_size_ = input_bit_stream_->ReadInt(32);  // 使用32位支持大数据集
   max_diff_ = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
   pre_value_ = 2;
   std::vector<double> decompressed_value_list;

@@ -5,12 +5,16 @@
 
 std::vector<double> SerfQtLinearDecompressor::Decompress(const Array<uint8_t> &bs) {
   input_bit_stream_->SetBuffer(bs);
-  block_size_ = input_bit_stream_->ReadInt(16);
+  block_size_ = input_bit_stream_->ReadInt(32);  // 使用32位支持大数据集
   max_diff_ = Double::LongBitsToDouble(input_bit_stream_->ReadLong(64));
+  
+  // 读取第一个点的timestamp（参考TrajSP）
+  prev_timestamp1_ = input_bit_stream_->ReadLong(64);
   
   // Reset state
   prev_value1_ = 2;
   prev_value2_ = 2;
+  prev_timestamp2_ = 0;
   first_ = true;
   second_ = true;
   
@@ -24,42 +28,69 @@ std::vector<double> SerfQtLinearDecompressor::Decompress(const Array<uint8_t> &b
   return decompressed_value_list;
 }
 
-double SerfQtLinearDecompressor::LinearPredict() const {
+double SerfQtLinearDecompressor::LinearPredict(uint64_t current_timestamp) const {
   if (first_) {
     return 2.0;  // default value for first point
   } else if (second_) {
     return prev_value1_;  // use previous value for second point
   } else {
-    // Linear prediction: predicted = 2 * prev1 - prev2
+    // 使用真实时间戳进行线性预测（参考TrajSP）
+    if (current_timestamp > 0 && prev_timestamp1_ > 0 && prev_timestamp2_ > 0) {
+      int64_t dt1_signed = static_cast<int64_t>(prev_timestamp1_) - static_cast<int64_t>(prev_timestamp2_);
+      int64_t dt2_signed = static_cast<int64_t>(current_timestamp) - static_cast<int64_t>(prev_timestamp1_);
+      
+      if (dt1_signed > 0 && dt2_signed > 0) {
+        double velocity = (prev_value1_ - prev_value2_) / static_cast<double>(dt1_signed);
+        return prev_value1_ + velocity * static_cast<double>(dt2_signed);
+      }
+    }
+    
+    // Fallback: 等时间间隔预测
     return 2.0 * prev_value1_ - prev_value2_;
   }
 }
 
 double SerfQtLinearDecompressor::NextValue() {
-  int64_t decodeValue = ZigZagCodec::Decode(EliasGammaCodec::Decode(input_bit_stream_.get()) - 1);
-  
   double predicted;
   if (first_) {
     first_ = false;
+    // 第一个点：直接读取量化误差
+    int64_t decodeValue = ZigZagCodec::Decode(EliasGammaCodec::Decode(input_bit_stream_.get()) - 1);
     predicted = 2.0;  // default prediction for first value
     double recoverValue = predicted + 2 * max_diff_ * static_cast<double>(decodeValue);
     prev_value1_ = recoverValue;
     return recoverValue;
   } else if (second_) {
     second_ = false;
+    // 第二个点：先读timestamp delta，再读量化误差（参考TrajSP）
+    uint64_t timestamp_delta_bits = input_bit_stream_->ReadLong(64);
+    int64_t timestamp_delta = static_cast<int64_t>(timestamp_delta_bits);
+    uint64_t current_timestamp = prev_timestamp1_ + timestamp_delta;
+    
+    int64_t decodeValue = ZigZagCodec::Decode(EliasGammaCodec::Decode(input_bit_stream_.get()) - 1);
     predicted = prev_value1_;  // use previous value as prediction for second value
     double recoverValue = predicted + 2 * max_diff_ * static_cast<double>(decodeValue);
     prev_value2_ = prev_value1_;
+    prev_timestamp2_ = prev_timestamp1_;
     prev_value1_ = recoverValue;
+    prev_timestamp1_ = current_timestamp;
     return recoverValue;
   } else {
-    // Linear prediction for third value onwards
-    predicted = LinearPredict();
+    // 第三个点及以后：先读timestamp delta，再读量化误差（参考TrajSP）
+    uint64_t timestamp_delta_bits = input_bit_stream_->ReadLong(64);
+    int64_t timestamp_delta = static_cast<int64_t>(timestamp_delta_bits);
+    uint64_t current_timestamp = prev_timestamp1_ + timestamp_delta;
+    
+    int64_t decodeValue = ZigZagCodec::Decode(EliasGammaCodec::Decode(input_bit_stream_.get()) - 1);
+    // Linear prediction for third value onwards (使用真实timestamp)
+    predicted = LinearPredict(current_timestamp);
     double recoverValue = predicted + 2 * max_diff_ * static_cast<double>(decodeValue);
     
     // Update history
     prev_value2_ = prev_value1_;
+    prev_timestamp2_ = prev_timestamp1_;
     prev_value1_ = recoverValue;
+    prev_timestamp1_ = current_timestamp;
     return recoverValue;
   }
 }
